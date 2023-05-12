@@ -1,0 +1,28 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'order-app/css/menu.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container">
+  <div class="nav-box remove-margin">
+    <div class="search">
+      <img class="icon-search" src="{% static 'order-app/images/home/search-icon.png' %}" alt="">
+      <input type="text" placeholder="Search menu">
+      <img onclick="onSearch()" class="icon-filter" src="{% static 'order-app/images/home/filter.png' %}" alt="">
+    </div>
+    <img class="button" src="{% static 'order-app/images/home/phone-call.png' %}" alt="">
+    <a href="/order-app/cart">
+      <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+    </a>
+  </div>
+  <div class="section_categories"></div>
+  <div class="section_items_order"></div>
+</div>
+<div class="app-menu-container">
+  <div class="app-menu"></div>
+</div>
+{% endblock %}
+{% block js_custom_foot %}
+<script src="{% static 'order-app/js/menu.js'%}"></script>
+{% endblock %}

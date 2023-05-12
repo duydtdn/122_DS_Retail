@@ -1,0 +1,104 @@
+.order-status {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	background: #f5f5f5;
+	z-index: 1;
+	padding: 12px 25px;
+	margin-bottom: -12px;
+	margin-top: 0;
+}
+
+.order-status img {
+	width: 40px;
+}
+
+.order-status .tables,
+.order-status .orders {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 4px;
+}
+
+.order-status .divider {
+	width: 1px;
+	height: 40px;
+	background: #de3905;
+	margin: 0 15px;
+}
+
+.order-status .text {
+	color: #de3905;
+	font-weight: 400;
+	font-size: 14px;
+}
+
+.order-status .tables.text {
+	text-align: end;
+}
+
+.order-status .orders .text {
+	text-align: start;
+}
+
+.banner {
+	height: 150px;
+	position: relative;
+}
+
+.banner img {
+	object-fit: cover;
+	height: 100%;
+	width: 100%;
+}
+
+.banner .text {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	font-style: normal;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	inset: 0;
+	font-weight: 900;
+	font-size: 40px;
+	line-height: 47px;
+	color: #ffffff;
+	letter-spacing: -0.05rem;
+	-webkit-text-stroke: 2px black;
+	-webkit-text-fill-color: white;
+	text-shadow: 2px 2px 3px black;
+}
+
+.section_popular_food .foods,
+.section_popular_drink .drinks {
+	display: flex;
+	gap: 20px;
+}
+
+.section_popular_food .order-item,
+.section_popular_drink .order-item {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	font-weight: 400;
+	font-size: 10px;
+}
+.order-item .name {
+	font-weight: 400;
+	font-size: 10px;
+	color: #000;
+}
+
+.order-item img {
+	filter: drop-shadow(2px 4px 15px rgba(0, 0, 0, 0.25));
+}
+
+.order-item .price {
+	color: #808080;
+}

@@ -1,0 +1,68 @@
+.banner_section {
+	color: #fff;
+	background: #d5aa4b;
+	margin-bottom: 8px;
+}
+
+.banner_section.banner-top img,
+.banner_section.banner-bottom img {
+	width: 100%;
+	max-height: 80px;
+	object-fit: cover;
+}
+
+.banner_section.banner-top .desc {
+	font-size: 14px;
+	font-weight: 400;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+}
+
+.banner_section.banner-middle {
+	height: 200px;
+	display: flex;
+}
+
+.banner_section.banner-middle img {
+	height: 100%;
+	width: 46%;
+	object-fit: cover;
+}
+
+.banner_section.banner-middle .desc {
+	margin: auto;
+	margin-left: 16px;
+	margin-right: 16px;
+	font-size: 16px;
+	font-weight: 700;
+	position: relative;
+	z-index: 1;
+}
+
+.banner_section.banner-middle .desc.right::before {
+	content: "";
+	width: 30px;
+	height: 30px;
+	background: #d5aa4b;
+	position: absolute;
+	left: -40px;
+	transform: rotate(45deg) translateY(-50%);
+	z-index: -1;
+}
+.banner_section.banner-middle .desc.left::before {
+	content: "";
+	width: 30px;
+	height: 30px;
+	background: #d5aa4b;
+	position: absolute;
+	right: -20px;
+	top: 50%;
+	transform: rotate(45deg) translateY(-50%);
+	z-index: -1;
+}
+.banner_section.banner-bottom {
+	background: #fff;
+}

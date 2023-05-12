@@ -1,0 +1,35 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'order-app/css/signage.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container">
+  <div class="banner_section banner-top remove-margin">
+    <img src="{% static 'order-app/images/signage/image-top.png' %}" alt="">
+    <div class="desc">We only uses the freshest and most seasonal items</div>
+  </div>
+  <div class="banner_section banner-middle remove-margin">
+    <img src="{% static 'order-app/images/signage/best-seller.png' %}" alt="">
+    <div class="desc right">BEST SELLER DISH</div>
+  </div>
+  <div class="banner_section banner-middle remove-margin">
+    <div class="desc left">WE PREPARE FRESH HEALTHY FOOD SO IT’S PERFECT ON THE GO!</div>
+    <img src="{% static 'order-app/images/home/cappucino2.png' %}" alt="">
+  </div>
+  <div class="banner_section banner-middle remove-margin">
+    <img src="{% static 'order-app/images/signage/we-prepare.png' %}" alt="">
+    <div class="desc right">20% DISCOUNT TABLE FOR 4</div>
+  </div>
+  <div class="banner_section banner-bottom remove-margin">
+    <img src="{% static 'order-app/images/signage/image-top.png' %}" alt="">
+  </div>
+</div>
+<div class="app-menu-container">
+  <div class="app-menu">
+  </div>
+</div>
+{% endblock %}
+{% block js_custom_foot %}
+<script src="{% static 'order-app/js/signage.js'%}"></script>
+{% endblock %}

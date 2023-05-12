@@ -1,0 +1,40 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'order-app/css/detail.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container">
+  <div id="product-detail"></div>
+  <div class="navigation">
+    <div class="back-btn" onclick="onBack()">
+      <img class="button" src="{% static 'order-app/images/detail/icon-back.png' %}" alt="">
+    </div>
+    <a href="/order-app/cart">
+      <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+    </a>
+  </div>
+  <div class="btn-add-to-cart">
+    <button id="btn_add_to_cart">
+      <span>Add to cart</span>
+      <img src="{% static 'order-app/images/detail/shopping-cart.png' %}" alt="">
+    </button>
+  </div>
+  <div id="add_to_cart_popup" class="modal">
+    <div class="section_detail"></div>
+    <div class="btn-add-to-cart">
+      <button id="btn_add_to_cart_popup" onclick="addToCart()">
+        <span>Add</span>
+        <!-- <img src="images/detail/shopping-cart.png" alt=""> -->
+      </button>
+    </div>
+  </div>
+</div>
+<div class="app-menu-container">
+  <div class="app-menu">
+  </div>
+</div>
+{% endblock %}
+{% block js_custom_foot %}
+<script src="{% static 'order-app/js/detail.js'%}"></script>
+{% endblock %}
