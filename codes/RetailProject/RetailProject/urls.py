@@ -19,10 +19,11 @@ from django.urls import path, include, re_path
 from django.views.static import serve
 from RetailProject import settings
 from django.conf.urls.static import static
-
+from orders.urls import api_router
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('order-app/', include('orders.urls')),
+    path('order-app/api/', include(api_router.urls)),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.BASE_DIR, 'static')}),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

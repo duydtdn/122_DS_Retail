@@ -1,8 +1,15 @@
+from rest_framework import routers
 from django.urls import re_path as url
+from django.urls import include
 from django.urls import path
 from . import views
+from orders.controller.product_ctr import ProductViewSet
+
 
 app_name = 'order'
+api_router = routers.DefaultRouter()
+api_router.register(r'products', ProductViewSet)
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('home', views.home, name='home2'),

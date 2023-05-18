@@ -2,9 +2,10 @@ if (!id && !cart) {
   window.location.assign(APP_MENU_URLS.HOME)
 }
 const detailId = cart || id;
-const product = allProduct.find(item => item.id === detailId);
 
-let price = +product.price.slice(0, -1);
+let product;
+
+let price = 0;
 let quantity = cart ? cartLS.find(it => it.id === detailId).quantity : 1;
 let note = cart ? cartLS.find(it => it.id === detailId).note : '';
 const increase = () => {
@@ -22,12 +23,18 @@ const renderPrice = (value) => {
   $('#quantity').text(value)
   $('#total').text(value * price + '$');
 }
+const getDetail = async () =>{
+  const response = await fetch (`/order-app/api/products/${detailId}`);
+  const data = await response.json();
+  product = data;
+  price = product.price
+  renderDetail()
+  renderPopupAddToCart();
+}
 
 $(document).ready(function () {
-  renderDetail();
-  renderPopupAddToCart();
+  getDetail();
   if (cart) {
-    renderPopupAddToCart();
     $("#add_to_cart_popup").modal({
       open: true,
       fadeDuration: 200,
@@ -49,23 +56,23 @@ $(document).ready(function () {
 const renderDetail = () => {
   const stringHtml =
     `<div class="thumbnail-top remove-margin">
-      <img src="${product.image}" alt="">
+      <img src="${product.thumbnail}" alt="">
     </div>
     <div class="section_detail">
-      <div class="title">${product.name}</div>
+      <div class="title">${product.title}</div>
       <div class="sub-title">${product.group}</div>
-      <div class="desc">${product.desc}</div>
+      <div class="desc">${product.detail}</div>
       <div class="price">Price:
-        <span>${product.price}</span>
+        <span>${product.price}$</span>
       </div>
     </div>`
   $('#product-detail').html(stringHtml);
 }
 const renderPopupAddToCart = () => {
   const stringHtml =
-    `<div class="title">${product.name}</div>
+    `<div class="title">${product.title}</div>
     <div class="sub-title">${product.group}</div>
-    <div class="desc">${product.desc}</div>
+    <div class="desc">${product.detail}</div>
     <div class="price">
       Price:
       <span>${product.price}</span>

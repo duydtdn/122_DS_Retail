@@ -133,33 +133,29 @@ const renderListOrderMenu = (search = '', group = '', category = '') => {
   $('.section_items_order').html(stringHtml);
 }
 
-const renderPopularFood = (search = '', category = '') => {
-  const foods = allProduct
-    .filter(it => it.name.includes(search) && it.group === 'food')
-    .filter(it => it.category.includes(category))
-    .slice(0, 2);
+const renderPopularFood = async (search = '', category = '') => {
+  const response = await fetch ('/order-app/api/products/');
+  const foods = await response.json();
   const stringHtml =
-    foods.map(it =>
+    foods.results.map(it =>
       `<a class="order-item food" href="${APP_MENU_URLS.DETAIL}?id=${it.id}">
-      <img class="thumbnail" src="${it.image}" alt="">
-      <span class="name">${it.name}</span>
-      <span class="price">${it.price}</span>
+      <img class="thumbnail" src="${it.thumbnail}" alt="">
+      <span class="name">${it.title}</span>
+      <span class="price">${it.price} $</span>
     </a>`
     ).join('')
   $('.foods').html(stringHtml);
 }
-const renderPopularDrink = (search = '', category = '') => {
-  const drinks = allProduct
-    .filter(it => it.name.includes(search) && it.group === 'drink')
-    .filter(it => it.category.includes(category))
-    .slice(0, 2);
+const renderPopularDrink = async (search = '', category = '') => {
+  const response = await fetch ('/order-app/api/products/');
+  const drinks = await response.json();
   const stringHtml =
-    drinks.map(it =>
-      `<a class="order-item food" href="${APP_MENU_URLS.DETAIL}?id=${it.id}">
-      <img class="thumbnail" src="${it.image}" alt="">
-      <span class="name">${it.name}</span>
-      <span class="price">${it.price}</span>
-    </a>`
+  drinks.results.map(it =>
+    `<a class="order-item food" href="${APP_MENU_URLS.DETAIL}?id=${it.id}">
+    <img class="thumbnail" src="${it.thumbnail}" alt="">
+    <span class="name">${it.title}</span>
+    <span class="price">${it.price} $</span>
+  </a>`
     ).join('')
   $('.drinks').html(stringHtml);
 }

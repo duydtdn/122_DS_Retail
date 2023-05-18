@@ -1,0 +1,11 @@
+__pycache__/
+app.dat
+data.dat
+build.db
+build.db1
+build/manage/
+manage.spec
+dist/manage/
+scripts/
+staticfiles/
+app_log/
