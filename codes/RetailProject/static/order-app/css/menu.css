@@ -1,6 +1,7 @@
 .nav-box {
-	position: sticky;
+	position: fixed;
 	top: 0;
+	width: 100%;
 	background: #f5f5f5;
 	z-index: 1;
 	padding: 12px 25px;
@@ -39,4 +40,7 @@
 .order-item .price {
 	/* color: #808080; */
 	color: #df6751;
+}
+.app-container {
+	padding-top: 60px;
 }

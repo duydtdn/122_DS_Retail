@@ -17,33 +17,7 @@ let searchText = '';
 let categoryFilter = '';
 let groupText = '';
 let categories = [];
-const allProduct = [
-  { desc: 'Good choose for your family', group: 'food', id: 1, name: 'Japanese food 1', category: 'Japanese_food', price: '20$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Good choose for your family', group: 'drink', id: 2, name: 'Japanese drink 2', category: 'Japanese_food', price: '20$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Good choose for your family', group: 'food', id: 3, name: 'Japanese food 3', category: 'Grilled_meat', price: '20$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Good choose for your family', group: 'food', id: 4, name: 'Japanese food 4', category: 'Japanese_food', price: '20$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Good choose for your family', group: 'food', id: 111, name: 'Japanese food 111', category: 'Iced_Drinks', price: '20$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Product from natural', group: 'food', id: 222, name: 'Japanese food 222', category: 'Grilled_meat', price: '20$', image: '../static/order-app/images/home/cappucino2.png' },
-  { desc: 'Product from natural', group: 'food', id: 333, name: 'Japanese food 333', category: 'Iced_Drinks', price: '20$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Product from natural', group: 'food', id: 444, name: 'Japanese food 444', category: 'Grilled_meat', price: '20$', image: '../static/order-app/images/home/cappucino2.png' },
-  { desc: 'Product from natural', group: 'drink', id: 5, name: 'Drinks 1', category: 'Grilled_meat', price: '15$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Product from natural', group: 'drink', id: 6, name: 'Drinks 2', category: 'Japanese_food', price: '15$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Product from natural', group: 'drink', id: 7, name: 'Drinks 3', category: 'Iced_Drinks', price: '15$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Product from natural', group: 'drink', id: 8, name: 'Drinks 4', category: 'Grilled_meat', price: '15$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Product from natural', group: 'drink', id: 555, name: 'Drinks 111', category: 'Japanese_food', price: '15$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Product from natural', group: 'drink', id: 666, name: 'Drinks 222', category: 'Iced_Drinks', price: '15$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Product from natural', group: 'drink', id: 777, name: 'Drinks 333', category: 'Japanese_food', price: '15$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 888, name: 'Drinks 444', category: 'Iced_Drinks', price: '15$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Best seller all the world', group: 'food', id: 9, name: 'Grilled meat 1', category: 'Grilled_meat', price: '25$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 10, name: 'Grilled meat 2', category: 'Grilled_meat', price: '25$', image: '../static/order-app/images/home/takiyoki.png' },
-  { desc: 'Best seller all the world', group: 'food', id: 11, name: 'Grilled meat 3', category: 'Japanese_food', price: '25$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 12, name: 'Grilled meat 4', category: 'Grilled_meat', price: '25$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 888, name: 'Drinks 4', category: 'Iced_Drinks', price: '15$', image: 'images/home/takiyoki.png' },
-  { desc: 'Best seller all the world', group: 'food', id: 999, name: 'Grilled meat 111', category: 'Grilled_meat', price: '25$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 100, name: 'Grilled meat 222', category: 'Iced_Drinks', price: '25$', image: '../static/order-app/images/home/cappucino2.png' },
-  { desc: 'Best seller all the world', group: 'food', id: 110, name: 'Grilled meat 333', category: 'Grilled_meat', price: '25$', image: '../static/order-app/images/home/cappcino.png' },
-  { desc: 'Best seller all the world', group: 'drink', id: 120, name: 'Grilled meat 444', category: 'Japanese_food', price: '25$', image: '../static/order-app/images/home/sushi_uramaki.png' },
-];
+
 const renderAppMenu = () => {
   const stringHtml = `
   <div class="wrapper">
@@ -95,6 +69,7 @@ const onChangeCategories = (key) => {
     renderPopularDrink('', categoryFilter);
   }
 }
+
 const onSearch = () => {
   searchText = $('.search input').val();
   console.log({ searchText, groupText, categoryFilter })

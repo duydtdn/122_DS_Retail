@@ -75,7 +75,7 @@ const renderPopupAddToCart = () => {
     <div class="desc">${product.detail}</div>
     <div class="price">
       Price:
-      <span>${product.price}</span>
+      <span>${product.price} $</span>
     </div>
     <div class="quantity">
       Quantity:
@@ -87,7 +87,7 @@ const renderPopupAddToCart = () => {
     </div>
     <div class="total">
       Total:&nbsp;
-      <span id="total">${product.price}</span>
+      <span id="total">${product.price} $</span>
     </div>
     <textarea placeholder="Note">${note}</textarea>`
   $('#add_to_cart_popup .section_detail').html(stringHtml);
@@ -96,8 +96,15 @@ const renderPopupAddToCart = () => {
 const addToCart = () => {
   const noteText = $('.section_detail textarea').val() || '';
   if (!cart) {
-    cartLS.push({ id: product.id, quantity: quantity, note: noteText });
+    // Add new cart
+    const index = cartLS.findIndex((item) => item.id === product.id);
+    if (index < 0) {
+      cartLS.push({ id: product.id, quantity: quantity, note: noteText });
+    } else {
+      cartLS[index] = { id: product.id, quantity: cartLS[index].quantity + quantity, note: noteText }
+    }
   } else {
+    // Edit cart
     cartLS = [
       ...cartLS.filter(c => c.id !== product.id),
       { id: product.id, quantity: quantity, note: noteText }
