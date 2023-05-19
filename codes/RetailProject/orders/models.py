@@ -55,7 +55,7 @@ class Product(models.Model):
     is_show_list_media = models.BooleanField(default=False)
     def thumbnail_directory_path(Client, filename):
         dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
-        return 'uploads/landing_page/apps/{0}/logo/{1}'.format(dirname, filename)
+        return 'uploads/order-app/{0}/product/{1}'.format(dirname, filename)
 
     thumbnail = models.FileField(upload_to=thumbnail_directory_path, verbose_name="Hình ảnh",
                               default='', null=True)
@@ -151,3 +151,33 @@ class Notification(models.Model):
 class GiftCode(models.Model):
     group = models.CharField(max_length=32, null=True, blank=True)
     rule = models.TextField(null=True, blank=True)
+
+class DiscountPackage(models.Model):
+    title = models.CharField(max_length=512, null=True, blank=True)
+    discount = models.IntegerField(null=True, blank=True)
+    detail = models.TextField(null=True, blank=True)
+    amount = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    def thumbnail_directory_path(Client, filename):
+        dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+        return 'uploads/order-app/{0}/discount-package/{1}'.format(dirname, filename)
+
+    thumbnail = models.FileField(upload_to=thumbnail_directory_path, verbose_name="Hình ảnh",
+                              default='', null=True)
+    def __str__(self):
+        return f'{self.title}'
+    
+    def save(self, force_insert=False, force_update=False):
+        size = 300, 300
+        super(DiscountPackage, self).save(force_insert, force_update)
+        if self.id is not None:
+            # previous = Destination.objects.get(id=self.id)
+            # if self.avatar and self.avatar != previous.avatar:
+            if self.thumbnail:
+                try:
+                    image = Image.open(self.thumbnail.name)
+                    # image = image.resize((100, 100), Image.ANTIALIAS)
+                    image.thumbnail(size, Image.ANTIALIAS)
+                    image.save(self.thumbnail.name)
+                except IOError:
+                    print("Co loi trong qua trinh resize")

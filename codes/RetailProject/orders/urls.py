@@ -5,12 +5,14 @@ from django.urls import path
 from . import views
 from orders.controller.product_ctr import ProductViewSet
 from orders.controller.category_ctr import ProductCategoryViewSet
+from orders.controller.discount_package_ctr import DiscountPackageViewSet
 
 
 app_name = 'order'
 api_router = routers.DefaultRouter()
 api_router.register(r'products', ProductViewSet)
 api_router.register(r'categories', ProductCategoryViewSet)
+api_router.register(r'discount-packages', DiscountPackageViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),

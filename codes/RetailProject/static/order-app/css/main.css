@@ -222,3 +222,16 @@ strong {
 	width: 100%;
 	border-radius: 6px;
 }
+
+
+.swiper .swiper-button-prev, .swiper .swiper-button-next {
+	color: rgba(245, 130, 32, 1);
+}
+.swiper .swiper-pagination-bullet {
+	width: 18px;
+	height: 4px;
+	border-radius: 2px;
+}
+.swiper .swiper-pagination-bullet-active{
+	background: rgba(245, 130, 32, 1);
+}

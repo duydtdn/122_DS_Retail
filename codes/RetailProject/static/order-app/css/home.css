@@ -44,34 +44,8 @@
 	text-align: start;
 }
 
-.banner {
-	height: 150px;
-	position: relative;
-}
-
-.banner img {
-	object-fit: cover;
-	height: 100%;
-	width: 100%;
-}
-
 .banner .text {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	font-style: normal;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	inset: 0;
-	font-weight: 900;
-	font-size: 40px;
-	line-height: 47px;
-	color: #ffffff;
-	letter-spacing: -0.05rem;
-	-webkit-text-stroke: 2px black;
-	-webkit-text-fill-color: white;
-	text-shadow: 2px 2px 3px black;
+	
 }
 
 .section_popular_food .foods,
@@ -102,4 +76,54 @@
 .order-item .price {
 	/* color: #808080; */
 	color: #df6751;
+}
+
+.banner {
+  border-radius: 8px;
+	z-index: 0;
+  /* height: 240px; */
+}
+.banner .discount-packages-swipper {
+	height: 100%;
+}
+.banner .discount-packages-item {
+	position: relative;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.banner img {
+	width: 100%;
+	height: 180px;
+	object-fit: cover;
+}
+.banner .discount-packages-item .content {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* background: linear-gradient(0deg, rgba(55, 74, 124, 0.57) 17.19%, rgba(236, 255, 242, 0.62) 64.6%); */
+}
+.banner .discount-packages-item .content .title {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	padding: 0 15px;
+	font-style: normal;
+	font-family: 'system-ui';
+	display: flex;
+	align-items: center;
+	text-align: center;
+	inset: 0;
+	font-size: 34px;
+	line-height: 40px;
+	color: #ffffff;
+	/* font-weight: 900;
+	letter-spacing: -0.05rem;
+	-webkit-text-stroke: 2px black;
+	-webkit-text-fill-color: white;
+	text-shadow: 2px 2px 3px black; */
+	font-weight: 800;
+	letter-spacing: 1px;
+	text-shadow: 5px 2px 4px black;
 }

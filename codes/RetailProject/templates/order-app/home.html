@@ -1,6 +1,7 @@
 {% extends 'order-app/base-site/base-side.html' %}
 {% load static %}
 {% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
 <link rel="stylesheet" href="{% static 'order-app/css/home.css' %}">
 {% endblock %}
 {% block app-container %}
@@ -36,9 +37,13 @@
     </a>
   </div>
   <div class="banner">
-    <img src="{% static 'order-app/images/home/banner.png' %}" alt="">
+    <!-- <img src="{% static 'order-app/images/home/banner.png' %}" alt="">
     <div class="text">20% Discount
-      table for 4</div>
+      table for 4</div> -->
+      <div class="swiper discount-packages-swipper">
+        <div class="swiper-wrapper"></div>
+        <div class="swiper-pagination"></div>
+      </div>
   </div>
   <div class="section_categories">
   </div>
@@ -67,5 +72,6 @@
 </div>
 {% endblock %}
 {% block js_custom_foot %}
+<script src="{% static 'js/swiper-bundle.min.js'%}"></script>
 <script src="{% static 'order-app/js/home.js'%}"></script>
 {% endblock %}
