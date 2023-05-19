@@ -4,3 +4,5 @@ pytz==2023.3
 sqlparse==0.4.4
 typing_extensions==4.5.0
 django-ckeditor
+django-mptt
+django-mptt-admin

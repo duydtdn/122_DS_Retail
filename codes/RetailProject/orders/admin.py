@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia
+from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia, ProductCategory
 
 # Register your models here.
 
@@ -8,6 +8,12 @@ admin.site.register(
     Product,
     list_display=['id', 'title', 'price', 'discount', 'is_show_main_media', 'is_show_list_media'],
     list_display_links=['id', 'title'],
+)
+
+admin.site.register(
+    ProductCategory,
+    list_display=['id', 'name', 'slug', 'parent'],
+    list_display_links=['id', 'name'],
 )
 
 admin.site.register(

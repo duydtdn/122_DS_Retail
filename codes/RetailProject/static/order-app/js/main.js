@@ -16,6 +16,7 @@ let cartLS = JSON.parse(localStorage.getItem('cart') || '[]');
 let searchText = '';
 let categoryFilter = '';
 let groupText = '';
+let categories = [];
 const allProduct = [
   { desc: 'Good choose for your family', group: 'food', id: 1, name: 'Japanese food 1', category: 'Japanese_food', price: '20$', image: '../static/order-app/images/home/sushi_uramaki.png' },
   { desc: 'Good choose for your family', group: 'drink', id: 2, name: 'Japanese drink 2', category: 'Japanese_food', price: '20$', image: '../static/order-app/images/home/takiyoki.png' },
@@ -103,41 +104,41 @@ const onSearch = () => {
     renderPopularDrink(searchText, categoryFilter);
   }
 }
-const renderCategories = (activeKey) => {
-  const categories = [
-    { label: "Japanese food", key: 'Japanese_food' },
-    { label: "Iced Drinks", key: 'Iced_Drinks' },
-    { label: "Grilled meat", key: 'Grilled_meat' },
-  ]
+const renderCategories = async (activeKey) => {
+  if (!categories.length) {
+    const response = await fetch ('/order-app/api/categories');
+    const data = await response.json();
+    categories = data.results.filter(ct => ct.parent)
+  }
   const stringHtml = `
     <div class="title">Categories</div>
       <div class="categories">
         ${categories.map(ct =>
-    `<div onclick="onChangeCategories('${ct.key}')" class="ctg-item ${ct.key === activeKey ? 'active' : ''}">${ct.label}</div>`).join('')}
+    `<div onclick="onChangeCategories(${ct.id})" class="ctg-item ${ct.id === activeKey ? 'active' : ''}">${ct.name}</div>`).join('')}
         </div>
         </div>
       `;
   $('.section_categories').html(stringHtml);
 };
-const renderListOrderMenu = (search = '', group = '', category = '') => {
-  items = allProduct
-    .filter(it => it.name.includes(search) && it.group.includes(group) && it.category.includes(category));
+const renderListOrderMenu = async (search = '', group = '', category = '') => {
+  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const items = await response.json();
   const stringHtml =
-    items.map(it =>
+    items.results.map(it =>
       `<a class="order-item" href="${APP_MENU_URLS.DETAIL}?id=${it.id}"}>
-    <img class="thumbnail" src="${it.image}" alt="">
-    <span class="name">${it.name}</span>
-    <span class="price">${it.price}</span>
+    <img class="thumbnail" src="${it.thumbnail}" alt="">
+    <span class="name">${it.title}</span>
+    <span class="price">${it.price} $</span>
   </a>`
     ).join('')
   $('.section_items_order').html(stringHtml);
 }
 
 const renderPopularFood = async (search = '', category = '') => {
-  const response = await fetch ('/order-app/api/products/');
+  const response = await fetch (`/order-app/api/products?category=${category}`);
   const foods = await response.json();
   const stringHtml =
-    foods.results.map(it =>
+    foods.results.slice(0,2).map(it =>
       `<a class="order-item food" href="${APP_MENU_URLS.DETAIL}?id=${it.id}">
       <img class="thumbnail" src="${it.thumbnail}" alt="">
       <span class="name">${it.title}</span>
@@ -147,10 +148,10 @@ const renderPopularFood = async (search = '', category = '') => {
   $('.foods').html(stringHtml);
 }
 const renderPopularDrink = async (search = '', category = '') => {
-  const response = await fetch ('/order-app/api/products/');
+  const response = await fetch (`/order-app/api/products?category=${category}`);
   const drinks = await response.json();
   const stringHtml =
-  drinks.results.map(it =>
+  drinks.results.slice(0,2).map(it =>
     `<a class="order-item food" href="${APP_MENU_URLS.DETAIL}?id=${it.id}">
     <img class="thumbnail" src="${it.thumbnail}" alt="">
     <span class="name">${it.title}</span>

@@ -7,17 +7,50 @@ from django.dispatch import receiver
 from django.utils.safestring import mark_safe
 from PIL import Image
 from datetime import datetime
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 # from SiiOn.controller.libs.file_folder_ast import delete_file
 
 
 # Create your models here.
+
+class ProductCategory(MPTTModel):
+    name = models.CharField(verbose_name='Thể loại', max_length=150, db_index=True)
+    slug = models.SlugField(max_length=150, unique=True ,db_index=True)
+    # parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,on_delete=models.CASCADE)
+    # thu_tu = models.IntegerField(default=0)
+    class MPTTMeta:
+        # level_attr = 'mptt_level'
+        order_insertion_by = ['parent']
+
+    class Meta:
+        unique_together = (('parent', 'slug',))
+        verbose_name_plural = 'Quản lý Category'
+
+    def get_slug_list(self):
+        try:
+            ancestors = self.get_ancestors(include_self=True)
+        except:
+            ancestors = []
+        else:
+            ancestors = [i.slug for i in ancestors]
+        slugs = []
+        for i in range(len(ancestors)):
+            slugs.append('/'.join(ancestors[:i + 1]))
+        return slugs
+
+    def __unicode__(self):
+        return '%s' % self.name
+    def __str__(self):
+        return self.name
 class Product(models.Model):
     title = models.CharField(max_length=512, null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
     detail = RichTextField(null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     is_show_main_media = models.BooleanField(default=False)
     is_show_list_media = models.BooleanField(default=False)
     def thumbnail_directory_path(Client, filename):

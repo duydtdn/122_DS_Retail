@@ -4,11 +4,13 @@ from django.urls import include
 from django.urls import path
 from . import views
 from orders.controller.product_ctr import ProductViewSet
+from orders.controller.category_ctr import ProductCategoryViewSet
 
 
 app_name = 'order'
 api_router = routers.DefaultRouter()
 api_router.register(r'products', ProductViewSet)
+api_router.register(r'categories', ProductCategoryViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),
