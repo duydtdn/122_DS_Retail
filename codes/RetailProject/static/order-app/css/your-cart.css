@@ -162,6 +162,7 @@
 	color: white;
 	border: none;
 	margin-top: 30px;
+	text-transform: uppercase;
 }
 
 .btn-place-order button span {
