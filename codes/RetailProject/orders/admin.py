@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia, ProductCategory, DiscountPackage
+from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia, ProductCategory, DiscountPackage,Table,OrderPlace,OrderPlaceProduct
 
 # Register your models here.
 
@@ -54,4 +54,19 @@ admin.site.register(
     DiscountPackage,
     list_display=['id', 'title', 'discount', 'amount', 'is_active',],
     list_display_links=['id', 'title'],
+)
+admin.site.register(
+    Table,
+    list_display=['id', 'name', 'number_of_chair' , 'is_available'],
+    list_display_links=['id', 'name'],
+)
+admin.site.register(
+    OrderPlace,
+    list_display=['id', 'discount', 'table', 'is_pay', 'time'],
+    list_display_links=['id', 'table'],
+)
+admin.site.register(
+    OrderPlaceProduct,
+    list_display=['id', 'order_place_id', 'product', 'amount'],
+    list_display_links=['id', 'order_place_id'],
 )

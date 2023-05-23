@@ -181,3 +181,24 @@ class DiscountPackage(models.Model):
                     image.save(self.thumbnail.name)
                 except IOError:
                     print("Co loi trong qua trinh resize")
+
+
+class Table(models.Model):
+    name = models.CharField(verbose_name='Table name', max_length=150, db_index=True)
+    number_of_chair = models.IntegerField(null=False, blank=False)
+    is_available = models.BooleanField(default=True)
+    def __str__(self):
+        return f'{self.name}'
+
+class OrderPlace(models.Model):
+    discount = models.ForeignKey(DiscountPackage, on_delete=models.CASCADE, null=True, blank=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_created=True)
+    is_pay = models.BooleanField(default=False)
+    def __str__(self):
+        return f'{self.id}'
+
+class OrderPlaceProduct(models.Model):
+    order_place_id = models.ForeignKey(OrderPlace,  on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    amount = models.IntegerField(null=False, blank=False, default=1)
