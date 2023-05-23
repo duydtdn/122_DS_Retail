@@ -39,3 +39,10 @@ def signage(request):
         'products': 'products',
     }
     return render(request, 'order-app/signage.html', context)
+
+def placeOrders(request):
+    context = {
+        'categories': 'categories',
+        'products': 'products',
+    }
+    return render(request, 'order-app/place-orders.html', context)
