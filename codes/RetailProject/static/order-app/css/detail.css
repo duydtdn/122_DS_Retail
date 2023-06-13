@@ -80,12 +80,19 @@
 	margin-top: 20px;
 }
 
-.navigation img {
-	height: 20px;
+.navigation .back-btn,
+.navigation .cart-btn {
+	width: 34px;
+	height: 34px;
+	padding: 6px;
+	background: #fff;
+	border-radius: 9999px;
 }
-
-.navigation .back-btn img {
-	height: 15px;
+.navigation .back-btn img,
+.navigation .cart-btn img {
+	width: 100%;
+	object-fit: contain;
+	height: 100%;
 }
 
 .btn-add-to-cart button {
