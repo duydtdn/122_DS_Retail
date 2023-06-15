@@ -67,7 +67,7 @@ strong {
 	border-radius: 10px;
 	color: white;
 	border: none;
-	margin-top: 30px;
+	margin-top: 20px;
 	text-transform: uppercase;
   font-size: 14px;
   font-weight: 400;
@@ -91,7 +91,9 @@ strong {
   background-color: #de3905;
   border-color: #de3905;
 }
-
+input.otp-input {
+  text-align: center;
+}
 .app-container {
 	max-width: 400px;
 	margin: auto;
@@ -114,7 +116,7 @@ strong {
 	top: 0;
 	left: 0;
 	background: #f3f3fe;
-  z-index: 9;
+  z-index: 1;
 }
 
 .navigation-header img {
@@ -150,7 +152,7 @@ strong {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-	z-index: 9;
+	z-index: 1;
 }
 
 .app-menu {
@@ -302,6 +304,7 @@ strong {
   border-bottom: solid 2px #de3905;
   padding-bottom: 8px;
   margin-bottom: 20px;
+  font-size: 20px;
 }
 .popup-form .container {
   position: relative;
@@ -331,7 +334,7 @@ strong {
 }
 
 .popup-form .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;

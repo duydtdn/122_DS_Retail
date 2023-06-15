@@ -14,38 +14,83 @@
     {% block app-container %}
     {% endblock %}
     <div id="login_popup" class="modal popup-form animated fadeInDown">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-offset-3">
-              <h1 class="text-center font-weight-bold">Đăng nhập</h1>
-              <form class="form-horizontal">
-                <div class="form-group">
-                  <label for="phone" class="control-label">Số điện thoại</label>
-                  <div class="">
-                    <input type="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại">
-                  </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-offset-3">
+            <h1 class="text-center font-weight-bold">Đăng nhập</h1>
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="phone" class="control-label">Số điện thoại</label>
+                <div class="">
+                  <input type="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại">
                 </div>
-                <div class="form-group">
-                  <label for="password" class="control-label">Mật khẩu</label>
-                  <div class="">
-                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
-                  </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="control-label">Mật khẩu</label>
+                <div class="">
+                  <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
                 </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-2">
-                    <button onclick="handleLogin()" class="btn btn-primary btn-block">Đăng nhập</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label text-center">Chưa có tài khoản</label>
-                  <div class="col-sm-offset-2">
-                    <button onclick="handleRegister()" class="btn btn-outline-primary btn-block">Đăng ký ngay</button>
-                  </div>
-                </div>
-              </form>
+              </div>
+            </form>
+            <div class="form-group">
+              <div class="col-sm-offset-2">
+                <button onclick="handleLogin()" class="btn btn-primary btn-block">Đăng nhập</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label text-center">Chưa có tài khoản</label>
+              <div class="col-sm-offset-2">
+                <button onclick="popupRegister()" class="btn btn-outline-primary btn-block text-uppercase">Đăng ký ngay</button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div id="register_popup" class="modal popup-form animated fadeInUp">
+      <div class="container">
+        <div class="row" id="register_step_1">
+          <div class="col-md-offset-3">
+            <h1 class="text-center font-weight-bold">Đăng ký</h1>
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="register_phone" class="control-label">Số điện thoại</label>
+                <div class="">
+                  <input type="phone" class="form-control" id="register_phone" placeholder="Nhập số điện thoại">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="register_password" class="control-label">Mật khẩu</label>
+                <div class="">
+                  <input type="password" class="form-control" id="register_password" placeholder="Nhập mật khẩu">
+                </div>
+              </div>
+            </form>
+            <div class="form-group">
+              <div class="col-sm-offset-2">
+                <button onclick="handleRegister()" class="btn btn-primary btn-block">Đăng ký</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row d-none" id="register_step_2">
+          <div class="col-md-offset-3">
+            <h1 class="text-center font-weight-bold">Xác nhận OTP</h1>
+            <form>
+              <div class="form-group">
+                <label class="control-label mb-2" for="otp">Nhập OTP được gửi đến số điện thoại của bạn</label>
+                <div class="input-group mb-3 flex-nowrap">
+                  <input type="text" class="form-control otp-input" id="digit1" name="digit1" maxlength="1" aria-label="Digit 1">
+                  <input type="text" class="form-control otp-input" id="digit2" name="digit2" maxlength="1" aria-label="Digit 2">
+                  <input type="text" class="form-control otp-input" id="digit3" name="digit3" maxlength="1" aria-label="Digit 3">
+                  <input type="text" class="form-control otp-input" id="digit4" name="digit4" maxlength="1" aria-label="Digit 4">
+                </div>
+              </div>
+            </form>
+            <button onclick="confirmOtp()" class="btn btn-primary btn-block">Xác nhận</button>
+        </div>
+        </div>
+      </div>
     </div>
     {% block js_default_foot %}
     {% endblock %}

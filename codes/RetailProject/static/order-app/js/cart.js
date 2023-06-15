@@ -17,12 +17,16 @@ const handlePlaceOrder = () => {
   }
 }
 const handlePay = () => {
-  cartLS = [];
-  localStorage.setItem('cart', JSON.stringify([]));
+  // cartLS = [];
+  // localStorage.setItem('cart', JSON.stringify([]));
   if (!accessToken) {
     popupLogin()  
   } else {
-    const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'} 
+    // call api create order and payment
+
+    const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'}
+    cartLS = [];
+    localStorage.setItem('cart', JSON.stringify([]));
     popupOrderSuccess(orderResult);
   }
 }
@@ -75,7 +79,6 @@ const renderCart = () => {
       <span class="icon-add">+</span>
     </a>
   </div>
-  <div class="end-line"></div>
   <div class="total-cart">
     <span>Total:</span>
     <span>${cartItems.map(c => +c.price * c.quantity).reduce((a, b) => a + b, 0)}$</span>
