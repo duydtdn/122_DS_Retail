@@ -1,20 +1,31 @@
 let allProduct = [];
+let payMethod = 'cash';
 $(document).ready( async function () {
   await getAllProduct();
   renderCart();
-  $('#btn_place_order').click(function () {
-    cartLS = [];
-    localStorage.setItem('cart', JSON.stringify([]));
+})
 
-    $('#place_order_popup').modal({
+const handlePlaceOrder = () => {
+  if (cartLS.length) {
+    $('#order_popup').modal({
       open: true,
       fadeDuration: 200,
       showClose: false,
-      escapeClose: false,
-      clickClose: false,
+      escapeClose: true,
+      clickClose: true,
     })
-  })
-})
+  }
+}
+const handlePay = () => {
+  cartLS = [];
+  localStorage.setItem('cart', JSON.stringify([]));
+  if (!accessToken) {
+    popupLogin()  
+  } else {
+    const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'} 
+    popupOrderSuccess(orderResult);
+  }
+}
 const getAllProduct = async () => {
   const response = await fetch (`/order-app/api/products`);
   const data = await response.json();
@@ -70,4 +81,9 @@ const renderCart = () => {
     <span>${cartItems.map(c => +c.price * c.quantity).reduce((a, b) => a + b, 0)}$</span>
   </div>`
   $('.cart-items').html(stringHtml);
+}
+const selectPayMethod = (method) => {
+  payMethod = method;
+  $('.pay-method').removeClass('selected')
+  $(`.${method}`).addClass('selected')
 }

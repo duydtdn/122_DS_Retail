@@ -12,10 +12,16 @@
       <img onclick="onSearch()" class="icon-filter" src="{% static 'order-app/images/home/filter.png' %}" alt="">
     </div>
     <a href="/order-app/cart">
-      <img class="button" src="{% static 'order-app/images/home/phone-call.png' %}" alt="">
+      <button class="btn btn-outline-primary">
+        <img class="button" src="{% static 'order-app/images/home/phone-call.png' %}" alt="">
+      </button>
     </a>
     <a href="/order-app/cart">
-      <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+      <button class="btn btn-outline-primary position-relative">
+        <img src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+        <span id="order_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+          </span>
+      </button>
     </a>
   </div>
   <div class="section_categories"></div>

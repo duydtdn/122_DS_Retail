@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="{% static 'order-app/css/your-cart.css' %}">
 {% endblock %}
 {% block app-container %}
-<div class="app-container animated fadeInUp">
-  <div class="navigation remove-margin">
+<div class="app-container">
+  <div class="navigation-header remove-margin animated fadeInDown">
     <!-- <div class="back-btn" onclick="onBack()">
         <img class="button" src="images/detail/icon-back.png" alt="">
       </div> -->
@@ -14,23 +14,63 @@
       <span class="page-title">Your Cart</span>
     </div>
   </div>
-  <div class="box-cart remove-margin">
+  <div class="box-cart remove-margin animated fadeInUp">
     <div class="cart-items"></div>
   </div>
-  <div class="btn-place-order">
-    <button id="btn_place_order">
+  <div class="btn-place-order animated fadeInUp">
+    <button id="btn_place_order" class="btn-primary" onclick="handlePlaceOrder()">
       <span>Place Order</span>
     </button>
   </div>
   <div id="place_order_popup" class="modal">
     <img src="{% static 'order-app/images/your-cart/success.png' %}" alt="">
-    <div class="text-done">Done</div>
-    <a href="/order-app/home">
-      <button id="btn_home_page">
-        <span>GO TO HOMEPAGE</span>
+    <div class="text-done text-success">Đặt hàng thành công!</div>
+    <div class="text-center">
+      <span class="">Mã đơn hàng:</span>
+      <span class="order-hash"></span>
+    </div>
+    <div class="text-center fst-italic mt-2 fw-bold">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng</div>
+    <a href="/order-app/place-orders">
+      <button id="btn_home_page" class="btn-primary">
+        <span>Xem danh sách đơn</span>
       </button>
     </a>
   </div>
+  <div id="order_popup" class="popup-form modal animated fadeInDown">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-3">
+          <h1 class="text-center font-weight-bold">Đặt hàng</h1>
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="email" class="control-label">Số điện thoại</label>
+              <div class="">
+                <input disabled type="email" class="form-control" id="email" placeholder="0928201102">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Chọn phương thức thanh toán</label>
+              <div id="pay-method-groups">
+                <div class="pay-method cash-pay selected" onclick="selectPayMethod('cash-pay')">
+                  <img src="{% static 'order-app/images/your-cart/cash.jpg' %}" alt="">
+                  <span>Thanh toán bằng tiền mặt</span>
+                </div>
+                <div class="pay-method momo-pay" onclick="selectPayMethod('momo-pay')">
+                  <img src="{% static 'order-app/images/your-cart/momo.png' %}" alt="">
+                  <span>Thanh toán bằng Momo</span>
+                </div>  
+              </div>
+            </div>
+          </form>
+          <div class="form-group">
+            <div class="col-sm-offset-2">
+              <button onclick="handlePay()" class="btn btn-primary btn-block">Thanh toán</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 </div>
 <div class="app-menu-container">
   <div class="app-menu">
@@ -38,5 +78,6 @@
 </div>
 {% endblock %}
 {% block js_custom_foot %}
+<!-- <script src="{% static 'order-app/js/placeOrders.js'%}"></script> -->
 <script src="{% static 'order-app/js/cart.js'%}"></script>
 {% endblock %}

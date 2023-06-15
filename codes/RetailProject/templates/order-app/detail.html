@@ -10,12 +10,12 @@
     <div class="back-btn" onclick="onBack()">
       <img class="button" src="{% static 'order-app/images/detail/icon-back.png' %}" alt="">
     </div>
-    <a href="/order-app/cart">
+    <a href="/order-app/cart" class="cart-btn">
       <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
     </a>
   </div>
   <div class="btn-add-to-cart">
-    <button id="btn_add_to_cart">
+    <button id="btn_add_to_cart" class="btn-primary">
       <span>Add to cart</span>
       <img src="{% static 'order-app/images/detail/shopping-cart.png' %}" alt="">
     </button>
@@ -23,7 +23,7 @@
   <div id="add_to_cart_popup" class="modal">
     <div class="section_detail"></div>
     <div class="btn-add-to-cart">
-      <button id="btn_add_to_cart_popup" onclick="addToCart()">
+      <button id="btn_add_to_cart_popup" class="btn-primary" onclick="addToCart()">
         <span>Add</span>
         <!-- <img src="images/detail/shopping-cart.png" alt=""> -->
       </button>

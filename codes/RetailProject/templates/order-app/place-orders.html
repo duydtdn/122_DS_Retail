@@ -4,33 +4,47 @@
 <link rel="stylesheet" href="{% static 'order-app/css/place-orders.css' %}">
 {% endblock %}
 {% block app-container %}
-<div class="app-container animated fadeInUp">
-  <div class="navigation remove-margin">
-    <!-- <div class="back-btn" onclick="onBack()">
-        <img class="button" src="images/detail/icon-back.png" alt="">
-      </div> -->
+<div class="app-container">
+  <div class="navigation-header remove-margin animated fadeInDown">
     <div style="display: flex; align-items: center; gap: 4px;">
       <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
-      <span class="page-title">Your Cart</span>
+      <span class="page-title">Đơn hàng của bạn</span>
     </div>
   </div>
-  <div class="box-cart remove-margin">
-    <div class="cart-items"></div>
+  <div class="box-orders remove-margin">
+    <div class="header row g-0">
+      <div class="col-5">Mã đơn</div>
+      <div class="col-3">Tổng tiền</div>
+      <div class="col-4">Trạng thái</div>
+    </div>
+    <div class="orders-items">
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-primary text-light">Chờ món</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-success text-light">Hoàn tất</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-secondary text-light">Đã hủy</span></div>
+      </div>
+    </div>
   </div>
-  <div class="btn-place-order">
-    <button id="btn_place_order">
-      <span>Place Order</span>
+  <a href="./cart">
+  <button id="btn_home_page" class="btn-primary">
+      View cart
     </button>
-  </div>
-  <div id="place_order_popup" class="modal">
-    <img src="{% static 'order-app/images/your-cart/success.png' %}" alt="">
-    <div class="text-done">Done</div>
-    <a href="/order-app/home">
-      <button id="btn_home_page">
-        <span>GO TO HOMEPAGE</span>
-      </button>
-    </a>
-  </div>
+  </a>
 </div>
 <div class="app-menu-container">
   <div class="app-menu">

@@ -4,8 +4,13 @@ $(document).ready(function () {
   renderPopularDrink();
   getDiscountPackage();
   renderOrderStatus();
+  renderHeader();
 });
-
+const renderHeader = () => {
+  if (userLS) {
+  $('#app_header .user .phone').html(userLS.phone)
+  }
+}
 const getDiscountPackage = async () => {
   const response = await fetch (`/order-app/api/discount-packages`);
   const data = await response.json();

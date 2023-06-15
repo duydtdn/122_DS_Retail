@@ -12,6 +12,9 @@ const APP_MENU_URLS = {
   CART: '/order-app/cart',
   PLACE_ORDERS: '/order-app/place-orders',
 }
+const userLS = JSON.parse(localStorage.getItem('user'));
+const accessToken = localStorage.getItem('access_token')
+
 const onBack = () => history.back();
 let cartLS = JSON.parse(localStorage.getItem('cart') || '[]');
 let searchText = '';
@@ -70,7 +73,6 @@ const onChangeCategories = (key) => {
     renderPopularDrink('', categoryFilter);
   }
 }
-
 const onSearch = () => {
   searchText = $('.search input').val();
   console.log({ searchText, groupText, categoryFilter })
@@ -109,7 +111,6 @@ const renderListOrderMenu = async (search = '', group = '', category = '') => {
     ).join('')
   $('.section_items_order').html(stringHtml);
 }
-
 const renderPopularFood = async (search = '', category = '') => {
   const response = await fetch (`/order-app/api/products?category=${category}`);
   const foods = await response.json();
@@ -136,7 +137,37 @@ const renderPopularDrink = async (search = '', category = '') => {
     ).join('')
   $('.drinks').html(stringHtml);
 }
+const renderOrderCount = () => {
+  $('.nav-box #order_count').html(cartLS.length || '')
+}
+const popupLogin = () => {
+  $('#login_popup').modal({
+    open: true,
+    fadeDuration: 200,
+    showClose: false,
+    escapeClose: true,
+    clickClose: true,
+  });
+}
+const popupOrderSuccess = (orderResult) => {
+  $('#place_order_popup .order-hash').html(orderResult.orderHash);
 
+  $('#place_order_popup').modal({
+    open: true,
+    fadeDuration: 200,
+    showClose: false,
+    escapeClose: false,
+    clickClose: false,
+  })
+}
+const handleLogin = () => {
+  console.log('aaa');
+  const phone = $('#phone').val();
+  const user = {phone}
+  localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('access_token', 'token');
+}
 $(document).ready(function () {
   renderAppMenu();
+  renderOrderCount();
 });
