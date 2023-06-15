@@ -1,12 +1,13 @@
 .box-orders {
   background: #fff;
   /* height: 400px; */
-  padding: 25px;
+  padding: 15px;
 }
 .box-orders .header {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   overflow: hidden;
+  font-size: 14px;
 }
 .box-orders .header div {
   /* border: solid de3905 1px; */
@@ -22,12 +23,15 @@
   border: #de3905 solid 1px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow: auto;
+  height: calc( 100vh - 380px );
+
 }
 .box-orders .orders-item {
   padding: 4px 0;
   background: #fff;
-  border-bottom: solid #de3905 1px;
+  border-top: solid #de3905 1px;
 
 }
 .box-orders .orders-item div {

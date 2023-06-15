@@ -5,19 +5,52 @@
 {% endblock %}
 {% block app-container %}
 <div class="app-container">
-  <div class="navigation-header remove-margin animated fadeInDown">
+  <div class="navigation-header remove-margin">
     <div style="display: flex; align-items: center; gap: 4px;">
-      <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+      <img class="button" src="{% static 'order-app/images/home/order.png' %}" alt="">
       <span class="page-title">Đơn hàng của bạn</span>
     </div>
   </div>
   <div class="box-orders remove-margin">
+    <div class="d-flex justify-content-end mb-3">
+      <a class="" href="./cart">
+        <button id="" class="btn btn-outline-primary">
+          Xem giỏ hàng
+          <img src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
+        </button>
+      </a>
+    </div>
     <div class="header row g-0">
       <div class="col-5">Mã đơn</div>
       <div class="col-3">Tổng tiền</div>
       <div class="col-4">Trạng thái</div>
     </div>
     <div class="orders-items">
+      <div class="orders-item row g-0" onclick="popupOrderDetail()">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
+      <div class="orders-item row g-0">
+        <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
+        <div class="col-3">16000</div>
+        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">Chờ thanh toán</span></div>
+      </div>
       <div class="orders-item row g-0">
         <div class="col-5 fw-bold text-primary">KJLKJLKJALK</div>
         <div class="col-3">16000</div>
@@ -40,11 +73,70 @@
       </div>
     </div>
   </div>
-  <a href="./cart">
-  <button id="btn_home_page" class="btn-primary">
-      View cart
-    </button>
-  </a>
+  <div id="order_detail_popup" class="modal popup-form">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-3">
+          <h1 class="text-center font-weight-bold">Chi tiết đơn hàng</h1>
+          <div class="row mb-1 ">
+            <span class="col-4">Mã ĐH:</span>
+            <span class="col-8 fst-italic fw-bold">KL6L5LL234IPP</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Ngày tạo:</span>
+            <span class="col-8 fst-italic">30/05/2023</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Số ĐT:</span>
+            <span class="col-8 fst-italic">0928201102</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Trạng thái:</span>
+            <span class="col-8 fst-italic">Chờ thanh toán</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Hình thức:</span>
+            <span class="col-8 fst-italic">Thanh toán tại quầy</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Thực đơn:</span>
+            <div class="col-8 fst-italic">
+              <div class="row">
+                <span class="col-8">Gà bó xôi (x3):</span>
+                <span class="col-4">160k</span>
+              </div>
+              <div class="row">
+                <span class="col-8">Gà bó xôi (x3):</span>
+                <span class="col-4">160k</span>
+              </div>
+              <div class="row">
+                <span class="col-8">Gà bó xôi (x3):</span>
+                <span class="col-4">160k</span>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Mã giảm giá:</span>
+            <span class="col-8 fst-italic">GIAM10%</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Thành tiền:</span>
+            <span class="col-8 fst-italic fw-bold">480.000 VND</span>
+          </div>
+          <p class="fst-italic text-center">***********************************</p>
+          <p class="fst-italic text-center fs-6">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng.</p>
+          <div class="form-group mt-2">
+            <div class="col-sm-offset-2">
+              <!-- <div class="col-6"></div> -->
+              <div class="col-6 m-auto">
+                <button onclick="handleLogin()" class="btn btn-outline-primary btn-block">Hủy đơn</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="app-menu-container">
   <div class="app-menu">

@@ -140,8 +140,19 @@ const renderPopularDrink = async (search = '', category = '') => {
 const renderOrderCount = () => {
   $('.nav-box #order_count').html(cartLS.length || '')
 }
-const popupLogin = () => {
+const popupLogin = (open = true) => {
   $('#login_popup').modal({
+    open: open,
+    fadeDuration: 200,
+    showClose: false,
+    escapeClose: true,
+    clickClose: true,
+  });
+}
+const popupRegister = () => {
+  $('#register_step_1').removeClass('d-none').addClass('d-flex');
+  $('#register_step_2').removeClass('d-flex').addClass('d-none');
+  $('#register_popup').modal({
     open: true,
     fadeDuration: 200,
     showClose: false,
@@ -161,13 +172,39 @@ const popupOrderSuccess = (orderResult) => {
   })
 }
 const handleLogin = () => {
-  console.log('aaa');
   const phone = $('#phone').val();
-  const user = {phone}
+  const password = $('#password').val();
+  const user = {phone, password}
   localStorage.setItem('user', JSON.stringify(user));
   localStorage.setItem('access_token', 'token');
+  window.location.reload();
+}
+const handleRegister = () => {
+  const phone = $('#register_phone').val();
+  const password = $('#register_password').val();
+  const user = {phone, password}
+  //send request register user
+
+  $('#register_step_1').addClass('d-none');
+  $('#register_step_2').removeClass('d-none').addClass('d-flex');
+  $('#digit1').focus();;
+}
+const confirmOtp = () => {
+  const otp = $('#register_step_2 form').serializeArray().map(item => +item.value);
+  if (otp.every((item) => item >= 0 && typeof item === 'number')) {
+    //send request confirm otp
+
+    popupLogin();
+  }
 }
 $(document).ready(function () {
   renderAppMenu();
   renderOrderCount();
+  // auto focus next input when input OTP
+  $('input[type="text"]').on('input', function() {
+    var $this = $(this);
+    if ($this.val().length == $this.attr('maxlength')) {
+      $this.next().focus();
+    }
+  });
 });
