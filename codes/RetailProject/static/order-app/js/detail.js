@@ -4,7 +4,6 @@ if (!id && !cart) {
 const detailId = cart || id;
 
 let product;
-
 let price = 0;
 let quantity = cart ? cartLS.find(it => it.id === detailId).quantity : 1;
 let note = cart ? cartLS.find(it => it.id === detailId).note : '';
@@ -39,8 +38,8 @@ $(document).ready(function () {
       open: true,
       fadeDuration: 200,
       showClose: false,
-      escapeClose: false,
-      clickClose: false,
+      escapeClose: true,
+      clickClose: true,
     });
     renderPrice(quantity)
   }
@@ -81,7 +80,7 @@ const renderPopupAddToCart = () => {
       Quantity:
       <button onclick="decrease()">-</button>
       <span id="quantity">
-        2
+        ${quantity}
       </span>
       <button onclick="increase()">+</button>
     </div>
@@ -111,12 +110,13 @@ const addToCart = () => {
     ]
   }
   localStorage.setItem('cart', JSON.stringify(cartLS))
+  $("#add_to_cart_popup").modal('toggle');
   $.notify("Add to cart successfully",
     {
       className: 'success',
       position: "top center",
-      showAnimation: 'slideDown',
-      hideAnimation: 'slideUp',
+      // showAnimation: 'slideDown',
+      // hideAnimation: 'slideUp',
       autoHideDelay: 1000
     });
   setTimeout(() => {

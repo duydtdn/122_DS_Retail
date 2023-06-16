@@ -36,6 +36,7 @@
               <div class="col-sm-offset-2">
                 <button onclick="handleLogin()" class="btn btn-primary btn-block">Đăng nhập</button>
               </div>
+              <div class="text-end text-primary"><a>Quên mật khẩu</a></div>
             </div>
             <div class="form-group">
               <label class="control-label text-center">Chưa có tài khoản</label>
@@ -91,6 +92,10 @@
         </div>
         </div>
       </div>
+    </div>
+    <div id="processing">
+      <div class="overlay"></div>
+      <div id="spinner"></div>
     </div>
     {% block js_default_foot %}
     {% endblock %}

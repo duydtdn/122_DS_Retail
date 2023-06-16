@@ -1,4 +1,5 @@
-.thumbnail-top {
+.app-container {
+	height: 100vh;
 }
 
 .thumbnail-top img {

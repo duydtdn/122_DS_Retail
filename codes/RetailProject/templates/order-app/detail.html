@@ -4,9 +4,9 @@
 <link rel="stylesheet" href="{% static 'order-app/css/detail.css' %}">
 {% endblock %}
 {% block app-container %}
-<div class="app-container animated fadeInDown">
-  <div id="product-detail"></div>
-  <div class="navigation">
+<div class="app-container">
+  <div id="product-detail" class="animated fadeInDown"></div>
+  <div class="navigation animated fadeInDown">
     <div class="back-btn" onclick="onBack()">
       <img class="button" src="{% static 'order-app/images/detail/icon-back.png' %}" alt="">
     </div>
@@ -14,13 +14,13 @@
       <img class="button" src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
     </a>
   </div>
-  <div class="btn-add-to-cart">
+  <div class="btn-add-to-cart animated fadeInUp">
     <button id="btn_add_to_cart" class="btn-primary">
       <span>Add to cart</span>
       <img src="{% static 'order-app/images/detail/shopping-cart.png' %}" alt="">
     </button>
   </div>
-  <div id="add_to_cart_popup" class="modal">
+  <div id="add_to_cart_popup" class="modal animated fadeInUp">
     <div class="section_detail"></div>
     <div class="btn-add-to-cart">
       <button id="btn_add_to_cart_popup" class="btn-primary" onclick="addToCart()">

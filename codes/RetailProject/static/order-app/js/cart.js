@@ -31,9 +31,11 @@ const handlePay = () => {
   }
 }
 const getAllProduct = async () => {
+  $('#processing').show();
   const response = await fetch (`/order-app/api/products`);
   const data = await response.json();
   allProduct = data?.results || [];
+  $('#processing').hide();
 }
 const removeCart = (id) => {
   const newCart = cartLS.filter(item => +item.id !== +id);

@@ -3,6 +3,7 @@ const urlParams = new URLSearchParams(queryString);
 const id = +urlParams.get('id');
 const cart = +urlParams.get('cart');
 const path = window.location.pathname;
+const API_URL = '/';
 const APP_ROOT_URL = '/order-app/'
 const APP_MENU_URLS = {
   HOME: '/order-app/home',
@@ -185,18 +186,43 @@ const handleRegister = () => {
   const user = {phone, password}
   //send request register user
 
+  //show confirm OTP popup
   $('#register_step_1').addClass('d-none');
   $('#register_step_2').removeClass('d-none').addClass('d-flex');
-  $('#digit1').focus();;
+  $('#digit1').focus();
 }
 const confirmOtp = () => {
   const otp = $('#register_step_2 form').serializeArray().map(item => +item.value);
   if (otp.every((item) => item >= 0 && typeof item === 'number')) {
     //send request confirm otp
 
-    popupLogin();
+    //login to continue
+    $("#processing").show();
+    setTimeout(() => {
+      // $('#register_popup').modal('toggle')
+      $.notify("Đăng ký tài khoản thành công, chuyển đến đăng nhập...",
+      {
+        className: 'success',
+        position: "top",
+        autoHideDelay: 2000
+      });
+      setTimeout(() => {
+        $("#processing").hide();
+        popupLogin();
+      }, 1000)
+    }, 2000)
   }
 }
+// Show the spinner and overlay
+function showSpinner() {
+  $("#spinner").addClass("loading");
+}
+
+// Hide the spinner and overlay
+function hideSpinner() {
+  $("#spinner").removeClass("loading");
+}
+
 $(document).ready(function () {
   renderAppMenu();
   renderOrderCount();
