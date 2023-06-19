@@ -142,6 +142,10 @@ const renderOrderCount = () => {
   $('.nav-box #order_count').html(cartLS.length || '')
 }
 const popupLogin = (open = true) => {
+  // clear old form value
+  $('#login_popup input').val('')
+  $('#login_popup .error-text').html('')
+
   $('#login_popup').modal({
     open: open,
     fadeDuration: 200,
@@ -153,6 +157,11 @@ const popupLogin = (open = true) => {
 const popupRegister = () => {
   $('#register_step_1').removeClass('d-none').addClass('d-flex');
   $('#register_step_2').removeClass('d-flex').addClass('d-none');
+
+  // clear old form value
+  $('#register_popup input').val('')
+  $('#register_popup .error-text').html('')
+
   $('#register_popup').modal({
     open: true,
     fadeDuration: 200,
@@ -176,20 +185,36 @@ const handleLogin = () => {
   const phone = $('#phone').val();
   const password = $('#password').val();
   const user = {phone, password}
-  localStorage.setItem('user', JSON.stringify(user));
-  localStorage.setItem('access_token', 'token');
-  window.location.reload();
+  const isValidPhone =validatePhoneNumber(+phone);
+  const isValidPassword =validatePassword(password);
+  if(isValidPhone && isValidPassword) {
+    //call api login
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('access_token', 'token');
+    window.location.reload();
+  } else {
+    $('#login_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
+    $('#login_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
+  }
 }
 const handleRegister = () => {
   const phone = $('#register_phone').val();
   const password = $('#register_password').val();
   const user = {phone, password}
-  //send request register user
+  const isValidPhone =validatePhoneNumber(+phone);
+  const isValidPassword =validatePassword(password);
+  if(isValidPhone && isValidPassword) {
+    //send request register user
 
-  //show confirm OTP popup
-  $('#register_step_1').addClass('d-none');
-  $('#register_step_2').removeClass('d-none').addClass('d-flex');
-  $('#digit1').focus();
+    //show confirm OTP popup
+    $('#register_step_1').addClass('d-none');
+    $('#register_step_2').removeClass('d-none').addClass('d-flex');
+    $('#digit1').focus();
+  } else {
+    $('#register_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
+    $('#register_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
+  }
+ 
 }
 const confirmOtp = () => {
   const otp = $('#register_step_2 form').serializeArray().map(item => +item.value);
@@ -221,6 +246,14 @@ function showSpinner() {
 // Hide the spinner and overlay
 function hideSpinner() {
   $("#spinner").removeClass("loading");
+}
+function validatePhoneNumber(phoneNumber) {
+  const regex = /^\d{9,11}$/;
+  return regex.test(phoneNumber);
+}
+function validatePassword(password) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  return regex.test(password);
 }
 
 $(document).ready(function () {

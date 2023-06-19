@@ -7,6 +7,11 @@ $(document).ready( async function () {
 
 const handlePlaceOrder = () => {
   if (cartLS.length) {
+    if(userLS?.phone) {
+      $('#order_popup #logged_phone input').val(userLS.phone)
+    } else {
+      $('#order_popup #logged_phone').hide();
+    }
     $('#order_popup').modal({
       open: true,
       fadeDuration: 200,
