@@ -62,13 +62,13 @@ admin.site.register(
 )
 admin.site.register(
     OrderPlace,
-    list_display=['id', 'discount', 'table', 'is_pay', 'time'],
+    list_display=['id', 'discount', 'table', 'order_date','status'],
     list_display_links=['id', 'table'],
 )
 admin.site.register(
     OrderPlaceProduct,
-    list_display=['id', 'order_place_id', 'product', 'amount'],
-    list_display_links=['id', 'order_place_id'],
+    list_display=['id', 'order_place', 'product', 'amount'],
+    list_display_links=['id', 'order_place'],
 )
 
 admin.site.register(CustomUser,

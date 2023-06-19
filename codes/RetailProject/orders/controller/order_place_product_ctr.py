@@ -22,7 +22,7 @@ class OrderPlaceProductFilter(filters.FilterSet):
         model = OrderPlaceProduct
         fields = ['id', 'product', 'order_place_id']
 
-class OrderPlaceProductProductViewSet(viewsets.ModelViewSet):
+class OrderPlaceProductViewSet(viewsets.ModelViewSet):
     queryset = OrderPlaceProduct.objects.all()
     serializer_class = OrderPlaceProductSerializer
     filter_backends = [DjangoFilterBackend]

@@ -7,7 +7,7 @@ from orders.controller.product_ctr import ProductViewSet
 from orders.controller.category_ctr import ProductCategoryViewSet
 from orders.controller.discount_package_ctr import DiscountPackageViewSet
 from orders.controller.table_ctr import TableViewSet
-from orders.controller.order_place_product_ctr import OrderPlaceProductProductViewSet
+from orders.controller.order_place_ctr import OrderPlaceViewSet
 
 
 app_name = 'order'
@@ -16,7 +16,7 @@ api_router.register(r'products', ProductViewSet)
 api_router.register(r'categories', ProductCategoryViewSet)
 api_router.register(r'discount-packages', DiscountPackageViewSet)
 api_router.register(r'tables', TableViewSet)
-api_router.register(r'orders', OrderPlaceProductProductViewSet)
+api_router.register(r'orders', OrderPlaceViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),
