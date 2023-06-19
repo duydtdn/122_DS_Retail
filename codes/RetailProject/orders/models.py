@@ -8,8 +8,8 @@ from django.utils.safestring import mark_safe
 from PIL import Image
 from datetime import datetime
 from mptt.models import MPTTModel, TreeForeignKey
-
-
+from django.contrib.auth.models import AbstractUser, Group, Permission
+import phonenumbers
 # from SiiOn.controller.libs.file_folder_ast import delete_file
 
 
@@ -202,3 +202,28 @@ class OrderPlaceProduct(models.Model):
     order_place_id = models.ForeignKey(OrderPlace,  on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.IntegerField(null=False, blank=False, default=1)
+
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=20, unique=True)
+    groups = models.ManyToManyField(
+        Group,
+        blank=True,
+        related_name='custom_users',  # Add a unique related_name for groups
+        related_query_name='custom_user',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        blank=True,
+        related_name='custom_users_permissions',  # Add a unique related_name for user_permissions
+        related_query_name='custom_user_permission',
+    )
+
+    def save(self, *args, **kwargs):
+        # Validate and normalize the phone number before saving
+        parsed_number = phonenumbers.parse(self.phone_number, None)
+        if not phonenumbers.is_valid_number(parsed_number):
+            raise ValueError("Invalid phone number")
+        self.phone_number = phonenumbers.format_number(
+            parsed_number, phonenumbers.PhoneNumberFormat.E164
+        )
+        super().save(*args, **kwargs)

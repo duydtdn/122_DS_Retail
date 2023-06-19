@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia, ProductCategory, DiscountPackage,Table,OrderPlace,OrderPlaceProduct
+from orders.models import Cart, Pay, Notification, GiftCode, Product, ProductMedia, ProductCategory, DiscountPackage,Table,OrderPlace,OrderPlaceProduct,CustomUser
 
 # Register your models here.
 
@@ -70,3 +70,6 @@ admin.site.register(
     list_display=['id', 'order_place_id', 'product', 'amount'],
     list_display_links=['id', 'order_place_id'],
 )
+
+admin.site.register(CustomUser,
+  list_display=['id', 'phone_number'])

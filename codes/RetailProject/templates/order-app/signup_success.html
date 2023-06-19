@@ -1,0 +1,12 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'order-app/css/place-orders.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container animated fadeInUp">
+  <h2>Signup Successful</h2>
+  <p>Thank you for signing up!</p>
+</div>
+
+{% endblock %}
