@@ -14,13 +14,13 @@
   padding: 6px;
   background: #de3905;
   color: #fff;
-  height: 40px;
+  height: 50px;
   display: flex;
   align-items: center;
   border: #de3905 solid 1px;
 }
 .box-orders .orders-items {
-  border: #de3905 solid 1px;
+  border: #9E9E9E solid 1px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   /* overflow: hidden; */
@@ -31,7 +31,7 @@
 .box-orders .orders-item {
   padding: 4px 0;
   background: #fff;
-  border-top: solid #de3905 1px;
+  border-top: solid #9E9E9E  1px;
 
 }
 .box-orders .orders-item div {

@@ -419,6 +419,9 @@ input.otp-input {
 .popup-form .btn-outline-primary {
   background-color: #fff;
   color: #de3905;
+  height: 48px;
+  margin-top: 20px;
+  text-transform: uppercase;
 }
 .popup-form .btn-primary:hover,
 .popup-form .btn-outline-primary:hover {
