@@ -27,7 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    # Your other settings
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -156,3 +159,7 @@ LOGGING = {
         },
     },
 }
+VNPAY_TMN_CODE='SMZL30NT'
+VNPAY_RETURN_URL='localhost:8006/order-app/home'
+VNPAY_SCRETKEY='SQGRBQUVAJHBPWTFTCINLNUXHQRQFKBX'
+VNPAY_URL='https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'

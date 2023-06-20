@@ -16,20 +16,20 @@ admin.site.register(
     list_display_links=['id', 'name'],
 )
 
-admin.site.register(
-    ProductMedia,
-    list_display=['id', 'product', 'file_list_view', 'is_video', 'is_active'],
-    list_display_links=['id', 'product'],
-    fields=['product', 'file_detail_view', 'media_path', 'is_video', 'is_active'],
-    readonly_fields=['file_list_view', 'file_detail_view'],
-    list_filter=['product', ],
-)
+# admin.site.register(
+#     ProductMedia,
+#     list_display=['id', 'product', 'file_list_view', 'is_video', 'is_active'],
+#     list_display_links=['id', 'product'],
+#     fields=['product', 'file_detail_view', 'media_path', 'is_video', 'is_active'],
+#     readonly_fields=['file_list_view', 'file_detail_view'],
+#     list_filter=['product', ],
+# )
 
-admin.site.register(
-    Cart,
-    list_display=['id', 'user', 'product', 'quantity'],
-    list_display_links=['id', 'user', 'product'],
-)
+# admin.site.register(
+#     Cart,
+#     list_display=['id', 'user', 'product', 'quantity'],
+#     list_display_links=['id', 'user', 'product'],
+# )
 
 admin.site.register(
     Pay,
@@ -38,18 +38,18 @@ admin.site.register(
 )
 
 
-admin.site.register(
-    Notification,
-    list_display=['id', 'user', 'category', 'sender', 'message'],
-    list_display_links=['id', 'user', 'category'],
-)
+# admin.site.register(
+#     Notification,
+#     list_display=['id', 'user', 'category', 'sender', 'message'],
+#     list_display_links=['id', 'user', 'category'],
+# )
 
 
-admin.site.register(
-    GiftCode,
-    list_display=['id', 'group', 'rule'],
-    list_display_links=['id', 'group'],
-)
+# admin.site.register(
+#     GiftCode,
+#     list_display=['id', 'group', 'rule'],
+#     list_display_links=['id', 'group'],
+# )
 admin.site.register(
     DiscountPackage,
     list_display=['id', 'title', 'discount', 'amount', 'is_active',],
@@ -62,7 +62,7 @@ admin.site.register(
 )
 admin.site.register(
     OrderPlace,
-    list_display=['id', 'discount', 'table', 'order_date','status'],
+    list_display=['id', 'discount', 'table', 'order_date','status','price'],
     list_display_links=['id', 'table'],
 )
 admin.site.register(

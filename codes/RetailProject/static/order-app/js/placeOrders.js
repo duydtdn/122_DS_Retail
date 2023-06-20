@@ -1,4 +1,4 @@
-const orderList = [];
+let orderList = [];
 const popupOrderDetail = (orderId) => {
   renderOrderDetail(orderId);
   $('#order_detail_popup').modal({
@@ -77,6 +77,9 @@ const renderOrderDetail = (id) => {
               <div class="col-6 m-auto">
                 <button onclick="confirmCancelOrder()" class="btn btn-outline-primary btn-block">Hủy đơn</button>
               </div>
+              <div class="col-6 m-auto">
+                <button onclick="requestPayment(${id})" class="btn btn-outline-primary btn-block">Thanh toán</button>
+              </div>
               <div class="col-6">
                 <a href="#" rel="modal:close">
                   <button class="btn btn-primary btn-block">Đóng</button>
@@ -88,8 +91,9 @@ const renderOrderDetail = (id) => {
       </div>
     </div>
   `
-  $('order_detail_popup').html(stringHtml)
+  $('#order_detail_popup').html(stringHtml)
 }
+
 const renderListOrder = async () => {
   const response = await fetch (`/order-app/api/orders`);
   const items = await response.json();
@@ -104,6 +108,31 @@ const renderListOrder = async () => {
     ).join('')
   $('.box-orders .orders-items').html(stringHtml);
 }
+
+const requestPayment = async (id) => {
+  // const formData = new FormData();
+  // formData.append('name', 'Thanh')
+  // var dataPost = {
+  //   async: true,
+  //   crossDomain: true,
+  //   processData: false,
+  //   contentType: false,
+  //   mimeType: "multipart/form-data",
+  //   url: `/order-app/api/orders/request-payment/`,
+  //   method: "POST",
+  //   data: formData,
+  // };
+  // $.ajax(dataPost)
+  //   .done(function (response) {
+  //   console.log(response);
+  //   });
+  const response = await fetch (`/order-app/api/orders/${id}/request-payment/`);
+  const data = await response.json();
+  if (data.paymentUrl) {
+    window.location.assign(data.paymentUrl)
+  }
+}
+
 $(() => {
   renderListOrder();
 })
