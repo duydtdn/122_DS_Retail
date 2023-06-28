@@ -181,7 +181,7 @@ const popupOrderSuccess = (orderResult) => {
     clickClose: false,
   })
 }
-const handleLogin = () => {
+const handleLogin =  async () => {
   const phone = $('#phone').val();
   const password = $('#password').val();
   const user = {phone, password}
@@ -189,9 +189,29 @@ const handleLogin = () => {
   const isValidPassword =validatePassword(password);
   if(isValidPhone && isValidPassword) {
     //call api login
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('access_token', 'token');
-    window.location.reload();
+    let formData = new FormData()
+    formData.append('phone_number',phone)
+    formData.append('password',password)
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    const dataPost = {
+      async: true,
+      crossDomain: true,
+      processData: false,
+      contentType: false,
+      mimeType: "multipart/form-data",
+      url: `/order-app/api/auth/custom-login/`,
+      method: "POST",
+      data: formData,
+    };
+    $.ajax(dataPost).done(function (response) {
+      // localStorage.setItem('user', JSON.stringify(user));
+      // localStorage.setItem('access_token', 'token');
+      window.location.reload();
+
+    }).fail(function (e) {
+      
+    });
+   
   } else {
     $('#login_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
     $('#login_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
@@ -248,8 +268,9 @@ function hideSpinner() {
   $("#spinner").removeClass("loading");
 }
 function validatePhoneNumber(phoneNumber) {
-  const regex = /^\d{9,11}$/;
-  return regex.test(phoneNumber);
+  // const regex = /^\d{9,11}$/;
+  // return regex.test(phoneNumber);
+  return true;
 }
 function validatePassword(password) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;

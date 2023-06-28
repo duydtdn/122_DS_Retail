@@ -26,7 +26,7 @@ class OrderPlaceSerializer(serializers.ModelSerializer):
 class OrderPlaceFilter(filters.FilterSet):
     class Meta:
         model = OrderPlace
-        fields = ['id', 'table']    
+        fields = ['id']    
 
 def generatePaymentUrl(order: OrderPlace):
     print(order)

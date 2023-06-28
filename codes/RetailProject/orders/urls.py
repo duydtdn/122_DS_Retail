@@ -8,6 +8,7 @@ from orders.controller.category_ctr import ProductCategoryViewSet
 from orders.controller.discount_package_ctr import DiscountPackageViewSet
 from orders.controller.table_ctr import TableViewSet
 from orders.controller.order_place_ctr import OrderPlaceViewSet
+from orders.controller.authentication_ctr import AuthenticationViewSet
 
 
 app_name = 'order'
@@ -17,6 +18,8 @@ api_router.register(r'categories', ProductCategoryViewSet)
 api_router.register(r'discount-packages', DiscountPackageViewSet)
 api_router.register(r'tables', TableViewSet)
 api_router.register(r'orders', OrderPlaceViewSet)
+api_router.register(r'auth', AuthenticationViewSet, basename="custom_login")
+
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -28,6 +31,8 @@ urlpatterns = [
     path('place-orders', views.placeOrders, name='place-orders'),
     path('signup', views.signup, name='signup'),
     path('signup/success/', views.signup_success, name='signup_success'),
-    path('login', views.login, name='login'),
+    # path('login', views.login, name='login'), 
     path('logout', views.logout, name='logout'),
+    # path('custom-login/', views.custom_login, name='custom_login'),
+
 ]
