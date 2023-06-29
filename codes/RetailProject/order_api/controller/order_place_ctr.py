@@ -11,10 +11,10 @@ import hmac
 import hashlib
 from datetime import datetime
 
-from orders.controller.assistant.authenticated_ast import AllowAnyPutDelete
-from orders.controller.assistant.pagination_ast import CustomPagination
-from orders.models import OrderPlace
-from orders.controller.order_place_product_ctr import OrderPlaceProductSerializer
+from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
+from order_api.controller.assistant.pagination_ast import CustomPagination
+from order_api.models import OrderPlace
+from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
 
 class OrderPlaceSerializer(serializers.ModelSerializer):
     # order_places = OrderPlaceProductSerializer(many=True)

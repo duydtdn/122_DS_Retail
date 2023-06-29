@@ -2,7 +2,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
 # from django.contrib.auth import get_user_model
-from orders.models import CustomUser
+from order_api.models import CustomUser
 
 
 class UserChangeForm(forms.ModelForm):

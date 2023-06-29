@@ -85,7 +85,7 @@ const onSearch = () => {
 }
 const renderCategories = async (activeKey) => {
   if (!categories.length) {
-    const response = await fetch ('/order-app/api/categories');
+    const response = await fetch ('/order-api/categories');
     const data = await response.json();
     categories = data.results.filter(ct => ct.parent)
   }
@@ -100,7 +100,7 @@ const renderCategories = async (activeKey) => {
   $('.section_categories').html(stringHtml);
 };
 const renderListOrderMenu = async (search = '', group = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const items = await response.json();
   const stringHtml =
     items.results.map(it =>
@@ -113,7 +113,7 @@ const renderListOrderMenu = async (search = '', group = '', category = '') => {
   $('.section_items_order').html(stringHtml);
 }
 const renderPopularFood = async (search = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const foods = await response.json();
   const stringHtml =
     foods.results.slice(0,2).map(it =>
@@ -126,7 +126,7 @@ const renderPopularFood = async (search = '', category = '') => {
   $('.foods').html(stringHtml);
 }
 const renderPopularDrink = async (search = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const drinks = await response.json();
   const stringHtml =
   drinks.results.slice(0,2).map(it =>
@@ -199,7 +199,7 @@ const handleLogin =  async () => {
       processData: false,
       contentType: false,
       mimeType: "multipart/form-data",
-      url: `/order-app/api/auth/custom-login/`,
+      url: `/order-api/auth/custom-login/`,
       method: "POST",
       data: formData,
     };

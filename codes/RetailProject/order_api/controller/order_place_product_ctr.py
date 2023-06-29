@@ -7,11 +7,11 @@ from rest_framework import status
 from rest_framework.decorators import action
 from django.http import JsonResponse, HttpResponse
 
-from orders.controller.assistant.authenticated_ast import AllowAnyPutDelete
-from orders.controller.assistant.pagination_ast import CustomPagination
-from orders.models import OrderPlaceProduct
-from orders.models import OrderPlace
-# from orders.controller.order_place_ctr import OrderPlaceSerializer
+from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
+from order_api.controller.assistant.pagination_ast import CustomPagination
+from order_api.models import OrderPlaceProduct
+from order_api.models import OrderPlace
+# from order_api.controller.order_place_ctr import OrderPlaceSerializer
 class OrderPlaceProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderPlaceProduct

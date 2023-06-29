@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
-from orders.controller.assistant.form_ast import CustomUserCreationForm
+from order_api.controller.assistant.form_ast import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
-from orders.controller.assistant.form_ast import CustomAuthenticationForm
+from order_api.controller.assistant.form_ast import CustomAuthenticationForm
 from rest_framework.response import Response
 from rest_framework import status
 

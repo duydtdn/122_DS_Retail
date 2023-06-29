@@ -3,9 +3,9 @@ import django_filters.rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, serializers
 
-from orders.controller.assistant.authenticated_ast import AllowAnyPutDelete
-from orders.controller.assistant.pagination_ast import CustomPagination
-from orders.models import DiscountPackage
+from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
+from order_api.controller.assistant.pagination_ast import CustomPagination
+from order_api.models import DiscountPackage
 
 class DiscountPackageSerializer(serializers.ModelSerializer):
     class Meta:

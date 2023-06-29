@@ -1,10 +1,11 @@
 from django.contrib import admin
 
-from orders.models import Product, ProductCategory, DiscountPackage,OrderPlace,OrderPlaceProduct,CustomUser, Store
+from order_api.models import Product, ProductCategory, DiscountPackage,OrderPlace,OrderPlaceProduct,CustomUser, Store
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-from orders.form import  UserChangeForm, UserCreationForm
+from order_api.form import  UserChangeForm, UserCreationForm
 # Register your models here.
+admin.site.site_header = 'Order Admin'
 
 admin.site.register(
     Store,

@@ -95,7 +95,7 @@ const renderOrderDetail = (id) => {
 }
 
 const renderListOrder = async () => {
-  const response = await fetch (`/order-app/api/orders`);
+  const response = await fetch (`/order-api/orders`);
   const items = await response.json();
   orderList = items;
   const stringHtml =
@@ -118,7 +118,7 @@ const requestPayment = async (id) => {
   //   processData: false,
   //   contentType: false,
   //   mimeType: "multipart/form-data",
-  //   url: `/order-app/api/orders/request-payment/`,
+  //   url: `/order-api/orders/request-payment/`,
   //   method: "POST",
   //   data: formData,
   // };
@@ -126,7 +126,7 @@ const requestPayment = async (id) => {
   //   .done(function (response) {
   //   console.log(response);
   //   });
-  const response = await fetch (`/order-app/api/orders/${id}/request-payment/`);
+  const response = await fetch (`/order-api/orders/${id}/request-payment/`);
   const data = await response.json();
   if (data.paymentUrl) {
     window.location.assign(data.paymentUrl)

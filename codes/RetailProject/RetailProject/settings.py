@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'orders',
+    'order_app',
+    'order_api',
     'order_manager',
     'ckeditor'
 ]
@@ -163,7 +164,7 @@ VNPAY_RETURN_URL='localhost:8006/order-app/home'
 VNPAY_SCRETKEY='SQGRBQUVAJHBPWTFTCINLNUXHQRQFKBX'
 VNPAY_URL='https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
 
-AUTH_USER_MODEL= 'orders.CustomUser'
+AUTH_USER_MODEL= 'order_api.CustomUser'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]

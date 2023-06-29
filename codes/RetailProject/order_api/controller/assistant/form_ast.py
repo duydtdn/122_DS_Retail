@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from orders.models import CustomUser
+from order_api.models import CustomUser
 
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
