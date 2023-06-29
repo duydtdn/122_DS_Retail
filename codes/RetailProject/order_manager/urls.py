@@ -5,12 +5,15 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # Index
-    path('', views.index, name="index"),
+    path('', views.dashboard, name="index"),
 
     # Pages
     path('dashboard/', views.dashboard, name="dashboard"),
     path('transaction/', views.transaction, name="transaction"),
+    path('customers/', views.customerManager, name="customers"),
     path('settings/', views.settings, name="settings"),
+    path('login/', views.UserLoginView.as_view(), name="login"),
+    # path('register/', views.register_view, name="register"),
 
     # Tables
     path('tables/bs-tables/', views.bs_tables, name="bs_tables"),
@@ -32,7 +35,7 @@ urlpatterns = [
     ), name="password_change_done"),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name="password_reset"),
     path('accounts/password-reset-confirm/<uidb64>/<token>/',
-        views.UserPasswrodResetConfirmView.as_view(), name="password_reset_confirm"
+        views.UserPasswordResetConfirmView.as_view(), name="password_reset_confirm"
     ),
     path('accounts/password-reset-done/', auth_views.PasswordResetDoneView.as_view(
         template_name='accounts/password-reset-done.html'
