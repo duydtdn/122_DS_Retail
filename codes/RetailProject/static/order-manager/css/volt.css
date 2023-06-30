@@ -919,7 +919,7 @@
   --bs-gray-700: #374151;
   --bs-gray-800: #1F2937;
   --bs-gray-900: #111827;
-  --bs-primary-rgb: 31, 41, 55;
+  --bs-primary-rgb: 2, 117, 216;
   --bs-secondary-rgb: 240, 188, 116;
   --bs-tertiary-rgb: 49, 49, 106;
   --bs-success-rgb: 16, 185, 129;
@@ -4506,8 +4506,8 @@ textarea.form-control-lg {
 
 .btn-primary {
   color: #ffffff;
-  background-color: #1F2937;
-  border-color: #1F2937;
+  background-color: rgb(var(--bs-primary-rgb));
+  border-color:  rgb(var(--bs-primary-rgb));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(17, 24, 39, 0.075);
 }
 .btn-primary:hover {
@@ -6224,6 +6224,9 @@ textarea.form-control-lg {
   color: #1F2937;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
+.nav-link.logo-button {
+  height: 64px;
+}
 @media (prefers-reduced-motion: reduce) {
   .nav-link {
     transition: none;
@@ -6311,8 +6314,8 @@ textarea.form-control-lg {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  /* padding-top: 0.5rem;
+  padding-bottom: 0.5rem; */
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -6683,7 +6686,7 @@ textarea.form-control-lg {
   flex-basis: auto;
 }
 .navbar-expand .navbar-toggler {
-  display: none;
+  /* display: none; */
 }
 .navbar-expand .offcanvas-header {
   display: none;
@@ -21485,7 +21488,7 @@ textarea.form-control-lg {
 
 @media (max-width: 991.98px) {
   .navbar-nav .nav-link {
-    padding: 0.625rem 0;
+    padding: 0;
   }
   .navbar-nav .dropdown-menu {
     box-shadow: none;
@@ -21561,7 +21564,14 @@ textarea.form-control-lg {
   }
 }
 .navbar-dashboard {
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
+  background: rgb(var(--bs-primary-rgb));
+  height: 64px;
+  position: fixed;
+  width: 100%;
+  margin-left: -16px;
+  z-index: 1;
+  top: 0;
 }
 
 .navbar-theme-primary:not(.headroom) {
@@ -21862,19 +21872,22 @@ textarea.form-control-lg {
   white-space: nowrap;
 }
 .sidebar .nav-item {
-  margin-bottom: 0.2rem;
+  /* margin-bottom: 0.2rem; */
+  font-weight: 600;
+  border-bottom: solid var(--bs-body-bg) 2px;
 }
 .sidebar .nav-item.active > .nav-link {
-  color: #F2F4F6;
-  background-color: #374151;
+  color: rgb(var(--bs-primary-rgb));
+  background-color: var(--bs-body-bg);
+  font-weight: 600;
 }
 .sidebar .nav-item .nav-link {
-  color: #ffffff;
+  color: #000000;
   cursor: pointer;
 }
 .sidebar .nav-item .nav-link:hover {
   color: #F2F4F6;
-  background-color: #374151;
+  background-color: rgb(var(--bs-primary-rgb));
 }
 .sidebar .nav-link + .multi-level {
   margin-top: 0.2rem;
@@ -21882,12 +21895,12 @@ textarea.form-control-lg {
 .sidebar .nav-link {
   font-size: 1rem;
   vertical-align: middle;
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 1rem;
+  /* border-radius: 0.5rem; */
 }
 .sidebar .nav-link .sidebar-icon {
   margin-right: 0.5rem;
-  color: #9CA3AF;
+  /* color: #9CA3AF; */
 }
 .sidebar .nav-link .link-arrow {
   font-size: 0.875rem;
@@ -21969,7 +21982,7 @@ textarea.form-control-lg {
 }
 
 .user-card {
-  border-bottom: 0.0625rem solid #2e3650;
+  border-bottom: 2px solid #fff;
 }
 
 @media (max-width: 575.98px) {
@@ -21981,6 +21994,7 @@ textarea.form-control-lg {
   overflow: hidden;
   padding: 0 1rem 0 1rem;
   transition: all 0.3s;
+  padding-top: 64px;
 }
 @media (prefers-reduced-motion: reduce) {
   .content {
@@ -21990,6 +22004,9 @@ textarea.form-control-lg {
 @media (min-width: 992px) {
   .content {
     margin-left: 260px;
+  }
+  .navbar-dashboard {
+    width: calc(100% - 260px);
   }
 }
 
@@ -26452,9 +26469,9 @@ code[class*=language-], pre[class*=language-] {
   font-weight: 500;
 }
 
-.text-primary, .text-primary:hover {
+/* .text-primary, .text-primary:hover {
   color: #1F2937 !important;
-}
+} */
 .text-primary a:not(.btn), .text-primary h1, .text-primary h2, .text-primary h3, .text-primary h4, .text-primary h5, .text-primary h6, .text-primary .h1, .text-primary .h2, .text-primary .h3, .text-primary .h4, .text-primary .h5, .text-primary .h6, .text-primary .display-1, .text-primary .display-2, .text-primary .display-3, .text-primary .display-4 {
   color: #1F2937;
 }
