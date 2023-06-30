@@ -1,0 +1,21 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'order-app/css/place-orders.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container animated fadeInUp">
+
+  <h2>Sign Up</h2>
+  <form method="POST" action="{% url 'order:signup' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+  </form>
+  <div class="app-menu-container">
+    <div class="app-menu">
+    </div>
+  </div>
+</div>
+
+{% endblock %}

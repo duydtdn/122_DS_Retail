@@ -37,7 +37,7 @@ const handlePay = () => {
 }
 const getAllProduct = async () => {
   $('#processing').show();
-  const response = await fetch (`/order-app/api/products`);
+  const response = await fetch (`/order-api/products`);
   const data = await response.json();
   allProduct = data?.results || [];
   $('#processing').hide();

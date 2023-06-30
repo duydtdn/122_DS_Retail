@@ -27,7 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    # Your other settings
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,10 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'orders',
-    'products',
-    'ckeditor',
-
+    'order_app',
+    'order_api',
+    'order_manager',
+    'ckeditor'
 ]
 
 MIDDLEWARE = [
@@ -91,16 +94,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'OPTIONS': {
+            'min_length': 6,  # Set the minimum password length as desired
+        },
     },
 ]
 
@@ -162,3 +159,12 @@ LOGGING = {
         },
     },
 }
+VNPAY_TMN_CODE='SMZL30NT'
+VNPAY_RETURN_URL='localhost:8006/order-app/home'
+VNPAY_SCRETKEY='SQGRBQUVAJHBPWTFTCINLNUXHQRQFKBX'
+VNPAY_URL='https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
+
+AUTH_USER_MODEL= 'order_api.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

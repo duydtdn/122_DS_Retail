@@ -85,7 +85,7 @@ const onSearch = () => {
 }
 const renderCategories = async (activeKey) => {
   if (!categories.length) {
-    const response = await fetch ('/order-app/api/categories');
+    const response = await fetch ('/order-api/categories');
     const data = await response.json();
     categories = data.results.filter(ct => ct.parent)
   }
@@ -100,7 +100,7 @@ const renderCategories = async (activeKey) => {
   $('.section_categories').html(stringHtml);
 };
 const renderListOrderMenu = async (search = '', group = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const items = await response.json();
   const stringHtml =
     items.results.map(it =>
@@ -113,7 +113,7 @@ const renderListOrderMenu = async (search = '', group = '', category = '') => {
   $('.section_items_order').html(stringHtml);
 }
 const renderPopularFood = async (search = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const foods = await response.json();
   const stringHtml =
     foods.results.slice(0,2).map(it =>
@@ -126,7 +126,7 @@ const renderPopularFood = async (search = '', category = '') => {
   $('.foods').html(stringHtml);
 }
 const renderPopularDrink = async (search = '', category = '') => {
-  const response = await fetch (`/order-app/api/products?category=${category}`);
+  const response = await fetch (`/order-api/products?category=${category}`);
   const drinks = await response.json();
   const stringHtml =
   drinks.results.slice(0,2).map(it =>
@@ -181,7 +181,7 @@ const popupOrderSuccess = (orderResult) => {
     clickClose: false,
   })
 }
-const handleLogin = () => {
+const handleLogin =  async () => {
   const phone = $('#phone').val();
   const password = $('#password').val();
   const user = {phone, password}
@@ -189,9 +189,29 @@ const handleLogin = () => {
   const isValidPassword =validatePassword(password);
   if(isValidPhone && isValidPassword) {
     //call api login
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('access_token', 'token');
-    window.location.reload();
+    let formData = new FormData()
+    formData.append('phone_number',phone)
+    formData.append('password',password)
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    const dataPost = {
+      async: true,
+      crossDomain: true,
+      processData: false,
+      contentType: false,
+      mimeType: "multipart/form-data",
+      url: `/order-api/auth/custom-login/`,
+      method: "POST",
+      data: formData,
+    };
+    $.ajax(dataPost).done(function (response) {
+      // localStorage.setItem('user', JSON.stringify(user));
+      // localStorage.setItem('access_token', 'token');
+      window.location.reload();
+
+    }).fail(function (e) {
+      
+    });
+   
   } else {
     $('#login_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
     $('#login_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
@@ -248,8 +268,9 @@ function hideSpinner() {
   $("#spinner").removeClass("loading");
 }
 function validatePhoneNumber(phoneNumber) {
-  const regex = /^\d{9,11}$/;
-  return regex.test(phoneNumber);
+  // const regex = /^\d{9,11}$/;
+  // return regex.test(phoneNumber);
+  return true;
 }
 function validatePassword(password) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;

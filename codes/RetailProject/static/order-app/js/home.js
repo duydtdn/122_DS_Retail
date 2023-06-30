@@ -12,12 +12,12 @@ const renderHeader = () => {
   }
 }
 const getDiscountPackage = async () => {
-  const response = await fetch (`/order-app/api/discount-packages`);
+  const response = await fetch (`/order-api/discount-packages`);
   const data = await response.json();
   renderListNews(data?.results)
 }
 const renderOrderStatus = async () =>  {
-  const response = await fetch (`/order-app/api/tables?is_available=1`);
+  const response = await fetch (`/order-api/tables?is_available=1`);
   const data = await response.json();
   const stringHtml = `
     <div class="text">

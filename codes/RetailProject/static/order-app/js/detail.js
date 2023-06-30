@@ -23,7 +23,7 @@ const renderPrice = (value) => {
   $('#total').text(value * price + '$');
 }
 const getDetail = async () =>{
-  const response = await fetch (`/order-app/api/products/${detailId}`);
+  const response = await fetch (`/order-api/products/${detailId}`);
   const data = await response.json();
   product = data;
   price = product.price
