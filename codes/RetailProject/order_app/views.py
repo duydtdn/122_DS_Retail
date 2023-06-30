@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
-from order_api.controller.assistant.form_ast import CustomUserCreationForm
+# from order_api.controller.assistant.form_ast import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
-from order_api.controller.assistant.form_ast import CustomAuthenticationForm
+# from order_api.controller.assistant.form_ast import CustomAuthenticationForm
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -53,15 +53,15 @@ def placeOrders(request):
     }
     return render(request, 'order-app/place-orders.html', context)
 
-def signup(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('signup_success')   # Replace 'home' with the name of your home view
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'order-app/signup.html', {'form': form})
+# def signup(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('signup_success')   # Replace 'home' with the name of your home view
+#     else:
+#         form = CustomUserCreationForm()
+#     return render(request, 'order-app/signup.html', {'form': form})
 
 # def login(request):
 #     if request.method == 'POST':

@@ -10,13 +10,11 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     disabled password hash display field.
     """
-
     password = ReadOnlyPasswordHashField()
-
     class Meta:
         model = CustomUser
         fields = ("username", "phone_number","password","store_operate", "is_active", "is_admin")
-        
+
     # def clean_password(self):
     #     # Regardless of what the user provides, return the initial value.
     #     # This is done here, rather than on the field, because the
