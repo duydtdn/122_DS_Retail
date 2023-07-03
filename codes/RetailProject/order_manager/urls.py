@@ -11,6 +11,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
     path('transaction/', views.transaction, name="transaction"),
     path('customers/', views.customerManager, name="customers"),
+    path('products/', views.productManager, name="products"),
     path('settings/', views.settings, name="settings"),
     path('login/', views.UserLoginView.as_view(), name="login"),
     # path('register/', views.register_view, name="register"),
@@ -47,6 +48,7 @@ urlpatterns = [
     path('accounts/lock/', views.lock, name="lock"),
 
     # Errors
+    path('error/403/', views.error_403, name="error_403"),
     path('error/404/', views.error_404, name="error_404"),
     path('error/500/', views.error_500, name="error_500"),
 

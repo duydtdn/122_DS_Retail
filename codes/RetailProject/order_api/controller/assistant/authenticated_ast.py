@@ -45,7 +45,7 @@ class ManagerOfStorePermission(permissions.BasePermission):
     def has_permission(self, request, view):
         # if request.method in permissions.SAFE_METHODS:
             # return True
-        if request.user.role == 'manager':
+        if request.user.role == 'store_manager':
             return True
         return False
     

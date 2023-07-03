@@ -173,8 +173,9 @@ class Product(models.Model):
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
-    detail = RichTextField(null=True, blank=True)
+    detail = models.CharField(max_length=512, null=True, blank=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    is_active= models.BooleanField(default=True)
     is_show_main_media = models.BooleanField(default=False)
     is_show_list_media = models.BooleanField(default=False)
     def thumbnail_directory_path(Client, filename):
