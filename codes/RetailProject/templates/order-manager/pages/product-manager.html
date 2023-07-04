@@ -101,7 +101,7 @@
             </div></td>
             <td>
               <button class="btn btn-outline-primary" type="button">Sửa</button>
-              <button class="btn btn-danger delete_product_btn" data-product="{{product.title}}" type="button">Xóa</button>
+              <button class="btn btn-danger delete_product_btn" onclick="handleDeleteProduct('{{product.id}}','{{product.title}}')" data-product="{{product.title}}" type="button">Xóa</button>
             </td>
           </tr>
         {% endfor %}
@@ -155,44 +155,56 @@
 
 {% block extra_js %}
   <script>
-     const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-gray-50 ms-4'
-      },
-      buttonsStyling: false
-    });
-
     function onSearchProduct() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const searchText = $('#search_product').val()
-    urlParams.set('search', searchText)
-    urlParams.set('page', 1)
-    const path = window.location.pathname;
-    window.location.assign(`?${urlParams.toString()}`)
-  }
-  $('.delete_product_btn').click( function () {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const searchText = $('#search_product').val()
+      urlParams.set('search', searchText)
+      urlParams.set('page', 1)
+      const path = window.location.pathname;
+      window.location.assign(`?${urlParams.toString()}`)
+    }
+    function handleDeleteProduct (id, title) {
       swalWithBootstrapButtons.fire({
         icon: 'error',
         title: 'Xóa sản phẩm',
-        text: `Bạn chắc chắn muốn xóa sản phẩm ${$(this).attr('data-product')}?`,
+        text: `Bạn chắc chắn muốn xóa sản phẩm ${title}?`,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Đồng ý'
       }).then((result) => {
         if (result.isConfirmed) {
-          swalWithBootstrapButtons.fire(
-            { icon: 'success',
-              title: 'Delete success',
-              text: 'Your product has been deleted!',
-              showConfirmButton: true,
-              timer: 3000
-            }
-          )
+          $.ajax({
+              url: `/order-api/products/${id}`,
+              type: 'DELETE',
+              data: {},
+              beforeSend: function(xhr) {
+                  xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
+              },
+              contentType: 'application/json',
+              dataType: 'text',
+              success: function (result) {
+                swalWithBootstrapButtons.fire(
+                  { icon: 'success',
+                    title: 'Xóa thành công',
+                    text: 'Sản phẩm của bạn đã được xóa thành công!',
+                    showConfirmButton: true,
+                    timer: 3000
+                  }
+                )
+                window.location.reload();
+              },
+              error: function (error) {
+                notyf.open({
+                  type: 'error',
+                  message: 'Xảy ra lỗi, vui lòng thử lại.',
+                  duration: 3000
+                });
+              }
+          });
         }
       })
-    });
+    }
   </script>
 {% endblock %}

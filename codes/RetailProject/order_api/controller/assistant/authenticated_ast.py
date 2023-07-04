@@ -18,7 +18,7 @@ class EmployeeRoleFilter(RoleFilter):
         return ['list', 'retrieve', 'update', 'partial_update']
 
 class ManagerRoleFilter(RoleFilter):
-    role_id = 'manager'
+    role_id = 'store_manager'
     def get_allowed_actions(self, request, view, obj=None):
         return ['create', 'list', 'retrieve', 'update', 'partial_update', 'destroy']
 
@@ -32,7 +32,6 @@ class ModelViewSet(RoleFilterModelViewSet):
         if request.user.is_admin:
             return 'admin'
         return request.user.role
-
 
 class AllowAnyPutDelete(permissions.BasePermission):
     def has_permission(self, request, view):
