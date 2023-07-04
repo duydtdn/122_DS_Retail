@@ -12,6 +12,7 @@ urlpatterns = [
     path('transaction/', views.transaction, name="transaction"),
     path('customers/', views.customerManager, name="customers"),
     path('products/', views.productManager, name="products"),
+    path('product/add', views.addProduct, name="product_add"),
     path('settings/', views.settings, name="settings"),
     path('login/', views.UserLoginView.as_view(), name="login"),
     # path('register/', views.register_view, name="register"),

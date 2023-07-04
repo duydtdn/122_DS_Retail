@@ -16,6 +16,8 @@ admin.site.register(
     Product,
     list_display=['id', 'title', 'price', 'discount', 'is_show_main_media', 'is_show_list_media'],
     list_display_links=['id', 'title'],
+    list_filter = ["store_operate", "is_active"]
+
 )
 
 admin.site.register(

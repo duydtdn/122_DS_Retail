@@ -165,7 +165,7 @@
           <span class="sidebar-text">Quản lý khách hàng</span>
         </a>
       </li>
-      <li class="nav-item {% if 'Quản lý sản phẩm' in segment %}active{% endif %}">
+      <li class="nav-item {% if  segment in product_segments %}active{% endif %}">
         <a href="{% url 'products' %}" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

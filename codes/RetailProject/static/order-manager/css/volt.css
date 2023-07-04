@@ -21911,6 +21911,7 @@ textarea.form-control-lg {
 .sidebar .nav-link .sidebar-icon img {
   max-height: 50px;
   border-radius: 4px;
+  object-fit: cover;
 }
 .sidebar .nav-link .link-arrow {
   font-size: 0.875rem;

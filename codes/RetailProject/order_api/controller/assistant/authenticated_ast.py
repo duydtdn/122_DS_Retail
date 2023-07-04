@@ -21,10 +21,18 @@ class ManagerRoleFilter(RoleFilter):
     role_id = 'store_manager'
     def get_allowed_actions(self, request, view, obj=None):
         return ['create', 'list', 'retrieve', 'update', 'partial_update', 'destroy']
-
+    
+    # def get_queryset(self, request, view, queryset):
+    #     queryset = queryset.filter(store_operate =self.request.user.store_operate)
+    #     return queryset
+    # def get_queryset(self):
+    #     user=self.request.user
+    #     return Student.objects.filter(name=user)
+    # def get_serializer_class(self, request, view):
+    #     return SerializerForManager
 
 class ModelViewSet(RoleFilterModelViewSet):
-    role_filter_classes = [AdminRoleFilter, ManagerRoleFilter,EmployeeRoleFilter, CustomerRoleFilter]
+    role_filter_classes = [AdminRoleFilter, ManagerRoleFilter, EmployeeRoleFilter, CustomerRoleFilter]
 
     def get_role_id(self, request):
         if request.user.is_anonymous:

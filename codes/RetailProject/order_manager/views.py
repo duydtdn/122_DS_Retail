@@ -1,16 +1,18 @@
 from django.shortcuts import render, redirect
-from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
 from order_api.models import Product
+
 LOGIN_URL="/order-manager/login/"
 
 def getItemsWithPagination (request, items):
-  LIMIT = 4
+  LIMIT = 6
   page_number = request.GET.get("page") or 1
   search = request.GET.get("search") or ''
   paginator = Paginator(items, LIMIT)
@@ -45,14 +47,32 @@ def customerManager(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
+
 def productManager(request):
   search  = request.GET.get('search') or ''
   products = Product.objects.filter(store_operate=request.user.store_operate, title__contains=search).order_by('id')
   context = {
-    'segment': 'Quản lý sản phẩm',
+    'segment': 'Quản lý sản phẩm','product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm'],
     'data': getItemsWithPagination (request, products)
   }
   return render(request, 'order-manager/pages/product-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def addProduct(request):
+  form = ProductCreateForm(user = request.user)
+  if request.method == 'POST':
+    form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES)
+    if form.is_valid():
+      form.save()
+      form = ProductCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,'Thêm sản phẩm thành công')
+      redirect('/order-manager/product/add')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Thêm sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm']   
+ }
+  return render(request, 'order-manager/pages/add-product.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
