@@ -5,6 +5,21 @@
 {% endblock %}
 {% block app-container %}
 <div class="app-container">
+  <div id="app_header" class="header remove-margin">
+    <div class="logo">
+      <img src="/media/{{store.thumbnail}}" alt="">
+      <span>{{store.name}}</span>
+    </div>
+    <div class="user">
+      <span class="phone">{% if request.user.is_authenticated%}{{request.user.username}}{% endif %}</span>
+      {% if not request.user.is_authenticated%}
+        <img onclick="popupLogin()" src="{% static 'order-app/images/home/user.png' %}" alt="">
+      {% endif %}
+      {% if request.user.is_authenticated%}
+        <img src="{% static 'order-app/images/home/customer.png' %}" alt="">
+      {% endif %}
+    </div>
+  </div>
   <div class="navigation-header remove-margin">
     <!-- <div class="back-btn" onclick="onBack()">
         <img class="button" src="images/detail/icon-back.png" alt="">
@@ -30,7 +45,7 @@
       <span class="order-hash"></span>
     </div>
     <div class="text-center fst-italic mt-2 fw-bold">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng</div>
-    <a href="/order-app/place-orders">
+    <a href="{% url 'place-orders' %}?store={{store.id}}">
       <button id="btn_home_page" class="btn-primary">
         <span>Xem danh sách đơn</span>
       </button>
@@ -43,9 +58,9 @@
           <h1 class="text-center font-weight-bold">Đặt hàng</h1>
           <form class="form-horizontal">
             <div class="form-group mb-4" id="logged_phone">
-              <label for="phone" class="control-label">Số điện thoại</label>
+              <label for="phone_number" class="control-label">Số điện thoại</label>
               <div class="">
-                <input disabled type="phone" class="form-control" id="phone" placeholder="">
+                <input disabled type="phone" class="form-control" id="phone_number" placeholder="">
               </div>
             </div>
             <div class="form-group">
@@ -64,7 +79,7 @@
           </form>
           <div class="form-group">
             <div class="col-sm-offset-2">
-              <button onclick="handlePay()" class="btn btn-primary btn-block">Thanh toán</button>
+              <button onclick="handlePay('{% if request.user.is_authenticated %}auth{% endif %}')" class="btn btn-primary btn-block">Thanh toán</button>
             </div>
           </div>
         </div>

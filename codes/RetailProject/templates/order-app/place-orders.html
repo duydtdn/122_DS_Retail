@@ -5,6 +5,21 @@
 {% endblock %}
 {% block app-container %}
 <div class="app-container">
+  <div id="app_header" class="header remove-margin">
+    <div class="logo">
+      <img src="/media/{{store.thumbnail}}" alt="">
+      <span>{{store.name}}</span>
+    </div>
+    <div class="user">
+      <span class="phone">{% if request.user.is_authenticated%}{{request.user.username}}{% endif %}</span>
+      {% if not request.user.is_authenticated%}
+        <img onclick="popupLogin()" src="{% static 'order-app/images/home/user.png' %}" alt="">
+      {% endif %}
+      {% if request.user.is_authenticated%}
+        <img src="{% static 'order-app/images/home/customer.png' %}" alt="">
+      {% endif %}
+    </div>
+  </div>
   <div class="navigation-header remove-margin">
     <div style="display: flex; align-items: center; gap: 4px;">
       <img class="button" src="{% static 'order-app/images/home/order.png' %}" alt="">
@@ -12,14 +27,14 @@
     </div>
   </div>
   <div class="box-orders remove-margin">
-    <div class="header row g-0">
+    <div class="header-table row g-0">
       <div class="col-5">Mã đơn</div>
       <div class="col-3">Tổng tiền</div>
       <div class="col-4">Trạng thái</div>
     </div>
     <div class="orders-items"></div>
     <div class="d-flex justify-content-center mt-3">
-      <a class="" href="./cart">
+      <a href="{% url 'cart' %}?store={{store.id}}">
         <button id="" class="btn btn-outline-primary">
           Xem giỏ hàng
           <img src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
