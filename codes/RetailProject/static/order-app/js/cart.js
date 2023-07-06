@@ -48,7 +48,7 @@ const removeCart = (id) => {
 };
 
 const editCart = (cartId) => {
-  window.location.assign(`/order-app/detail?cart=${cartId}`)
+  window.location.assign(`/order-app/detail?store=${store}&cart=${cartId}`)
 }
 
 const renderCart = () => {
