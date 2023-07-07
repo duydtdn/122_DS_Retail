@@ -7,7 +7,8 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
-from order_api.models import Product
+from order_api.models import Product, ProductCategory
+from django.db.models import Count
 
 LOGIN_URL="/order-manager/login/"
 
@@ -36,6 +37,12 @@ def dashboard(request):
   }
   return render(request, 'order-manager/pages/dashboard/dashboard.html', context)
 
+def statistic(request):
+  context = {
+    'segment': 'Thống kê',
+  }
+  return render(request, 'order-manager/pages/statistic.html', context)
+
 # Pages
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -47,15 +54,59 @@ def customerManager(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
+def categoryManager(request):
+  group  = request.GET.get('group') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate).order_by('id').annotate(number_of_product=Count('product'))
+  if group: 
+    categories = categories.filter(parent__id=group)
+
+  context = {
+    'segment': 'Quản lý loại sản phẩm','category_segments' :['Quản lý loại sản phẩm', 'Thêm loại sản phẩm'],
+    'parentCategories': ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull = True),
+    'data': getItemsWithPagination (request, categories),
+    'group': group
+  }
+  return render(request, 'order-manager/pages/category-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 
 def productManager(request):
   search  = request.GET.get('search') or ''
-  products = Product.objects.filter(store_operate=request.user.store_operate, title__contains=search).order_by('id')
+  category  = request.GET.get('category') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull=False).order_by('id')
+  products = Product.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  if search:
+    products = products.filter(title__contains=search)
+  if category:
+    products = products.filter(category=category)
   context = {
     'segment': 'Quản lý sản phẩm','product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm'],
-    'data': getItemsWithPagination (request, products)
+    'data': getItemsWithPagination (request, products),
+    'category': category,
+    'categories': categories
   }
   return render(request, 'order-manager/pages/product-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+
+def orderManager(request):
+  search  = request.GET.get('search') or ''
+  category  = request.GET.get('category') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull=False).order_by('id')
+  products = Product.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  if search:
+    products = products.filter(title__contains=search)
+  if category:
+    products = products.filter(category=category)
+  context = {
+    'segment': 'Quản lý đơn hàng','orders_segments' :['Quản lý đơn hàng'],
+    'data': getItemsWithPagination (request, products),
+    'category': category,
+    'categories': categories
+  }
+  return render(request, 'order-manager/pages/order-manager.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -86,7 +137,7 @@ def transaction(request):
 @store_manager_role_required
 def settings(request):
   context = {
-    'segment': 'settings'
+    'segment': 'Thông tin cửa hàng'
   }
   return render(request, 'order-manager/pages/settings.html', context)
 
