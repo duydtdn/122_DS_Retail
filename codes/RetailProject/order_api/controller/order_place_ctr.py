@@ -17,8 +17,6 @@ from order_api.models import OrderPlace
 from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
 
 class OrderPlaceSerializer(serializers.ModelSerializer):
-    # order_places = OrderPlaceProductSerializer(many=True)
-
     class Meta:
         model = OrderPlace
         fields = '__all__'
@@ -59,7 +57,7 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
     filterset_class = OrderPlaceFilter
     pagination_class = CustomPagination
     permission_classes = [AllowAnyPutDelete]
-    
+
     @action(methods=['get'], detail=True, url_path='request-payment', url_name='request_payment')
     def request_payment(self, request, pk=None):
         try:
