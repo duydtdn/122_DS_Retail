@@ -184,15 +184,18 @@ const popupOrderSuccess = (orderResult) => {
   })
 }
 const handleLogin =  async () => {
-  const phone = $('#phone').val();
+  $('#login_popup #login_username_error').html('')
+  $('#login_popup #login_password_error').html('')
+  const username = $('#username').val();
   const password = $('#password').val();
-  const user = {phone, password}
-  const isValidPhone =validatePhoneNumber(+phone);
+  const user = {username, password}
+  // const isValidPhone =validatePhoneNumber(+phone);
+  const isValidUsername =validateUsername(username);
   const isValidPassword =validatePassword(password);
-  if(isValidPhone && isValidPassword) {
+  if(isValidUsername && isValidPassword) {
     //call api login
     let formData = new FormData()
-    formData.append('phone_number',phone)
+    formData.append('username',username)
     formData.append('password',password)
     formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
     const dataPost = {
@@ -206,35 +209,66 @@ const handleLogin =  async () => {
       data: formData,
     };
     $.ajax(dataPost).done(function (response) {
-      // localStorage.setItem('user', JSON.stringify(user));
-      // localStorage.setItem('access_token', 'token');
       window.location.reload();
 
     }).fail(function (e) {
-      
+      $('#login_popup #login_error').html('Sai tên đăng nhập hoặc mật khẩu.')
     });
    
   } else {
-    $('#login_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
-    $('#login_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
+    $('#login_popup #login_username_error').html(isValidUsername ? '' : 'Tài khoản không hợp lệ')
+    $('#login_popup #login_password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 6 ký tự không chứa ký tự đặc biệt')
   }
 }
 const handleRegister = () => {
-  const phone = $('#register_phone').val();
+  $('#register_popup #register_username_error').html('')
+  $('#register_popup #register_password_error').html('')
+  const username = $('#register_username').val();
   const password = $('#register_password').val();
-  const user = {phone, password}
-  const isValidPhone =validatePhoneNumber(+phone);
+  const user = {username, password}
+  // const isValidPhone =validatePhoneNumber(+phone);
+  const isValidUsername =validateUsername(username);
   const isValidPassword =validatePassword(password);
-  if(isValidPhone && isValidPassword) {
+  if(isValidUsername && isValidPassword) {
     //send request register user
+    let formData = new FormData()
+    formData.append('username',username)
+    formData.append('password',password)
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    const dataPost = {
+      async: true,
+      crossDomain: true,
+      processData: false,
+      contentType: false,
+      mimeType: "multipart/form-data",
+      url: `/order-api/auth/custom-register/`,
+      method: "POST",
+      data: formData,
+    };
+    $("#processing").show();
 
+    $.ajax(dataPost).done(function (response) {
+        $.notify("Đăng ký tài khoản thành công, đăng nhập để tiếp tục...",
+        {
+          className: 'success',
+          position: "top",
+          autoHideDelay: 2000
+        });
+        setTimeout(() => {
+          $("#processing").hide();
+          popupLogin();
+        }, 2000)
+
+    }).fail(function (e) {
+      $('#login_popup #login_error').html('Sai tên đăng nhập hoặc mật khẩu.')
+    });
     //show confirm OTP popup
-    $('#register_step_1').addClass('d-none');
-    $('#register_step_2').removeClass('d-none').addClass('d-flex');
-    $('#digit1').focus();
+    // $('#register_step_1').addClass('d-none');
+    // $('#register_step_2').removeClass('d-none').addClass('d-flex');
+    // $('#digit1').focus();
   } else {
-    $('#register_popup #phone_error').html(isValidPhone ? '' : 'Số điện thoại không hợp lệ')
-    $('#register_popup #password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ thường, chữ hoa và số')
+    $('#register_popup #register_username_error').html(isValidUsername ? '' : 'Tài khoản không hợp lệ')
+    $('#register_popup #register_password_error').html(isValidPassword ? '' : 'Mật khẩu tối thiểu 6 ký tự không chứa ký tự đặc biệt')
   }
  
 }
@@ -275,8 +309,14 @@ function validatePhoneNumber(phoneNumber) {
   return true;
 }
 function validatePassword(password) {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+  // const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+  const regex = /^[a-zA-Z\d]{6,}$/;
   return regex.test(password);
+}
+
+function validateUsername(username) {
+  const regex = /^[a-zA-Z\d]{6,}$/;
+  return regex.test(username);
 }
 
 $(document).ready(function () {
