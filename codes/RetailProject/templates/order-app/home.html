@@ -8,39 +8,31 @@
 <div class="app-container">
   <div id="app_header" class="header remove-margin animated fadeInDown">
     <div class="logo">
-      <img src="{% static 'order-app/images/home/Order.png' %}" alt="">
-      <span>Food Store</span>
+      <img src="/media/{{store.thumbnail}}" alt="">
+      <span>{{store.name}}</span>
     </div>
     <div class="user">
-      <span class="phone">Guest</span>
-      <img src="{% static 'order-app/images/home/user.png' %}" alt="">
+      <span class="phone">{% if request.user.is_authenticated%}{{request.user.username}}{% endif %}</span>
+      {% if not request.user.is_authenticated%}
+        <img onclick="popupLogin()" src="{% static 'order-app/images/home/user.png' %}" alt="">
+      {% endif %}
+      {% if request.user.is_authenticated%}
+        <img src="{% static 'order-app/images/home/customer.png' %}" alt="">
+      {% endif %}
     </div>
   </div>
-  <!-- <div class="order-status remove-margin animated fadeInDown">
-    <div class="tables">
-      <img src="{% static 'order-app/images/home/table.png' %}" alt="">
-    </div>
-    <div class="divider"></div>
-    <div class="orders">
-      <img src="{% static 'order-app/images/home/Order.png' %}" alt="">
-      <div class="text">
-        <div>1,200 Fulfilled</div>
-        <div>Orders</div>
-      </div>
-    </div>
-  </div> -->
-  <div class="nav-box remove-margin animated fadeInUp">
+  <div class="nav-box remove-margin animated fadeInDown">
     <div class="search">
       <img class="icon-search" src="{% static 'order-app/images/home/search-icon.png' %}" alt="">
       <input type="text" placeholder="Search menu">
       <img onclick="onSearch()" class="icon-filter" src="{% static 'order-app/images/home/filter.png' %}" alt="">
     </div>
-    <a href="/order-app/cart">
+    <a href="{% url 'cart' %}?store={{store.id}}">
       <button class="btn btn-outline-primary">  
         <img class="button" src="{% static 'order-app/images/home/phone-call.png' %}" alt="">
       </button>
     </a>
-    <a href="/order-app/cart">
+    <a href="{% url 'cart' %}?store={{store.id}}">
       <button class="btn btn-outline-primary position-relative">
         <img src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
         <span id="order_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
@@ -48,38 +40,56 @@
       </button>
     </a>
   </div>
-  <div class="banner animated zoomIn">
-    <!-- <img src="{% static 'order-app/images/home/banner.png' %}" alt="">
-    <div class="text">20% Discount
-      table for 4</div> -->
-      <div class="swiper discount-packages-swipper">
-        <div class="swiper-wrapper"></div>
-        <div class="swiper-pagination"></div>
-      </div>
+  <div class="banner animated fadeInLeft">
+    <div class="swiper discount-packages-swipper">
+      <div class="swiper-wrapper">
+      {% for item in banners %}
+        <div class="swiper-slide">
+            <div class="discount-packages-item">
+              <img src="/media/{{item.thumbnail}}"/>
+              <div class="content d-flex flex-column">
+                <div class="title">{{item.title}}</div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+      <div class="swiper-pagination"></div>
+    </div>
   </div>
   <div class="section_categories">
-  </div>
-  <div class="section_popular_food animated fadeInLeft">
-    <div class="flex-between">
-      <div class="title">
-        Most Popular Food
-      </div>
-      <a href="/order-app/menu?group=food">See more</a>
+    <div class="title">Categories</div>
+    <div class="categories">
+      {% for ct in categories %}
+        {% if ct.parent %}
+        <a href="{% url 'menu'%}?store={{store.id}}&category={{ct.id}}" class="ctg-item {% if ct.id|stringformat:'s' == category|stringformat:'s' %} active {% endif %}">{{ct.name}}</a>
+        {% endif %}
+        </a>
+      {% endfor %}
     </div>
-    <div class="foods"></div>
   </div>
-  <div class="section_popular_drink animated fadeInLeft">
-    <div class="flex-between">
-      <div class="title">
-        Most Popular Drink
+  {% for group in popularProducts %}
+    <div class="section_popular_food">
+      <div class="flex-between">
+        <div class="title">
+          Most Popular {{group.category.name}}
+        </div>
+        <a href="{% url 'menu' %}?store={{store.id}}">See more</a>
       </div>
-      <a href="/order-app/menu?group=drink">See more</a>
+      <div class="foods">
+        {% for item in group.products %}
+          <a class="order-item food animated zoomIn" href="{% url 'detail' %}?store={{store.id}}&id={{item.id}}">
+            <img class="thumbnail" src="/media/{{item.thumbnail}}" alt="">
+            <span class="name">{{item.title}}</span>
+            <span class="price">{{item.price}}</span>
+          </a>
+        {% endfor %}
+      </div>
     </div>
-    <div class="drinks"></div>
-  </div>
+  {% endfor %}
 </div>
-<div class="app-menu-container">
-  <div class="app-menu animated fadeInUp">
+<div class="app-menu-container animated fadeInUp">
+  <div class="app-menu">
   </div>
 </div>
 {% endblock %}

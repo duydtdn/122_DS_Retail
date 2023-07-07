@@ -21,10 +21,8 @@ const handlePlaceOrder = () => {
     })
   }
 }
-const handlePay = () => {
-  // cartLS = [];
-  // localStorage.setItem('cart', JSON.stringify([]));
-  if (!accessToken) {
+const handlePay = (isAuth=null) => {
+  if (!isAuth) {
     popupLogin()  
   } else {
     // call api create order and payment
@@ -50,7 +48,7 @@ const removeCart = (id) => {
 };
 
 const editCart = (cartId) => {
-  window.location.assign(`/order-app/detail?cart=${cartId}`)
+  window.location.assign(`/order-app/detail?store=${store}&cart=${cartId}`)
 }
 
 const renderCart = () => {

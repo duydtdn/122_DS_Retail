@@ -4,7 +4,8 @@ from order_api.controller.category_ctr import ProductCategoryViewSet
 from order_api.controller.discount_package_ctr import DiscountPackageViewSet
 from order_api.controller.table_ctr import TableViewSet
 from order_api.controller.order_place_ctr import OrderPlaceViewSet
-from order_api.controller.authentication_ctr import AuthenticationViewSet
+from order_api.controller.authentication_ctr import  custom_login, custom_register
+from django.urls import path
 
 
 app_name = 'order-app'
@@ -14,4 +15,8 @@ api_router.register(r'categories', ProductCategoryViewSet)
 api_router.register(r'discount-packages', DiscountPackageViewSet)
 api_router.register(r'tables', TableViewSet)
 api_router.register(r'orders', OrderPlaceViewSet)
-api_router.register(r'auth', AuthenticationViewSet, basename="custom_login")
+
+api_urlpatterns = [
+    path('auth/custom-login/', custom_login, name='custom_login'),
+    path('auth/custom-register/', custom_register, name='custom_register'),
+]

@@ -169,12 +169,13 @@ class ProductCategory(MPTTModel):
     def __str__(self):
         return self.name
 class Product(models.Model):
-    title = models.CharField(max_length=512, null=True, blank=True)
-    store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
-    price = models.FloatField(null=True, blank=True)
+    title = models.CharField(max_length=512, null=False, blank=False)
+    store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=False, blank=False)
+    price = models.FloatField(null=False, blank=False)
     discount = models.FloatField(null=True, blank=True)
-    detail = RichTextField(null=True, blank=True)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    detail = models.CharField(max_length=512, null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=False, blank=False)
+    is_active= models.BooleanField(default=True)
     is_show_main_media = models.BooleanField(default=False)
     is_show_list_media = models.BooleanField(default=False)
     def thumbnail_directory_path(Client, filename):
@@ -291,29 +292,39 @@ class Table(models.Model):
     is_available = models.BooleanField(default=True)
     def __str__(self):
         return f'{self.name}'
+class OrderType(models.Model):
+    name = models.CharField(verbose_name='Table name', max_length=150, db_index=True)
+    number_of_chair = models.IntegerField(null=False, blank=False)
+    is_available = models.BooleanField(default=True)
+    def __str__(self):
+        return f'{self.name}'
 
 class OrderPlace(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('shipped', 'Shipped'),
-        ('delivered', 'Delivered'),
+        ('confirmed', 'Confirmed'),
+        ('serving', 'Serving'),
+        ('finished', 'Finished'),
         ('cancelled', 'Cancelled'),
     ]
+    ORDER_TYPE_CHOICES= [
+        ('onsite', 'On-site Service'),
+        ('delivery', 'Delivery'),
+    ]
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
-
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     discount = models.ForeignKey(DiscountPackage, on_delete=models.CASCADE, null=True, blank=True)
     # table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, db_constraint=False)
-    order_date   = models.DateTimeField(auto_created=True)
-    # is_pay = models.BooleanField(default=False)
+    order_date = models.DateTimeField(auto_created=True)
+    is_paid = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     price = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)
+    order_type = models.CharField(max_length=20, choices=ORDER_TYPE_CHOICES, default='onsite')
     def __str__(self):
         return f'{self.id}'
-
+    
 class OrderPlaceProduct(models.Model):
-    order_place = models.ForeignKey(OrderPlace,  on_delete=models.CASCADE)
+    order_place = models.ForeignKey(OrderPlace,  on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.IntegerField(null=False, blank=False, default=1)
     # price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)

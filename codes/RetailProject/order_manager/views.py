@@ -1,45 +1,148 @@
 from django.shortcuts import render, redirect
-from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+from order_api.controller.assistant.decorator import  store_manager_role_required
+from order_api.models import Product, ProductCategory
+from django.db.models import Count
 
-# Index
-def index(request):
-  return render(request, 'order-manager/pages/index.html')
+LOGIN_URL="/order-manager/login/"
+
+def getItemsWithPagination (request, items):
+  LIMIT = 6
+  page_number = request.GET.get("page") or 1
+  search = request.GET.get("search") or ''
+  paginator = Paginator(items, LIMIT)
+  page_objects = paginator.get_page(page_number)
+  data = {
+    'items': page_objects,
+    'total': items.count(),
+    'params': {'page': page_number, 'search':search },
+    'from': (int(page_number) - 1) * LIMIT + 1,
+    'to': (int(page_number) - 1) * LIMIT + len(page_objects.object_list),
+    'total_page': 1 if items.count() <= LIMIT else (items.count() -1)//LIMIT + 1,
+    }
+  return data
 
 # Dashboard
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 def dashboard(request):
   context = {
-    'segment': 'dashboard'
+    'segment': 'dashboard',
   }
   return render(request, 'order-manager/pages/dashboard/dashboard.html', context)
 
+def statistic(request):
+  context = {
+    'segment': 'Thống kê',
+  }
+  return render(request, 'order-manager/pages/statistic.html', context)
+
 # Pages
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 def customerManager(request):
   context = {
     'segment': 'customers'
   }
   return render(request, 'order-manager/pages/customer-manager.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def categoryManager(request):
+  group  = request.GET.get('group') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate).order_by('id').annotate(number_of_product=Count('product'))
+  if group: 
+    categories = categories.filter(parent__id=group)
+
+  context = {
+    'segment': 'Quản lý loại sản phẩm','category_segments' :['Quản lý loại sản phẩm', 'Thêm loại sản phẩm'],
+    'parentCategories': ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull = True),
+    'data': getItemsWithPagination (request, categories),
+    'group': group
+  }
+  return render(request, 'order-manager/pages/category-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+
+def productManager(request):
+  search  = request.GET.get('search') or ''
+  category  = request.GET.get('category') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull=False).order_by('id')
+  products = Product.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  if search:
+    products = products.filter(title__contains=search)
+  if category:
+    products = products.filter(category=category)
+  context = {
+    'segment': 'Quản lý sản phẩm','product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm'],
+    'data': getItemsWithPagination (request, products),
+    'category': category,
+    'categories': categories
+  }
+  return render(request, 'order-manager/pages/product-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+
+def orderManager(request):
+  search  = request.GET.get('search') or ''
+  category  = request.GET.get('category') or ''
+  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull=False).order_by('id')
+  products = Product.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  if search:
+    products = products.filter(title__contains=search)
+  if category:
+    products = products.filter(category=category)
+  context = {
+    'segment': 'Quản lý đơn hàng','orders_segments' :['Quản lý đơn hàng'],
+    'data': getItemsWithPagination (request, products),
+    'category': category,
+    'categories': categories
+  }
+  return render(request, 'order-manager/pages/order-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def addProduct(request):
+  form = ProductCreateForm(user = request.user)
+  if request.method == 'POST':
+    form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES)
+    if form.is_valid():
+      form.save()
+      form = ProductCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,'Thêm sản phẩm thành công')
+      redirect('/order-manager/product/add')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Thêm sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm']   
+ }
+  return render(request, 'order-manager/pages/add-product.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 def transaction(request):
   context = {
     'segment': 'transactions'
   }
   return render(request, 'order-manager/pages/transactions.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 def settings(request):
   context = {
-    'segment': 'settings'
+    'segment': 'Thông tin cửa hàng'
   }
   return render(request, 'order-manager/pages/settings.html', context)
 
 # Tables
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def bs_tables(request):
   context = {
     'parent': 'tables',
@@ -48,45 +151,45 @@ def bs_tables(request):
   return render(request, 'pages/tables/bootstrap-tables.html', context)
 
 # Components
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def buttons(request):
   context = {
     'parent': 'components',
     'segment': 'buttons',
   }
-  return render(request, 'pages/components/buttons.html', context)
+  return render(request, 'order-manager/pages/components/buttons.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def notifications(request):
   context = {
     'parent': 'components',
     'segment': 'notifications',
   }
-  return render(request, 'pages/components/notifications.html', context)
+  return render(request, 'order-manager/pages/components/notifications.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def forms(request):
   context = {
     'parent': 'components',
     'segment': 'forms',
   }
-  return render(request, 'pages/components/forms.html', context)
+  return render(request, 'order-manager/pages/components/forms.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def modals(request):
   context = {
     'parent': 'components',
     'segment': 'modals',
   }
-  return render(request, 'pages/components/modals.html', context)
+  return render(request, 'order-manager/pages/components/modals.html', context)
 
-@login_required(login_url="/order-manager/login/")
+@login_required(login_url=LOGIN_URL)
 def typography(request):
   context = {
     'parent': 'components',
     'segment': 'typography',
   }
-  return render(request, 'pages/components/typography.html', context)
+  return render(request, 'order-manager/pages/components/typography.html', context)
 
 
 # Authentication
@@ -130,6 +233,9 @@ def lock(request):
   return render(request, 'accounts/lock.html')
 
 # Errors
+def error_403(request):
+  return render(request, 'order-manager/pages/examples/403.html')
+
 def error_404(request):
   return render(request, 'order-manager/pages/examples/404.html')
 

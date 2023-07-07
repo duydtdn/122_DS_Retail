@@ -1,10 +1,11 @@
 $(document).ready(function () {
-  renderCategories();
-  renderPopularFood();
-  renderPopularDrink();
-  getDiscountPackage();
+  // renderCategories();
+  // renderPopularFood();
+  // renderPopularDrink();
+  // getDiscountPackage();
   renderOrderStatus();
   renderHeader();
+  renderListNews();
 });
 const renderHeader = () => {
   if (userLS) {
@@ -14,7 +15,7 @@ const renderHeader = () => {
 const getDiscountPackage = async () => {
   const response = await fetch (`/order-api/discount-packages`);
   const data = await response.json();
-  renderListNews(data?.results)
+  // renderListNews(data?.results)
 }
 const renderOrderStatus = async () =>  {
   const response = await fetch (`/order-api/tables?is_available=1`);
@@ -28,18 +29,18 @@ const renderOrderStatus = async () =>  {
   $('.tables').html(stringHtml)
 }
 
-function renderListNews(data) {
-  const stringHtml = [...data].map(it => `
-  <div class="swiper-slide">
-    <div class="discount-packages-item">
-      <img src="${it.thumbnail}"/>
-      <div class="content d-flex flex-column">
-        <div class="title">${it.title}</div>
-      </div>
-    </div>
-  </div>
-  `).join("");
-  $('.banner .discount-packages-swipper .swiper-wrapper').html(stringHtml);
+function renderListNews() {
+  // const stringHtml = [...data].map(it => `
+  // <div class="swiper-slide">
+  //   <div class="discount-packages-item">
+  //     <img src="${it.thumbnail}"/>
+  //     <div class="content d-flex flex-column">
+  //       <div class="title">${it.title}</div>
+  //     </div>
+  //   </div>
+  // </div>
+  // `).join("");
+  // $('.banner .discount-packages-swipper .swiper-wrapper').html(stringHtml);
   const swiper = new Swiper(".discount-packages-swipper", {
   pagination: {
     el: ".swiper-pagination",

@@ -3,13 +3,13 @@
   /* height: 400px; */
   padding: 15px;
 }
-.box-orders .header {
+.box-orders .header-table {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   overflow: hidden;
   font-size: 14px;
 }
-.box-orders .header div {
+.box-orders .header-table div {
   /* border: solid de3905 1px; */
   padding: 6px;
   background: #de3905;

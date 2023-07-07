@@ -6,10 +6,10 @@
       <div class="d-flex align-items-center">
         <div class="avatar-lg me-4">
           <img src="{% static 'order-manager/assets/img/team/profile-picture-3.jpg' %}" class="card-img-top rounded-circle border-white"
-            alt="Bonnie Green">
+            alt="Avatar">
         </div>
         <div class="d-block">
-          <h2 class="h5 mb-3">Hi, Jane</h2>
+          <h2 class="h5 mb-3">Hi,{{ request.user.username }}</h2>
           <a href="{% url 'logout' %}" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
             <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
@@ -35,18 +35,15 @@
       <li class="nav-item">
         <a href="{% url 'index' %}" class="nav-link bg-primary logo-button d-flex align-items-center text-white fw-bold">
           <span class="sidebar-icon">
-            <img src="{% static 'order-manager/assets/img/brand/logo.png' %}" height="60" alt="Logo">
+            <img src="/media/{{request.user.store_operate.thumbnail}}" height="60" alt="Logo">
           </span>
-          <span class="mt-1 ms-1 sidebar-text">Order App</span>
+          <span class="mt-1 ms-1 sidebar-text">{{request.user.store_operate.name}}</span>
         </a>
       </li>
 
       <li class="nav-item {% if 'dashboard' in segment %}active{% endif %}">
-        {% if request.user.is_superuser %}
-        <a href="{% url 'admin:index' %}" class="nav-link">
-        {% else %}
+        <!-- <a href="{% url 'admin:index' %}" class="nav-link"> -->
         <a href="{% url 'dashboard' %}" class="nav-link">
-        {% endif %}
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
@@ -165,8 +162,8 @@
           <span class="sidebar-text">Quản lý khách hàng</span>
         </a>
       </li>
-      <li class="nav-item {% if 'transaction' in segment %}active{% endif %}">
-        <a href="{% url 'transaction' %}" class="nav-link">
+      <li class="nav-item {% if  segment in category_segments %}active{% endif %}">
+        <a href="{% url 'categories' %}" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
@@ -175,10 +172,48 @@
                 clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Transactions</span>
+          <span class="sidebar-text">Quản lý loại sản phẩm</span>
         </a>
       </li>
-      <li class="nav-item {% if 'settings' in segment %}active{% endif %}">
+      <li class="nav-item {% if  segment in product_segments %}active{% endif %}">
+        <a href="{% url 'products' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+              <path fill-rule="evenodd"
+                d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Quản lý sản phẩm</span>
+        </a>
+      </li>
+      <li class="nav-item {% if  segment in orders_segments %}active{% endif %}">
+        <a href="{% url 'orders' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+              <path fill-rule="evenodd"
+                d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Quản lý đơn hàng</span>
+        </a>
+      </li>
+      <li class="nav-item {% if 'Thống kê' in segment %}active{% endif %}">
+        <!-- <a href="{% url 'admin:index' %}" class="nav-link"> -->
+        <a href="{% url 'statistic' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Thống kê</span>
+        </a>
+      </li>
+      <li class="nav-item {% if 'Thông tin cửa hàng' in segment %}active{% endif %}">
         <a href="{% url 'settings' %}" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -187,7 +222,7 @@
                 clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Settings</span>
+          <span class="sidebar-text">Thông tin cửa hàng</span>
         </a>
       </li>
       <!-- <li class="nav-item">
@@ -221,8 +256,8 @@
             </li>
           </ul>
         </div>
-      </li>
-      <li class="nav-item">
+      </li> -->
+      <!-- <li class="nav-item">
         <span class="nav-link  collapsed  d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
           data-bs-target="#submenu-pages">
           <span>
@@ -284,7 +319,7 @@
             </li>
           </ul>
         </div>
-      </li>
+      </li> -->
       <li class="nav-item">
         <span class="nav-link  collapsed  d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
           data-bs-target="#submenu-components">
@@ -338,7 +373,7 @@
           </ul>
         </div>
       </li>
-      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+      <!-- <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
       <li class="nav-item">
         <a href="https://github.com/app-generator/django-volt-dashboard" target="_blank"
           class="nav-link d-flex align-items-center">

@@ -5,18 +5,33 @@
 {% endblock %}
 {% block app-container %}
 <div class="app-container">
-  <div class="nav-box remove-margin animated fadeInDown">
+  <div id="app_header" class="header remove-margin">
+    <div class="logo">
+      <img src="/media/{{store.thumbnail}}" alt="">
+      <span>{{store.name}}</span>
+    </div>
+    <div class="user">
+      <span class="phone">{% if request.user.is_authenticated%}{{request.user.username}}{% endif %}</span>
+      {% if not request.user.is_authenticated%}
+        <img onclick="popupLogin()" src="{% static 'order-app/images/home/user.png' %}" alt="">
+      {% endif %}
+      {% if request.user.is_authenticated%}
+        <img src="{% static 'order-app/images/home/customer.png' %}" alt="">
+      {% endif %}
+    </div>
+  </div>
+  <div class="nav-box remove-margin">
     <div class="search">
       <img class="icon-search" src="{% static 'order-app/images/home/search-icon.png' %}" alt="">
       <input type="text" placeholder="Search menu">
       <img onclick="onSearch()" class="icon-filter" src="{% static 'order-app/images/home/filter.png' %}" alt="">
     </div>
-    <a href="/order-app/cart">
+    <a href="{% url 'cart' %}?store={{store.id}}">
       <button class="btn btn-outline-primary">
         <img class="button" src="{% static 'order-app/images/home/phone-call.png' %}" alt="">
       </button>
     </a>
-    <a href="/order-app/cart">
+    <a href="{% url 'cart' %}?store={{store.id}}">
       <button class="btn btn-outline-primary position-relative">
         <img src="{% static 'order-app/images/home/akar-icons_cart.png' %}" alt="">
         <span id="order_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
@@ -24,8 +39,26 @@
       </button>
     </a>
   </div>
-  <div class="section_categories"></div>
-  <div class="section_items_order"></div>
+  <div class="section_categories">
+    <div class="title">Categories</div>
+    <div class="categories">
+      {% for ct in categories %}
+        {% if ct.parent %}
+        <a href="?store={{store.id}}&category={{ct.id}}" class="ctg-item {% if ct.id|stringformat:'s' == category|stringformat:'s' %} active {% endif %}">{{ct.name}}</a>
+        {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="section_items_order">
+    {% for it in products %}
+      <a class="order-item animated zoomIn" href="{% url 'detail' %}?store={{store.id}}&id={{it.id}}">
+        <img class="thumbnail" src="/media/{{it.thumbnail}}" alt="">
+        <span class="name">{{it.title}}</span>
+        <span class="price">{{it.price}}</span>
+      </a>
+    {% endfor %}
+  </div>
 </div>
 <div class="app-menu-container">
   <div class="app-menu"></div>

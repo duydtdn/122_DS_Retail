@@ -121,9 +121,9 @@ const addToCart = () => {
     });
   setTimeout(() => {
     if (!cart) {
-      window.location.assign(APP_MENU_URLS.HOME)
+      window.location.assign(`${APP_MENU_URLS.HOME}`)
     } else {
-      window.location.assign(APP_MENU_URLS.CART)
+      window.location.assign(`${APP_MENU_URLS.CART}`)
     }
   }, 1000);
 }

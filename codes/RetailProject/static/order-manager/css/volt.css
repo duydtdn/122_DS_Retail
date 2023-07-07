@@ -3997,8 +3997,8 @@ textarea.form-control-lg {
   box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.25);
 }
 .form-check-input:checked {
-  background-color: #1F2937;
-  border-color: #1F2937;
+  background-color: rgb(var(--bs-primary-rgb));
+  border-color: rgb(var(--bs-primary-rgb));
 }
 .form-check-input:checked[type=checkbox] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
@@ -4014,7 +4014,7 @@ textarea.form-control-lg {
 .form-check-input:disabled {
   pointer-events: none;
   filter: none;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
   opacity: 0.5;
@@ -5187,13 +5187,13 @@ textarea.form-control-lg {
 }
 
 .btn-outline-primary {
-  color: #1F2937;
-  border-color: #1F2937;
+  color: var(--bs-info);
+  border-color: var(--bs-info);
 }
 .btn-outline-primary:hover {
   color: #ffffff;
-  background-color: #1F2937;
-  border-color: #1F2937;
+  background-color: var(--bs-info);
+  border-color: #fff;
 }
 .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
   box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.5);
@@ -7086,6 +7086,8 @@ textarea.form-control-lg {
 }
 
 .page-link {
+  min-width: 40px;
+  text-align: center;
   position: relative;
   display: block;
   color: #1F2937;
@@ -7118,8 +7120,8 @@ textarea.form-control-lg {
 .page-item.active .page-link {
   z-index: 3;
   color: #ffffff;
-  background-color: #1F2937;
-  border-color: #1F2937;
+  background-color: var(--bs-info);
+  border-color: var(--bs-info);
 }
 .page-item.disabled .page-link {
   color: #4B5563;
@@ -9523,6 +9525,10 @@ textarea.form-control-lg {
 
 .w-auto {
   width: auto !important;
+}
+
+.fmxw-50 {
+  max-width: 50px !important;
 }
 
 .fmxw-100 {
@@ -21902,6 +21908,11 @@ textarea.form-control-lg {
   margin-right: 0.5rem;
   /* color: #9CA3AF; */
 }
+.sidebar .nav-link .sidebar-icon img {
+  max-height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+}
 .sidebar .nav-link .link-arrow {
   font-size: 0.875rem;
 }
@@ -26171,6 +26182,7 @@ label {
 .card .table th {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  vertical-align: middle;
 }
 
 .table [data-sort] {

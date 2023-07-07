@@ -18,13 +18,21 @@ class EmployeeRoleFilter(RoleFilter):
         return ['list', 'retrieve', 'update', 'partial_update']
 
 class ManagerRoleFilter(RoleFilter):
-    role_id = 'manager'
+    role_id = 'store_manager'
     def get_allowed_actions(self, request, view, obj=None):
         return ['create', 'list', 'retrieve', 'update', 'partial_update', 'destroy']
-
+    
+    # def get_queryset(self, request, view, queryset):
+    #     queryset = queryset.filter(store_operate =self.request.user.store_operate)
+    #     return queryset
+    # def get_queryset(self):
+    #     user=self.request.user
+    #     return Student.objects.filter(name=user)
+    # def get_serializer_class(self, request, view):
+    #     return SerializerForManager
 
 class ModelViewSet(RoleFilterModelViewSet):
-    role_filter_classes = [AdminRoleFilter, ManagerRoleFilter,EmployeeRoleFilter, CustomerRoleFilter]
+    role_filter_classes = [AdminRoleFilter, ManagerRoleFilter, EmployeeRoleFilter, CustomerRoleFilter]
 
     def get_role_id(self, request):
         if request.user.is_anonymous:
@@ -32,7 +40,6 @@ class ModelViewSet(RoleFilterModelViewSet):
         if request.user.is_admin:
             return 'admin'
         return request.user.role
-
 
 class AllowAnyPutDelete(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -45,7 +52,7 @@ class ManagerOfStorePermission(permissions.BasePermission):
     def has_permission(self, request, view):
         # if request.method in permissions.SAFE_METHODS:
             # return True
-        if request.user.role == 'manager':
+        if request.user.role == 'store_manager':
             return True
         return False
     

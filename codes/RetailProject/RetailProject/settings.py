@@ -168,3 +168,4 @@ AUTH_USER_MODEL= 'order_api.CustomUser'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+LOGIN_REDIRECT_URL='/order-manager/dashboard/'
