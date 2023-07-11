@@ -20,7 +20,7 @@ const confirmCancelOrder = () => {
   })
 }
 const renderOrderDetail = (id) => {
-  const itemDetail = orderList.find(item => item.id=id)
+  const itemDetail = orderList.find(order => order.id==id)
   const stringHtml = `
   <div class="container">
       <div class="row">
@@ -44,7 +44,7 @@ const renderOrderDetail = (id) => {
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Hình thức:</span>
-            <span class="col-8 fst-italic">${itemDetail.order_type}}</span>
+            <span class="col-8 fst-italic">${itemDetail.order_type}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Thực đơn:</span>
@@ -64,7 +64,7 @@ const renderOrderDetail = (id) => {
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Thành tiền:</span>
-            <span class="col-8 fst-italic fw-bold">${itemDetail.order_items.map(pr => pr.product.price * pr.amount).reduce((a,b) => a+b,0)} đ</span>
+            <span class="col-8 fst-italic fw-bold">${itemDetail.total} đ</span>
           </div>
           <p class="fst-italic text-center">***********************************</p>
           <p class="fst-italic text-center fs-6 mb-0">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng.</p>
@@ -86,7 +86,7 @@ const renderOrderDetail = (id) => {
 }
 
 const renderListOrder = async () => {
-  const response = await fetch (`/order-api/orders`);
+  const response = await fetch (`/order-api/orders?store_operate=${store}`);
   const items = await response.json();
   orderList = items.results;
   const stringHtml =
@@ -94,7 +94,7 @@ const renderListOrder = async () => {
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
         <div class="col-3 fw-bold text-primary">${it.id}</div>
         <div class="col-3">${it.order_type}</div>
-        <div class="col-3">${it.order_items.map(pr => pr.product.price * pr.amount).reduce((a,b) => a+b,0)}</div>
+        <div class="col-3">${it.total}</div>
         <div class="col-3"><span class="badge rounded-pill bg-warning text-dark">${it.status}</span></div>
       </div>`
     ).join('')

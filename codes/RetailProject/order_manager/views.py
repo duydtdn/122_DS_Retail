@@ -7,8 +7,10 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
-from order_api.models import Product, ProductCategory
+from order_api.models import Product, ProductCategory, OrderPlace
 from django.db.models import Count
+from order_api.controller.order_place_ctr import OrderPlaceViewSet
+import json
 
 LOGIN_URL="/order-manager/login/"
 
@@ -19,7 +21,8 @@ def getItemsWithPagination (request, items):
   paginator = Paginator(items, LIMIT)
   page_objects = paginator.get_page(page_number)
   data = {
-    'items': page_objects,
+    'items': enumerate(page_objects),
+    'page_objects': page_objects,
     'total': items.count(),
     'params': {'page': page_number, 'search':search },
     'from': (int(page_number) - 1) * LIMIT + 1,
@@ -93,18 +96,26 @@ def productManager(request):
 
 def orderManager(request):
   search  = request.GET.get('search') or ''
-  category  = request.GET.get('category') or ''
-  categories = ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull=False).order_by('id')
-  products = Product.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  status  = request.GET.get('status') or ''
+  order_type  = request.GET.get('order_type') or ''
+  is_paid = request.GET.get('is_paid') or ''
+  orders = OrderPlaceViewSet.queryset
   if search:
-    products = products.filter(title__contains=search)
-  if category:
-    products = products.filter(category=category)
+    orders = orders.filter(customer__username__contains=search)
+  if status:
+    orders = orders.filter(status=status)
+  if order_type:
+    orders = orders.filter(order_type=order_type)
+  if is_paid == '1':
+    orders = orders.filter(is_paid=True)
+  if is_paid == '0':
+    orders = orders.filter(is_paid=False)
   context = {
     'segment': 'Quản lý đơn hàng','orders_segments' :['Quản lý đơn hàng'],
-    'data': getItemsWithPagination (request, products),
-    'category': category,
-    'categories': categories
+    'data': getItemsWithPagination (request, orders),
+    'status': status,
+    'order_type': order_type,
+    'is_paid': is_paid,
   }
   return render(request, 'order-manager/pages/order-manager.html', context)
 
@@ -124,14 +135,6 @@ def addProduct(request):
   context = { 'form': form, 'segment': 'Thêm sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm']   
  }
   return render(request, 'order-manager/pages/add-product.html', context)
-
-@login_required(login_url=LOGIN_URL)
-@store_manager_role_required
-def transaction(request):
-  context = {
-    'segment': 'transactions'
-  }
-  return render(request, 'order-manager/pages/transactions.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required

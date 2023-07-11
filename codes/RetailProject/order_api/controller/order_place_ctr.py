@@ -19,21 +19,27 @@ from django.http import JsonResponse
 from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
 from order_api.controller.assistant.pagination_ast import CustomPagination
 from order_api.models import OrderPlace, OrderPlaceProduct
+from order_api.admin import CustomUserSerializer
 from order_api.form import OrderForm
 from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
+from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
 
 class OrderPlaceSerializer(serializers.ModelSerializer):
     order_items = OrderPlaceProductSerializer(many=True)
+    customer = CustomUserSerializer(many=False)
+    total = serializers.SerializerMethodField()
 
+    def get_total(self, obj):
+        return sum(map(lambda item: item.product.price * item.amount, list(obj.order_items.all())))
     class Meta:
         model = OrderPlace
         fields = '__all__'
-        include='order_items'
+        include=['order_items', 'customer', 'total']
 
 class OrderPlaceFilter(filters.FilterSet):
     class Meta:
         model = OrderPlace
-        fields = ['id']    
+        fields = ['id', 'store_operate']    
 
 # def generatePaymentUrl(order: OrderPlace):
 #     print(order)
@@ -58,13 +64,24 @@ class OrderPlaceFilter(filters.FilterSet):
 #     paymentUrl = settings.VNPAY_URL + '?' + qstr + '&vnp_SecureHash=' + signature
 #     return paymentUrl
 class OrderPlaceViewSet(viewsets.ModelViewSet):
-    queryset = OrderPlace.objects.all().order_by('order_date')
+    queryset = OrderPlace.objects.all()
     serializer_class = OrderPlaceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = OrderPlaceFilter
     pagination_class = CustomPagination
     permission_classes = [AllowAnyPutDelete]
-
+    
+    def get_queryset(self) :
+        qs = OrderPlace.objects.all().order_by('order_date')
+        user = self.request.user
+        if user.role == 'admin':
+            return qs
+        if user.role == 'store_manager': 
+            return qs.filter(store_operate=user.store_operate)
+        if user.role == 'customer': 
+            return qs.filter(customer=user)
+        return []
+    
     # @action(methods=['get'], detail=True, url_path='request-payment', url_name='request_payment')
     # def request_payment(self, request, pk=None):
     #     try:

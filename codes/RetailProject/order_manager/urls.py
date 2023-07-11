@@ -9,7 +9,7 @@ urlpatterns = [
 
     # Pages
     path('dashboard/', views.dashboard, name="dashboard"),
-    path('transaction/', views.transaction, name="transaction"),
+    # path('transaction/', views.transaction, name="transaction"),
     path('customers/', views.customerManager, name="customers"),
     path('products/', views.productManager, name="products"),
     path('product/add', views.addProduct, name="product_add"),
