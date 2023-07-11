@@ -2,7 +2,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
 # from django.contrib.auth import get_user_model
-from order_api.models import CustomUser
+from order_api.models import CustomUser, OrderPlace, OrderPlaceProduct
 
 
 class UserChangeForm(forms.ModelForm):
@@ -49,3 +49,12 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+class OrderForm(forms.ModelForm):
+    def __init__(self, user=None, *args, **kwargs):
+        super(OrderForm, self).__init__(*args, **kwargs)
+        # if user :
+        #     self.fields['order_date'].initial = user
+    class Meta:
+        model = OrderPlace
+        fields = ['store_operate', 'order_type']

@@ -4,7 +4,7 @@ const popupOrderDetail = (orderId) => {
   $('#order_detail_popup').modal({
     open: true,
     fadeDuration: 100,
-    showClose: false,
+    showClose: true,
     escapeClose: true,
     clickClose: true,
   })
@@ -20,6 +20,7 @@ const confirmCancelOrder = () => {
   })
 }
 const renderOrderDetail = (id) => {
+  const itemDetail = orderList.find(item => item.id=id)
   const stringHtml = `
   <div class="container">
       <div class="row">
@@ -27,11 +28,11 @@ const renderOrderDetail = (id) => {
           <h1 class="text-center font-weight-bold">Chi tiết đơn hàng</h1>
           <div class="row mb-1 ">
             <span class="col-4">Mã ĐH:</span>
-            <span class="col-8 fst-italic fw-bold">KL6L5LL234IPP</span>
+            <span class="col-8 fst-italic fw-bold">${itemDetail.id}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Ngày tạo:</span>
-            <span class="col-8 fst-italic">30/05/2023</span>
+            <span class="col-8 fst-italic">${new Date(itemDetail.order_date).toLocaleDateString()}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Số ĐT:</span>
@@ -39,36 +40,31 @@ const renderOrderDetail = (id) => {
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Trạng thái:</span>
-            <span class="col-8 fst-italic">Chờ thanh toán</span>
+            <span class="col-8 fst-italic">${itemDetail.status}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Hình thức:</span>
-            <span class="col-8 fst-italic">Thanh toán tại quầy</span>
+            <span class="col-8 fst-italic">${itemDetail.order_type}}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Thực đơn:</span>
             <div class="col-8 fst-italic">
-              <div class="row">
-                <span class="col-8">Gà bó xôi (x3):</span>
-                <span class="col-4">160k</span>
-              </div>
-              <div class="row">
-                <span class="col-8">Gà bó xôi (x3):</span>
-                <span class="col-4">160k</span>
-              </div>
-              <div class="row">
-                <span class="col-8">Gà bó xôi (x3):</span>
-                <span class="col-4">160k</span>
-              </div>
+            ${itemDetail.order_items.map(item => 
+              `<div class="row">
+                <span class="col-8">${item.product.title} (x${item.amount}):</span>
+                <span class="col-4">${item.amount * item.product.price} đ</span>
+              </div>`
+              ).join('')
+            }
             </div>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Mã giảm giá:</span>
-            <span class="col-8 fst-italic">GIAM10%</span>
+            <span class="col-8 fst-italic">${itemDetail.discount || '#'}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Thành tiền:</span>
-            <span class="col-8 fst-italic fw-bold">480.000 VND</span>
+            <span class="col-8 fst-italic fw-bold">${itemDetail.order_items.map(pr => pr.product.price * pr.amount).reduce((a,b) => a+b,0)} đ</span>
           </div>
           <p class="fst-italic text-center">***********************************</p>
           <p class="fst-italic text-center fs-6 mb-0">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng.</p>
@@ -79,11 +75,6 @@ const renderOrderDetail = (id) => {
               </div>
               <div class="col-6 m-auto">
                 <button onclick="requestPayment(${id})" class="btn btn-outline-primary btn-block">Thanh toán</button>
-              </div>
-              <div class="col-6">
-                <a href="#" rel="modal:close">
-                  <button class="btn btn-primary btn-block">Đóng</button>
-                </a>
               </div>
             </div>
           </div>
@@ -97,13 +88,14 @@ const renderOrderDetail = (id) => {
 const renderListOrder = async () => {
   const response = await fetch (`/order-api/orders`);
   const items = await response.json();
-  orderList = items;
+  orderList = items.results;
   const stringHtml =
-    items.results.map(it =>
+  orderList.map(it =>
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
-        <div class="col-5 fw-bold text-primary">${it.id}</div>
-        <div class="col-3">${it.price}</div>
-        <div class="col-4"><span class="badge rounded-pill bg-warning text-dark">${it.status}</span></div>
+        <div class="col-3 fw-bold text-primary">${it.id}</div>
+        <div class="col-3">${it.order_type}</div>
+        <div class="col-3">${it.order_items.map(pr => pr.product.price * pr.amount).reduce((a,b) => a+b,0)}</div>
+        <div class="col-3"><span class="badge rounded-pill bg-warning text-dark">${it.status}</span></div>
       </div>`
     ).join('')
   $('.box-orders .orders-items').html(stringHtml);

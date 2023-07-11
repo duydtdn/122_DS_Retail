@@ -5,6 +5,7 @@ from order_api.controller.discount_package_ctr import DiscountPackageViewSet
 from order_api.controller.table_ctr import TableViewSet
 from order_api.controller.order_place_ctr import OrderPlaceViewSet
 from order_api.controller.authentication_ctr import  custom_login, custom_register
+from order_api.controller.order_place_ctr import  create_order
 from django.urls import path
 
 
@@ -19,4 +20,5 @@ api_router.register(r'orders', OrderPlaceViewSet)
 api_urlpatterns = [
     path('auth/custom-login/', custom_login, name='custom_login'),
     path('auth/custom-register/', custom_register, name='custom_register'),
+    path('create-order/', create_order, name='create_order'),
 ]

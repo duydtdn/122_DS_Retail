@@ -21,16 +21,45 @@ const handlePlaceOrder = () => {
     })
   }
 }
+
 const handlePay = (isAuth=null) => {
   if (!isAuth) {
     popupLogin()  
   } else {
     // call api create order and payment
+    let formData = new FormData()
+    formData.append('store_operate',store)
+    formData.append('order_type','onsite')
+    formData.append('items', JSON.stringify(cartLS))
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const dataPost = {
+      async: true,
+      crossDomain: true,
+      processData: false,
+      contentType: false,
+      headers: { "X-CSRFToken": crf_token },
+      mimeType: "multipart/form-data",
+      url: `/order-api/create-order/`,
+      method: "POST",
+      data: formData,
+    };
+    $("#processing").show();
 
-    const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'}
-    cartLS = [];
-    localStorage.setItem('cart', JSON.stringify([]));
-    popupOrderSuccess(orderResult);
+    $.ajax(dataPost).done(function (response) {
+      cartLS = [];
+      localStorage.setItem('cart', JSON.stringify([]));
+      $("#processing").hide();
+      popupOrderSuccess(JSON.parse(response));
+    }).fail(function (e) {
+     $.notify("Có lỗi xảy ra, vui lòng thử lại.",
+        {
+          className: 'error',
+          position: "top",
+          autoHideDelay: 2000
+        });
+    });
+
+    // const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'}
   }
 }
 const getAllProduct = async () => {

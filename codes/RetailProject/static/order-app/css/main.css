@@ -53,6 +53,12 @@ strong {
 .modal {
   height: fit-content;
 }
+
+.modal a.close-modal {
+  top: 0;
+  right: 0;
+  background-color: #000;
+}
 .bg-primary {
   background-color: #de3905 !important;
 }
@@ -421,6 +427,7 @@ input.otp-input {
 .popup-form {
   height: fit-content;
   padding: 15px !important;
+  max-width: 400px !important;
 }
 .popup-form h1 {
   border-bottom: solid 2px #de3905;

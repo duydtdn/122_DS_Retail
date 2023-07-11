@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{% static 'order-app/css/your-cart.css' %}">
 {% endblock %}
 {% block app-container %}
+{% csrf_token %}
 <div class="app-container">
   <div id="app_header" class="header remove-margin">
     <div class="logo">
