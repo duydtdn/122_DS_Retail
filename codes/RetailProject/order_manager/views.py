@@ -93,7 +93,6 @@ def productManager(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
-
 def orderManager(request):
   search  = request.GET.get('search') or ''
   status  = request.GET.get('status') or ''
@@ -118,6 +117,17 @@ def orderManager(request):
     'is_paid': is_paid,
   }
   return render(request, 'order-manager/pages/order-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def orderDetailManager(request):
+  orderId  = request.GET.get('id') or ''
+  order = OrderPlace.objects.get(pk=orderId)
+  context = {
+    'segment': 'Thông tin đơn hàng','orders_segments' :['Quản lý đơn hàng', 'Thông tin đơn hàng'],
+    'order': order,
+  }
+  return render(request, 'order-manager/pages/order-detail.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required

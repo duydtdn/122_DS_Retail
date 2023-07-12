@@ -34,9 +34,9 @@
   </div>
   <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
-      <div class="col-12 col-md-12 d-flex mb-2">
+      <div class="col-12 col-md-6 d-flex mb-2">
         <div class="row">
-          <span class="col-12 mb-1">Tìm kiếm theo người mua</span>
+          <label class="col-12">Tìm kiếm theo người mua</label>
           <div class="input-group me-2 me-lg-3 fmxw-400">
             <span class="input-group-text">
               <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-3">
+      <!-- <div class="col-12 col-md-3">
         <label for="status_filter">Trạng thái đơn hàng</label>
         <select onchange="onSearchOrder()" class="form-select mb-0" id="status_filter" aria-label="Gender select example">
           <option value="" {% if status == "" %}selected{% endif %} >Tất cả</option>
@@ -59,7 +59,7 @@
           <option {% if status == "confirmed" %}selected{% endif %} value="confirmed">Confirmed</option>
           <option {% if status == "canceled" %}selected{% endif %} value="canceled">Canceled</option>
         </select>
-      </div>
+      </div> -->
       <div class="col-12 col-md-3">
         <label for="is_paid_filter">Trạng thái thanh toán</label>
         <select onchange="onSearchOrder()" class="form-select mb-0" id="is_paid_filter" aria-label="Gender select example">
@@ -80,6 +80,33 @@
   </div>
   <h2 class="h4">Danh sách đơn hàng</h2>
   <p class="mb-2">Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả.</p>
+  <div class="mb-2" id="status_filter">
+    <button 
+      onclick="onSearchOrderByStatus('')"
+      class="lh-lg btn btn-pill {% if status != '' %}btn-white{% endif %} {% if status == '' %}btn-info{% endif %} px-5 py-2" type="button">
+      Tất cả
+    </button>
+    <button 
+      onclick="onSearchOrderByStatus('pending')"
+      class="lh-lg btn btn-pill {% if status != 'pending' %}btn-white{% endif %} {% if status == 'pending' %}btn-info{% endif %} px-5 py-2" type="button">
+      New order
+    </button>
+    <button 
+      onclick="onSearchOrderByStatus('confirmed')"
+      class="lh-lg btn btn-pill {% if status != 'confirmed' %}btn-white{% endif %} {% if status == 'confirmed' %}btn-info{% endif %} px-5 py-2" type="button">
+      Confirmed
+    </button>
+    <button 
+      onclick="onSearchOrderByStatus('serving')"
+      class="lh-lg btn btn-pill {% if status != 'serving' %}btn-white{% endif %} {% if status == 'serving' %}btn-info{% endif %} px-5 py-2" type="button">
+      Serving
+    </button>
+    <button 
+      onclick="onSearchOrderByStatus('canceled')"
+      class="lh-lg btn btn-pill {% if status != 'canceled' %}btn-white{% endif %} {% if status == 'canceled' %}btn-info{% endif %} px-5 py-2" type="button">
+      Canceled
+    </button>
+  </div>
   <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <table class="table table-hover">
       <thead>
@@ -96,12 +123,12 @@
       <tbody>
         <!-- Items -->
         {% for index,order in data.items %}
-          <tr>
+          <tr onclick="">
             <td>
               <span class="fw-normal"> {{ index|add:data.from}}</span>
             </td>
             <td>
-              <span class="fw-normal"> {{order.id}}</span>
+              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> MSVK{{order.id}}</a>
             </td>
             <td>
               <a href="#" class="fw-bold">
@@ -191,11 +218,13 @@
 
 {% block extra_js %}
   <script>
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let statusFilter = urlParams.get('status') || ''
+
     function onSearchOrder() {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
       const searchText = $('#search_customer').val()
-      const status = $('#status_filter').val()
+      const status = statusFilter
       const is_paid = $('#is_paid_filter').val()
       const order_type = $('#order_type_filter').val()
       console.log({searchText,status,is_paid,order_type});
@@ -207,48 +236,10 @@
       const path = window.location.pathname;
       window.location.assign(`?${urlParams.toString()}`)
     }
-    function handleDeleteProduct (id, title) {
-      swalWithBootstrapButtons.fire({
-        icon: 'error',
-        title: 'Xóa sản phẩm',
-        text: `Bạn chắc chắn muốn xóa sản phẩm ${title}?`,
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Đồng ý'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-              url: `/order-api/products/${id}`,
-              type: 'DELETE',
-              data: {},
-              beforeSend: function(xhr) {
-                  xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
-              },
-              contentType: 'application/json',
-              dataType: 'text',
-              success: function (result) {
-                swalWithBootstrapButtons.fire(
-                  { icon: 'success',
-                    title: 'Xóa thành công',
-                    text: 'Sản phẩm của bạn đã được xóa thành công!',
-                    showConfirmButton: true,
-                  }
-                )
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000)
-              },
-              error: function (error) {
-                notyf.open({
-                  type: 'error',
-                  message: 'Xảy ra lỗi, vui lòng thử lại.',
-                  duration: 3000
-                });
-              }
-          });
-        }
-      })
+    function onSearchOrderByStatus (value) {
+      statusFilter=value;
+      onSearchOrder()
     }
+
   </script>
 {% endblock %}
