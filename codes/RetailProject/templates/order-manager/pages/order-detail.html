@@ -23,174 +23,160 @@
       </nav>
     </div>
   </div>
-  <h2 class="h4 mb-4">Thông tin đơn hàng :{{order.id}}</h2>
+  <h2 class="h4 mb-4">Thông tin đơn hàng : <span class="text-info">WCFS{{order.id}}</span></h2>
   <div class="table-settings mb-4">
     <div class="row order-steps align-items-center justify-content-center gap-2">
-        <div class="order-step step-1 pass">   <span>
-          New order
-        </span></div>
-        <div class="order-step pass">
-          <span>
-          Confirmed
-        </span>
+      <div class="order-step step-1 {% if order.status in 'pending,confirmed,serving,finished' %}pass{% endif %}">
+        <span>New order</span>
       </div>
-        <div class="order-step">
-          <span>
-          Serving
-        </span></div>
-        <div class="order-step">   <span>
-          Finished
-        </span></div>
+      <div class="order-step {% if order.status in 'confirmed,serving,finished' %}pass{% endif %}">
+        <span>Confirmed</span>
+      </div>
+      <div class="order-step {% if order.status in 'serving,finished' %}pass{% endif %}">
+        <span>Serving</span>
+      </div>
+      <div class="order-step {% if order.status in 'finished' %}pass{% endif %}">
+        <span>Finished</span>
+      </div>
     </div>
   </div>
   <div class="d-flex align-items-center gap-3">
+
+    {% if order.status in 'pending, confirmed, serving' %}
     <div class="">Xử lý đơn</div>
-    <button 
-      onclick="onSearchOrderByStatus('pending')"
-      class="btn btn-danger ">
+    {% endif %}
+    {% if order.status == 'cancelled' %}
+      <span class="text-danger fw-bold">Đơn đã hủy</span>
+    {% endif %}
+    {% if order.status == 'finished' %}
+      <span class="text-success fw-bold">Đơn hàng đã hoàn tất</span>
+    {% endif %}
+    {% if order.status == 'pending' %}
+      <button 
+        onclick="onUpdateOrderStatus('confirmed')"
+        class="btn btn-info">
+        Approve
+      </button>
+      <button 
+        onclick="onUpdateOrderStatus('cancelled')"
+        class="btn btn-danger ">
       Reject
-    </button>
-    <button 
-      onclick="onSearchOrderByStatus('pending')"
-      class="btn btn-primary">
-      Approve
-    </button>
+      </button>
+    {% endif %}
+    {% if order.status == 'confirmed' %}
+      <button 
+        onclick="onUpdateOrderStatus('serving')"
+        class="btn btn-info">
+      Ready for Serving
+      </button>
+      
+      <button 
+        onclick="onUpdateOrderStatus('cancelled')"
+        class="btn btn-danger">
+        Cancel
+      </button>
+    {% endif %}
+    {% if order.status == 'serving' %}
+      <button 
+        onclick="onUpdateOrderStatus('finished')"
+        class="btn btn-info">
+      Order Fulfilled
+      </button>
+    {% endif %}
   </div>
   <div class="row mt-4 g-3">
-    <div class="bg-white col-12 col-md-8 card-body border border-2 rounded-2 shadow table-wrapper table-responsive">
-      <h5>Thông tin món</h5>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="border-gray-200">#</th>
-            <th class="border-gray-200">Order code</th>
-            <th class="border-gray-200">Người mua</th>
-            <th class="border-gray-200">Loại đơn</th>
-            <th class="border-gray-200">Trạng thái</th>
-            <th class="border-gray-200">Thanh toán</th>
-            <th class="border-gray-200">Giá(VNĐ)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Items -->
-          {% for index,order in data.items %}
+    <div class=" col-12 col-md-8">
+      <div class="bg-white card-body border border-2 rounded-2 shadow table-wrapper table-responsive h-100">
+        <h5>Thông tin món</h5>
+        <table class="table table-hover">
+          <thead class="text-center">
             <tr>
-              <td>
-                <span class="fw-normal"> {{ index|add:data.from}}</span>
-              </td>
-              <td>
-                <span class="fw-normal"> {{order.id}}</span>
-              </td>
-              <td>
-                <a href="#" class="fw-bold">
-                  {{order.customer.username}} 
-                </a>
-              </td>
-
-              <td>
-                <span class="fw-normal"> {{order.order_type}}</span>
-              </td>
-              {% if order.status in 'pending'%}
-                <td><span class="p-2 rounded fw-normal bg-danger text-white">{{order.status}}
-              {% endif %}
-              {% if order.status in 'finished'%}
-                <td><span class="p-2 rounded fw-normal bg-success text-white">{{order.status}}
-              {% endif %}
-              {% if order.status in 'confirmed'%}
-                <td><span class="p-2 rounded fw-normal bg-primary text-white">{{order.status}}
-              {% endif %}
-              {% if order.status in 'serving'%}
-                <td><span class="p-2 rounded fw-normal bg-indigo text-white">{{order.status}}
-              {% endif %}
-              {% if order.status in 'cancelled'%}
-                <td><span class="p-2 rounded fw-normal bg-secondary text-white">{{order.status}}
-              {% endif %}
-              </span></td>
-              <td><div class="form-check form-switch">
-                {% if not order.is_paid %}
-                <input class="form-check-input" type="checkbox" disabled>
-                {% endif %}
-                {% if order.is_paid %}
-                <input class="form-check-input" type="checkbox" checked disabled>
-                {% endif %}
-              </div></td>
-              <td>
-                <span class="fw-normal"> {{ order.total }}</span>
-              </td>
+              <th class="border-gray-200">#</th>
+              <th class="border-gray-200">Sản phẩm</th>
+              <th class="border-gray-200">Số lượng</th>
+              <th class="border-gray-200">Giá</th>
+              <th class="border-gray-200">Thành tiền</th>
+              <th class="border-gray-200">Ghi chú</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="card-footer border-0 d-flex flex-lg-row justify-content-end">
-        {% if data.total_page > 1 %}
-          <nav aria-label="Page navigation">
-            <ul class="pagination">
-              {% if data.page_objects.has_previous %}
-                  <li class="page-item">
-                <a class="page-link" href="?page={{ data.page_objects.previous_page_number }}&search={{data.params.search}}">Trước</a></li>
-              {% else %}
-                  <li class="disabled"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
-              {% endif %}
-              
-              {% if data.page_objects.number|add:'-4' > 1 %}
-                  <li class="page-item">
-                <a class="page-link" href="?page={{ data.page_objects.number|add:'-5' }}&search={{data.params.search}}">&hellip;</a></li>
-              {% endif %}
-              
-              {% for i in data.page_objects.paginator.page_range %}
-                  {% if data.page_objects.number == i %}
-                      <li class="page-item active"><span class="page-link sr-only">{{ i }}</span></li>
-                  {% elif i > data.page_objects.number|add:'-3' and i < data.page_objects.number|add:'3' %}
-                      <li class="page-item">
-                        <a class="page-link" href="?page={{ i }}&search={{data.params.search}}">{{ i }}</a>
-                      </li>
-                  {% endif %}
-              {% endfor %}
-              
-              {% if data.page_objects.paginator.num_pages > data.page_objects.number|add:'4' %}
-                  <li class="page-item">
-                <a class="page-link" href="?page={{ data.page_objects.number|add:'5' }}&search={{data.params.search}}">&hellip;</a></li>
-              {% endif %}
-              
-              {% if data.page_objects.has_next %}
-                  <li class="page-item">
-                <a class="page-link" href="?page={{ data.page_objects.next_page_number }}&search={{data.params.search}}">Kế tiếp</a></li>
-              {% endif %}
-              
-              </ul>
-          </nav>
-        {% endif %}
-        {% if data.total == 0 %}
-          <p class="m-auto mb-2">Không tìm thấy kết quả.</p>
-        {% endif %}
+          </thead>
+          <tbody>
+            <!-- Items -->
+            {% for item in order.order_items %}
+              <tr class="text-center">
+                <td>
+                  <span class="fw-normal"> {{ index|add:1}}</span>
+                </td>
+                <td>
+                  <span class="fw-normal fw-bold text-info"> {{item.product.title}}</span>
+                </td>
+                <td>
+                  <a href="#" class="fw-bold">
+                    {{item.amount}} 
+                  </a>
+                </td>
+                <td>
+                  <span class="fw-normal"> {{item.product.price}}</span>
+                </td>
+                <td>
+                  <span class="fw-normal"> {% widthratio item.product.price 1 item.amount %}</span>
+                </td>
+                <td>
+                  <span class="fw-normal"> {{ item.product.note }}</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="col-6 float-end mt-4">
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Tổng:</span><span class="fw-bold">{{order.total}} VNĐ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Giảm giá:</span><span>{% if order.discount %} {{order.discount}} {% endif %} VNĐ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Thanh toán:</span><span class="fw-bold fs-4 text-danger">{{order.total}} VNĐ</span>
+          </div>
+      </div>
       </div>
     </div>
-    <div class="bg-white col-12 col-md-4 card-body border border-2 rounded-2">
-      <h5 class="">Thông tin đơn hàng</h5>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Thời gian đặt:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Người đặt:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Loại đơn:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Giá(VNĐ):</span><span>20-02-2023</span>
-      </div>
-      <h5 class="mt-4">Khách hàng</h5>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Thời gian đặt:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Người đặt:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Loại đơn:</span><span>20-02-2023</span>
-      </div>
-      <div class="d-flex justify-content-between mb-1">
-        <span class="text-gray">Giá(VNĐ):</span><span>20-02-2023</span>
+    <div class="col-12 col-md-4 ">
+      <div class="bg-white card-body border border-2 rounded-2 h-100">
+        <h5 class="">Thông tin đơn hàng</h5>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Thời gian đặt:</span><span>20-02-2023</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Người đặt:</span><span class="text-info">Khách</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Loại đơn:</span><span>{{order.order_type}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Hình thức thanh toán:</span><span>Tại quầy</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          {% if not order.is_paid %}
+          <span class="text-gray">Trạng thái:</span><span class="text-danger fw-bold">Chưa thanh toán</span>
+          {% endif %}
+          {% if order.is_paid %}
+          <span class="text-gray">Trạng thái:</span><span class="text-success fw-bold">Đã thanh toán</span>
+          {% endif %}
+        </div>
+        <h5 class="mt-4">Khách hàng</h5>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Tên:</span><span class="text-info">{{order.customer.username}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Email:</span><span>{{order.customer.email}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Số ĐT:</span><span>{{order.customer.phone_number}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Địa chỉ</span><span></span>
+        </div>
       </div>
     </div>
 </div>
@@ -221,6 +207,39 @@
       statusFilter=value;
       onSearchOrder()
     }
+    function onUpdateOrderStatus (status) {
+      const orderId = urlParams.get('id')
+      let formData = new FormData()
+      formData.append('status', status)
+      $.ajax({
+        url: `/order-api/orders/${orderId}/`,
+        type: 'PATCH',
+        data: formData,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
+        },
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        success: function (result) {
+          notyf.open({
+            type: 'success',
+            message: 'Cập nhật đơn hàng thành công.',
+            duration: 3000
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000)
+        },
+        error: function (error) {
+          notyf.open({
+            type: 'error',
+            message: 'Xảy ra lỗi, vui lòng thử lại.',
+            duration: 3000
+          });
+        }
+      });
+    } 
 
   </script>
 {% endblock %}

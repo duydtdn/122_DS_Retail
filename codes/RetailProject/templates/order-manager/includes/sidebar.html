@@ -96,7 +96,7 @@
 
       {% if request.user.is_authenticated and not request.user.is_superuser %}
 
-      <li class="nav-item {% if 'customers' in segment %}active{% endif %}">
+      <!-- <li class="nav-item {% if 'customers' in segment %}active{% endif %}">
         <a href="{% url 'customers' %}" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +108,7 @@
           </span>
           <span class="sidebar-text">Quản lý khách hàng</span>
         </a>
-      </li>
+      </li> -->
       <li class="nav-item {% if  segment in category_segments %}active{% endif %}">
         <a href="{% url 'categories' %}" class="nav-link">
           <span class="sidebar-icon">

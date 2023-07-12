@@ -17,10 +17,13 @@ from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
 # from order_api.controller.order_place_ctr import OrderPlaceSerializer
 class OrderPlaceProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=False)
+    price = serializers.SerializerMethodField()
+    def get_price(self, obj):
+        return obj.amount * obj.product.price
     class Meta:
         model = OrderPlaceProduct
         fields = '__all__'
-        include=['product']
+        include=['product', 'price']
 
 class OrderPlaceProductFilter(filters.FilterSet):
     class Meta:

@@ -102,8 +102,8 @@
       Serving
     </button>
     <button 
-      onclick="onSearchOrderByStatus('canceled')"
-      class="lh-lg btn btn-pill {% if status != 'canceled' %}btn-white{% endif %} {% if status == 'canceled' %}btn-info{% endif %} px-5 py-2" type="button">
+      onclick="onSearchOrderByStatus('cancelled')"
+      class="lh-lg btn btn-pill {% if status != 'cancelled' %}btn-white{% endif %} {% if status == 'cancelled' %}btn-info{% endif %} px-5 py-2" type="button">
       Canceled
     </button>
   </div>
@@ -128,7 +128,7 @@
               <span class="fw-normal"> {{ index|add:data.from}}</span>
             </td>
             <td>
-              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> MSVK{{order.id}}</a>
+              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> WCFS{{order.id}}</a>
             </td>
             <td>
               <a href="#" class="fw-bold">
@@ -164,7 +164,7 @@
               {% endif %}
             </div></td>
             <td>
-              <span class="fw-normal"> {{ order.total }}</span>
+              <span class="fw-normal fw-bold text-info"> {{ order.total }}</span>
             </td>
           </tr>
         {% endfor %}

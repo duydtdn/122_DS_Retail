@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
 from order_api.models import Product, ProductCategory, OrderPlace
 from django.db.models import Count
-from order_api.controller.order_place_ctr import OrderPlaceViewSet
+from order_api.controller.order_place_ctr import OrderPlaceViewSet, OrderPlaceSerializer
 import json
 
 LOGIN_URL="/order-manager/login/"
@@ -23,11 +23,11 @@ def getItemsWithPagination (request, items):
   data = {
     'items': enumerate(page_objects),
     'page_objects': page_objects,
-    'total': items.count(),
+    'total': len(items),
     'params': {'page': page_number, 'search':search },
     'from': (int(page_number) - 1) * LIMIT + 1,
     'to': (int(page_number) - 1) * LIMIT + len(page_objects.object_list),
-    'total_page': 1 if items.count() <= LIMIT else (items.count() -1)//LIMIT + 1,
+    'total_page': 1 if len(items) <= LIMIT else (len(items) -1)//LIMIT + 1,
     }
   return data
 
@@ -98,7 +98,7 @@ def orderManager(request):
   status  = request.GET.get('status') or ''
   order_type  = request.GET.get('order_type') or ''
   is_paid = request.GET.get('is_paid') or ''
-  orders = OrderPlaceViewSet.queryset
+  orders = OrderPlace.objects.all()
   if search:
     orders = orders.filter(customer__username__contains=search)
   if status:
@@ -109,9 +109,10 @@ def orderManager(request):
     orders = orders.filter(is_paid=True)
   if is_paid == '0':
     orders = orders.filter(is_paid=False)
+  serialize = OrderPlaceSerializer(orders, many=True)
   context = {
     'segment': 'Quản lý đơn hàng','orders_segments' :['Quản lý đơn hàng'],
-    'data': getItemsWithPagination (request, orders),
+    'data': getItemsWithPagination (request, serialize.data),
     'status': status,
     'order_type': order_type,
     'is_paid': is_paid,
@@ -123,9 +124,10 @@ def orderManager(request):
 def orderDetailManager(request):
   orderId  = request.GET.get('id') or ''
   order = OrderPlace.objects.get(pk=orderId)
+  serializer = OrderPlaceSerializer(order)
   context = {
     'segment': 'Thông tin đơn hàng','orders_segments' :['Quản lý đơn hàng', 'Thông tin đơn hàng'],
-    'order': order,
+    'order': serializer.data,
   }
   return render(request, 'order-manager/pages/order-detail.html', context)
 

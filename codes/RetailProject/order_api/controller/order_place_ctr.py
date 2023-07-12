@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
+from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete, ManagerOfStorePermission
 from order_api.controller.assistant.pagination_ast import CustomPagination
 from order_api.models import OrderPlace, OrderPlaceProduct
 from order_api.admin import CustomUserSerializer
@@ -69,8 +69,14 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = OrderPlaceFilter
     pagination_class = CustomPagination
-    permission_classes = [AllowAnyPutDelete]
-    
+
+    def get_permissions(self):
+        if self.action in ['get','list','retrieve']:
+            permission_classes = [AllowAnyPutDelete]
+        else:
+            permission_classes = [ManagerOfStorePermission]
+        return [permission() for permission in permission_classes]
+
     def get_queryset(self) :
         qs = OrderPlace.objects.all().order_by('order_date')
         user = self.request.user
@@ -82,6 +88,13 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
             return qs.filter(customer=user)
         return []
     
+    def patch(self, request, pk):
+        model = OrderPlace.objects.get(pk)
+        serializer = OrderPlaceSerializer(model, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(code=201, data=serializer.data)
+        return JsonResponse(code=400, data="wrong parameters")
     # @action(methods=['get'], detail=True, url_path='request-payment', url_name='request_payment')
     # def request_payment(self, request, pk=None):
     #     try:
