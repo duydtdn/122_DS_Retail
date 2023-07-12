@@ -10,12 +10,20 @@ from django.http import JsonResponse, HttpResponse
 from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
 from order_api.controller.assistant.pagination_ast import CustomPagination
 from order_api.models import OrderPlaceProduct
+from order_api.controller.product_ctr import ProductSerializer
 from order_api.models import OrderPlace
+from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
+
 # from order_api.controller.order_place_ctr import OrderPlaceSerializer
 class OrderPlaceProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(many=False)
+    price = serializers.SerializerMethodField()
+    def get_price(self, obj):
+        return obj.amount * obj.product.price
     class Meta:
         model = OrderPlaceProduct
         fields = '__all__'
+        include=['product', 'price']
 
 class OrderPlaceProductFilter(filters.FilterSet):
     class Meta:

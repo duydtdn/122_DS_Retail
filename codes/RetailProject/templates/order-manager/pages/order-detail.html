@@ -1,0 +1,245 @@
+{% extends 'order-manager/layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <div id="order_manager" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
+    <div class="d-block mb-4 mb-md-0">
+      <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">
+              <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                </path>
+              </svg>
+            </a>
+          </li>
+          <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Trang chủ</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{segment}}</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <h2 class="h4 mb-4">Thông tin đơn hàng : <span class="text-info">WCFS{{order.id}}</span></h2>
+  <div class="table-settings mb-4">
+    <div class="row order-steps align-items-center justify-content-center gap-2">
+      <div class="order-step step-1 {% if order.status in 'pending,confirmed,serving,finished' %}pass{% endif %}">
+        <span>New order</span>
+      </div>
+      <div class="order-step {% if order.status in 'confirmed,serving,finished' %}pass{% endif %}">
+        <span>Confirmed</span>
+      </div>
+      <div class="order-step {% if order.status in 'serving,finished' %}pass{% endif %}">
+        <span>Serving</span>
+      </div>
+      <div class="order-step {% if order.status in 'finished' %}pass{% endif %}">
+        <span>Finished</span>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+
+    {% if order.status in 'pending, confirmed, serving' %}
+    <div class="">Xử lý đơn</div>
+    {% endif %}
+    {% if order.status == 'cancelled' %}
+      <span class="text-danger fw-bold">Đơn đã hủy</span>
+    {% endif %}
+    {% if order.status == 'finished' %}
+      <span class="text-success fw-bold">Đơn hàng đã hoàn tất</span>
+    {% endif %}
+    {% if order.status == 'pending' %}
+      <button 
+        onclick="onUpdateOrderStatus('confirmed')"
+        class="btn btn-info">
+        Approve
+      </button>
+      <button 
+        onclick="onUpdateOrderStatus('cancelled')"
+        class="btn btn-danger ">
+      Reject
+      </button>
+    {% endif %}
+    {% if order.status == 'confirmed' %}
+      <button 
+        onclick="onUpdateOrderStatus('serving')"
+        class="btn btn-info">
+      Ready for Serving
+      </button>
+      
+      <button 
+        onclick="onUpdateOrderStatus('cancelled')"
+        class="btn btn-danger">
+        Cancel
+      </button>
+    {% endif %}
+    {% if order.status == 'serving' %}
+      <button 
+        onclick="onUpdateOrderStatus('finished')"
+        class="btn btn-info">
+      Order Fulfilled
+      </button>
+    {% endif %}
+  </div>
+  <div class="row mt-4 g-3">
+    <div class=" col-12 col-md-8">
+      <div class="bg-white card-body border border-2 rounded-2 shadow table-wrapper table-responsive h-100">
+        <h5>Thông tin món</h5>
+        <table class="table table-hover">
+          <thead class="text-center">
+            <tr>
+              <th class="border-gray-200">#</th>
+              <th class="border-gray-200">Sản phẩm</th>
+              <th class="border-gray-200">Số lượng</th>
+              <th class="border-gray-200">Giá</th>
+              <th class="border-gray-200">Thành tiền</th>
+              <th class="border-gray-200">Ghi chú</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Items -->
+            {% for item in order.order_items %}
+              <tr class="text-center">
+                <td>
+                  <span class="fw-normal"> {{ index|add:1}}</span>
+                </td>
+                <td>
+                  <span class="fw-normal fw-bold text-info"> {{item.product.title}}</span>
+                </td>
+                <td>
+                  <a href="#" class="fw-bold">
+                    {{item.amount}} 
+                  </a>
+                </td>
+                <td>
+                  <span class="fw-normal"> {{item.product.price}}</span>
+                </td>
+                <td>
+                  <span class="fw-normal"> {% widthratio item.product.price 1 item.amount %}</span>
+                </td>
+                <td>
+                  <span class="fw-normal"> {{ item.product.note }}</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="col-6 float-end mt-4">
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Tổng:</span><span class="fw-bold">{{order.total}} VNĐ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Giảm giá:</span><span>{% if order.discount %} {{order.discount}} {% endif %} VNĐ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-gray">Thanh toán:</span><span class="fw-bold fs-4 text-danger">{{order.total}} VNĐ</span>
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4 ">
+      <div class="bg-white card-body border border-2 rounded-2 h-100">
+        <h5 class="">Thông tin đơn hàng</h5>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Thời gian đặt:</span><span>20-02-2023</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Người đặt:</span><span class="text-info">Khách</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Loại đơn:</span><span>{{order.order_type}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Hình thức thanh toán:</span><span>Tại quầy</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          {% if not order.is_paid %}
+          <span class="text-gray">Trạng thái:</span><span class="text-danger fw-bold">Chưa thanh toán</span>
+          {% endif %}
+          {% if order.is_paid %}
+          <span class="text-gray">Trạng thái:</span><span class="text-success fw-bold">Đã thanh toán</span>
+          {% endif %}
+        </div>
+        <h5 class="mt-4">Khách hàng</h5>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Tên:</span><span class="text-info">{{order.customer.username}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Email:</span><span>{{order.customer.email}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Số ĐT:</span><span>{{order.customer.phone_number}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-gray">Địa chỉ</span><span></span>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+  <script>
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let statusFilter = urlParams.get('status') || ''
+
+    function onSearchOrder() {
+      const searchText = $('#search_customer').val()
+      const status = statusFilter
+      const is_paid = $('#is_paid_filter').val()
+      const order_type = $('#order_type_filter').val()
+      console.log({searchText,status,is_paid,order_type});
+      urlParams.set('search', searchText)
+      urlParams.set('status', status)
+      urlParams.set('is_paid', is_paid)
+      urlParams.set('order_type', order_type)
+      urlParams.set('page', 1)
+      const path = window.location.pathname;
+      window.location.assign(`?${urlParams.toString()}`)
+    }
+    function onSearchOrderByStatus (value) {
+      statusFilter=value;
+      onSearchOrder()
+    }
+    function onUpdateOrderStatus (status) {
+      const orderId = urlParams.get('id')
+      let formData = new FormData()
+      formData.append('status', status)
+      $.ajax({
+        url: `/order-api/orders/${orderId}/`,
+        type: 'PATCH',
+        data: formData,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
+        },
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        success: function (result) {
+          notyf.open({
+            type: 'success',
+            message: 'Cập nhật đơn hàng thành công.',
+            duration: 3000
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000)
+        },
+        error: function (error) {
+          notyf.open({
+            type: 'error',
+            message: 'Xảy ra lỗi, vui lòng thử lại.',
+            duration: 3000
+          });
+        }
+      });
+    } 
+
+  </script>
+{% endblock %}

@@ -173,7 +173,7 @@ const popupRegister = () => {
   });
 }
 const popupOrderSuccess = (orderResult) => {
-  $('#place_order_popup .order-hash').html(orderResult.orderHash);
+  $('#place_order_popup .order-hash').html(orderResult.data.id);
 
   $('#place_order_popup').modal({
     open: true,

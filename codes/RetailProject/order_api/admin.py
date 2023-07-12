@@ -4,6 +4,8 @@ from order_api.models import Product, ProductCategory, DiscountPackage,OrderPlac
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from order_api.form import  UserChangeForm, UserCreationForm
+from rest_framework import  serializers
+
 # Register your models here.
 admin.site.site_header = 'Order Admin'
 
@@ -98,6 +100,11 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ["username", "phone_number"]
     ordering = ["username"]
     filter_horizontal = []
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'phone_number']
 
 admin.site.register(CustomUser, CustomUserAdmin )
 # ... and, since we're not using Django's built-in permissions,

@@ -315,13 +315,16 @@ class OrderPlace(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     discount = models.ForeignKey(DiscountPackage, on_delete=models.CASCADE, null=True, blank=True)
     # table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, db_constraint=False)
-    order_date = models.DateTimeField(auto_created=True)
+    order_date = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     price = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)
     order_type = models.CharField(max_length=20, choices=ORDER_TYPE_CHOICES, default='onsite')
     def __str__(self):
         return f'{self.id}'
+    def save(self, *args, **kwargs):
+        super(OrderPlace, self).save(*args, **kwargs) 
+        return self
     
 class OrderPlaceProduct(models.Model):
     order_place = models.ForeignKey(OrderPlace,  on_delete=models.CASCADE, related_name='order_items')

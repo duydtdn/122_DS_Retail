@@ -82,10 +82,10 @@
       </thead>
       <tbody>
         <!-- Items -->
-        {% for product in data.items %}
+        {% for index, product in data.items %}
           <tr>
             <td>
-              <span class="fw-normal"> {{product.id}}</span>
+              <span class="fw-normal"> {{ index|add:1}}</span>
             </td>
             <td>
               <a href="#" class="fw-bold">
@@ -125,36 +125,36 @@
       {% if data.total_page > 1 %}
         <nav aria-label="Page navigation">
           <ul class="pagination">
-            {% if data.items.has_previous %}
+            {% if data.page_objects.has_previous %}
                 <li class="page-item">
-              <a class="page-link" href="?page={{ data.items.previous_page_number }}&search={{data.params.search}}">Trước</a></li>
+              <a class="page-link" href="?page={{ data.page_objects.previous_page_number }}&search={{data.params.search}}">Trước</a></li>
             {% else %}
                 <li class="disabled"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
             {% endif %}
             
-            {% if data.items.number|add:'-4' > 1 %}
+            {% if data.page_objects.number|add:'-4' > 1 %}
                 <li class="page-item">
-              <a class="page-link" href="?page={{ data.items.number|add:'-5' }}&search={{data.params.search}}">&hellip;</a></li>
+              <a class="page-link" href="?page={{ data.page_objects.number|add:'-5' }}&search={{data.params.search}}">&hellip;</a></li>
             {% endif %}
             
-            {% for i in data.items.paginator.page_range %}
-                {% if data.items.number == i %}
+            {% for i in data.page_objects.paginator.page_range %}
+                {% if data.page_objects.number == i %}
                     <li class="page-item active"><span class="page-link sr-only">{{ i }}</span></li>
-                {% elif i > data.items.number|add:'-3' and i < data.items.number|add:'3' %}
+                {% elif i > data.page_objects.number|add:'-3' and i < data.page_objects.number|add:'3' %}
                     <li class="page-item">
                       <a class="page-link" href="?page={{ i }}&search={{data.params.search}}">{{ i }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
             
-            {% if data.items.paginator.num_pages > data.items.number|add:'4' %}
+            {% if data.page_objects.paginator.num_pages > data.page_objects.number|add:'4' %}
                 <li class="page-item">
-              <a class="page-link" href="?page={{ data.items.number|add:'5' }}&search={{data.params.search}}">&hellip;</a></li>
+              <a class="page-link" href="?page={{ data.page_objects.number|add:'5' }}&search={{data.params.search}}">&hellip;</a></li>
             {% endif %}
             
-            {% if data.items.has_next %}
+            {% if data.page_objects.has_next %}
                 <li class="page-item">
-              <a class="page-link" href="?page={{ data.items.next_page_number }}&search={{data.params.search}}">Kế tiếp</a></li>
+              <a class="page-link" href="?page={{ data.page_objects.next_page_number }}&search={{data.params.search}}">Kế tiếp</a></li>
             {% endif %}
             
             </ul>
