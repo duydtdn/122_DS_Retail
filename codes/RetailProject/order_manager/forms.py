@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UsernameField, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
-from order_api.models import Product, ProductCategory, DiscountPackage
+from order_api.models import Product, ProductCategory, DiscountPackage, Store
 from django.utils.translation import gettext_lazy as _
 from django.forms import ModelForm
 
@@ -144,7 +144,6 @@ class DiscountPackageCreateForm(ModelForm):
             }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input',
-                'wrapper-class' : 'form-check form-switch'
             }),
             'store_operate': forms.HiddenInput(),
             'thumbnail': forms.FileInput(attrs={
@@ -164,21 +163,71 @@ class CategoryCreateForm(ModelForm):
         fields ='__all__'
         labels = {
             'name': 'Tên nhóm sản phẩm',
-            'slug': 'Slug',
-            'parent': 'Parent category',
+            'slug': 'Mã loại sản phẩm',
+            'parent': 'Nhóm sản phẩm',
         }
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Tên nhóm sản phẩm'
+                'placeholder': 'Tên loại sản phẩm'
             }),
             'slug': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'slug'
+                'placeholder': 'Mã loại sản phẩm'
             }),
              'parent': forms.Select(attrs={
                 'class': 'form-control',
                 'placeholder': 'Chọn parent group'
             }),
             'store_operate': forms.HiddenInput(),
+        }
+class StoreCreateForm(ModelForm):
+    def __init__(self, user=None, *args, **kwargs):
+        super(StoreCreateForm, self).__init__(*args, **kwargs)
+        # if user :
+        #     self.fields['parent'].queryset = ProductCategory.objects.filter(store_operate= user.store_operate, parent__isnull=True)
+        #     self.fields['store_operate'].initial = user.store_operate
+    class Meta:
+        model = Store
+        fields ='__all__'
+        labels = {
+            'name': 'Tên cửa hàng',
+            'created_date': 'Ngày tạo',
+            'slug': 'Mã cửa hàng',
+            'location': 'Địa chỉ',
+            'description': 'Giới thiệu',
+            'is_active': 'Trạng thái hoạt động',
+            'thumbnail': 'Hình ảnh'
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tên cửa hàng'
+            }),
+            'created_date': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tên cửa hàng',
+                'readonly': True
+            }),
+            'slug': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Mã cửa hàng'
+            }),
+           'location': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Địa chỉ',
+                'rows': '4'
+            }),
+           'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Mô tả',
+                'rows': '4'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
+            'thumbnail': forms.FileInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Hình đại diện'
+            }),
         }

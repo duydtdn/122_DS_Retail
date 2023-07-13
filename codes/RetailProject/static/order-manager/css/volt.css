@@ -22006,6 +22006,7 @@ textarea.form-control-lg {
   padding: 0 1rem 0 1rem;
   transition: all 0.3s;
   padding-top: 64px;
+  padding-bottom: 1rem;
 }
 @media (prefers-reduced-motion: reduce) {
   .content {

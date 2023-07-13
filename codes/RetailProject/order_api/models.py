@@ -16,6 +16,7 @@ import phonenumbers
 # Create your models here.
 class Store(models.Model):
     name = models.CharField(max_length=512, null=True, blank=True)
+    slug = models.SlugField(max_length=10, unique=True ,db_index=True)
     is_active = models.BooleanField(default=True)
     description =  models.CharField(max_length=512, null=True, blank=True)
     location =  models.CharField(max_length=512, null=True, blank=True)
@@ -322,7 +323,8 @@ class OrderPlace(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     discount = models.ForeignKey(DiscountPackage, on_delete=models.CASCADE, null=True, blank=True)
     # table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, db_constraint=False)
-    order_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_paid = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     price = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)

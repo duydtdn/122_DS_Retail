@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm,DiscountPackageCreateForm, CategoryCreateForm
+from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm,DiscountPackageCreateForm, CategoryCreateForm, StoreCreateForm
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
@@ -7,10 +7,9 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
-from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPackage
+from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPackage, Store
 from django.db.models import Count
-from order_api.controller.order_place_ctr import OrderPlaceViewSet, OrderPlaceSerializer
-import json
+from order_api.controller.order_place_ctr import  OrderPlaceSerializer
 from django.shortcuts import get_object_or_404
 
 LOGIN_URL="/order-manager/login/"
@@ -113,7 +112,7 @@ def orderManager(request):
   status  = request.GET.get('status') or ''
   order_type  = request.GET.get('order_type') or ''
   is_paid = request.GET.get('is_paid') or ''
-  orders = OrderPlace.objects.all()
+  orders = OrderPlace.objects.filter(store_operate=request.user.store_operate)
   if search:
     orders = orders.filter(customer__username__contains=search)
   if status:
@@ -219,8 +218,21 @@ def editDiscountPackage(request):
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
 def settings(request):
+  store = Store.objects.get(pk=request.user.store_operate.id)
+  form = StoreCreateForm(user = request.user, instance= store)
+  if request.method == 'POST':
+    form = StoreCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= store)
+    if form.is_valid():
+      form.save()
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      form = StoreCreateForm(user = request.user, instance= store)
+      redirect('/order-manager/settings')
+    else:
+      print('error')
   context = {
-    'segment': 'Thông tin cửa hàng'
+    'segment': 'Thông tin cửa hàng',
+    'store': store,
+    'form': form,
   }
   return render(request, 'order-manager/pages/settings.html', context)
 

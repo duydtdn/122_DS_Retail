@@ -28,11 +28,11 @@ const renderOrderDetail = (id) => {
           <h1 class="text-center font-weight-bold">Chi tiết đơn hàng</h1>
           <div class="row mb-1 ">
             <span class="col-4">Mã ĐH:</span>
-            <span class="col-8 fst-italic fw-bold">${itemDetail.id}</span>
+            <span class="col-8 fst-italic fw-bold">${itemDetail.store_operate.slug + itemDetail.id}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Ngày tạo:</span>
-            <span class="col-8 fst-italic">${new Date(itemDetail.order_date).toLocaleDateString()}</span>
+            <span class="col-8 fst-italic">${new Date(itemDetail.created_at).toLocaleDateString()}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Số ĐT:</span>
@@ -92,7 +92,7 @@ const renderListOrder = async () => {
   const stringHtml =
   orderList.map(it =>
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
-        <div class="col-3 fw-bold text-primary">${it.id}</div>
+        <div class="col-3 fw-bold text-primary">${it.store_operate.slug+it.id}</div>
         <div class="col-3">${it.order_type}</div>
         <div class="col-3">${it.total}</div>
         <div class="col-3"><span class="badge rounded-pill bg-warning text-dark">${it.status}</span></div>

@@ -133,7 +133,7 @@
               <span class="fw-normal"> {{ index|add:data.from}}</span>
             </td>
             <td>
-              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> WCFS{{order.id}}</a>
+              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> {{order.store_operate.slug}}{{order.id}}</a>
             </td>
             <td>
               <a href="#" class="fw-bold">

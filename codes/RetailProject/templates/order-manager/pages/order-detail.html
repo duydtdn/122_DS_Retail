@@ -23,7 +23,7 @@
       </nav>
     </div>
   </div>
-  <h2 class="h4 mb-4">Thông tin đơn hàng : <span class="text-info">WCFS{{order.id}}</span></h2>
+  <h2 class="h4 mb-4">Thông tin đơn hàng : <span class="text-info">{{order.store_operate.slug}}{{order.id}}</span></h2>
   <div class="table-settings mb-4">
     <div class="row order-steps align-items-center justify-content-center gap-2">
       <div class="order-step step-1 {% if order.status in 'pending,confirmed,serving,finished' %}pass{% endif %}">
@@ -124,7 +124,7 @@
                   <span class="fw-normal"> {{ index|add:1}}</span>
                 </td>
                 <td>
-                  <span class="fw-normal fw-bold text-info"> {{item.product.title}}</span>
+                  <span class="fw-bold"> {{item.product.title}}</span>
                 </td>
                 <td>
                   <a href="#" class="fw-bold">
@@ -162,7 +162,7 @@
       <div class="bg-white card-body border border-2 rounded-2 h-100">
         <h5 class="">Thông tin đơn hàng</h5>
         <div class="d-flex justify-content-between mb-1">
-          <span class="text-gray">Thời gian đặt:</span><span>{{order.order_date}}</span>
+          <span class="text-gray">Thời gian đặt:</span><span>{{order.created_at}}</span>
         </div>
         <div class="d-flex justify-content-between mb-1">
           <span class="text-gray">Người đặt:</span><span class="text-info">Khách</span>
