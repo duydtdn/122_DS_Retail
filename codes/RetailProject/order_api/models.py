@@ -256,10 +256,12 @@ def update_product_media(sender, instance, **kwargs):
 
 class DiscountPackage(models.Model):
     title = models.CharField(max_length=512, null=True, blank=True)
+    gift_code = models.CharField(max_length=10, null=True, blank=True, unique=True, default='')
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
     discount = models.IntegerField(null=True, blank=True)
     detail = models.TextField(null=True, blank=True)
-    amount = models.IntegerField(null=True, blank=True)
+    amount = models.IntegerField(null=False, blank=False, default=0)
+    available = models.IntegerField(null=False, blank=False, default=0)
     is_active = models.BooleanField(default=True)
     def thumbnail_directory_path(Client, filename):
         dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
@@ -311,6 +313,11 @@ class OrderPlace(models.Model):
         ('onsite', 'On-site Service'),
         ('delivery', 'Delivery'),
     ]
+    PAY_TYPE_CHOICES= [
+        ('online_pay', 'Online pay'),
+        ('ship_cod', 'Ship COD'),
+        ('onboard', 'Onboard'),
+    ]
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     discount = models.ForeignKey(DiscountPackage, on_delete=models.CASCADE, null=True, blank=True)
@@ -320,6 +327,7 @@ class OrderPlace(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     price = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)
     order_type = models.CharField(max_length=20, choices=ORDER_TYPE_CHOICES, default='onsite')
+    pay_type = models.CharField(max_length=20, choices=PAY_TYPE_CHOICES, default='onboard')
     def __str__(self):
         return f'{self.id}'
     def save(self, *args, **kwargs):

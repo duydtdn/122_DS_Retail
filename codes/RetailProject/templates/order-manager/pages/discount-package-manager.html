@@ -23,7 +23,7 @@
       </nav>
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <a href="{% url 'category_add' %}" class="btn btn-primary d-inline-flex align-items-center">
+      <a href="{% url 'discount_package_add' %}" class="btn btn-primary d-inline-flex align-items-center">
         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -35,7 +35,7 @@
   <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
       <div class="col d-flex">
-        <!-- <div class="input-group me-2 me-lg-3 fmxw-400">
+        <div class="input-group me-2 me-lg-3 fmxw-400">
           <span class="input-group-text">
             <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -44,61 +44,74 @@
                 clip-rule="evenodd"></path>
             </svg>
           </span>
-          <input id="search_product" type="text" class="form-control" value="{{data.params.search}}" placeholder="Tìm kiếm loại sản phẩm">
+          <input id="search_package" type="text" class="form-control" value="{{data.params.search}}" placeholder="Tìm kiếm gói">
         </div>
-        <button onclick="onSearchCategory()" class="btn btn-outline-primary">Tìm kiếm</button> -->
-        <div class="col-md-3">
-          <label for="group">Nhóm loại sản phẩm</label>
-          <select onchange="onFilterGroup()" class="form-select mb-0" id="group" aria-label="Gender select example">
-            <option value="" {% if group == "" %}selected{% endif %} >Tất cả</option>
-            {% for category in parentCategories %}
-                <option {% if group == category.id|stringformat:"s" %}selected{% endif %} value="{{category.id}}">{{category.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
+        <button onclick="onSearchPackage()" class="btn btn-outline-primary">Tìm kiếm</button>
       </div>
     </div>
   </div>
-  <h2 class="h4">Danh mục loại sản phẩm</h2>
+  <h2 class="h4">Danh sách cái gói giảm giá</h2>
   <p class="mb-2">Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả.</p>
   <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <table class="table table-hover">
       <thead>
         <tr>
           <th class="border-gray-200">#</th>
-          <th class="border-gray-200">Tên chủng loại</th>
-          <th class="border-gray-200">Nhóm sản phẩm</th>
-          <th class="border-gray-200">Số sản phẩm</th>
-          <th class="border-gray-200">Thao tác</th>
+          <th class="border-gray-200">Tên gói</th>
+          <th class="border-gray-200">Gift code</th>
+          <th class="border-gray-200">Mô tả</th>
+          <th class="border-gray-200">Discount(%)</th>
+          <th class="border-gray-200">Số lượng</th>
+          <th class="border-gray-200">Còn lại</th>
+          <th class="border-gray-200">Trạng thái</th>
+          <th class="border-gray-200">Hành động</th>
+
         </tr>
       </thead>
       <tbody>
         <!-- Items -->
-        {% for index, category in data.items %}
+        {% for index, package in data.items %}
           <tr>
             <td>
               <span class="fw-normal"> {{ index|add:1}}</span>
             </td>
             <td>
               <a href="#" class="fw-bold">
-                {{category.name}}
+                {{package.title}}
               </a>
             </td>
             <td>
-              {% if not category.parent %}
-                <span class="fw-normal"> #</span>
-              {% endif %}
-              {% if category.parent %}
-                <span class="fw-normal"> {{category.parent}}</span>
-              {% endif %}
+              <span class="fw-bold text-success"> {{package.gift_code}}</span>
             </td>
             <td>
-              <span class="fw-normal"> {{category.number_of_product}}</span>
+              <span class="fw-normal"> {{package.detail}}</span>
             </td>
             <td>
-              <button class="btn btn-outline-primary" type="button">Sửa</button>
+              <span class="fw-normal"> {{package.discount}}</span>
+            </td>
+            <td>
+              <span class="fw-normal"> {{package.amount}}</span>
+            </td>
+            <td>
+              <span class="fw-normal"> {{package.available}}</span>
+            </td>
+            <td><div class="form-check form-switch">
+              {% if not package.is_active %}
+              <input class="form-check-input" type="checkbox" disabled>
+              {% endif %}
+              {% if package.is_active %}
+              <input class="form-check-input" type="checkbox" checked disabled>
+              {% endif %}
+            </div></td>
+            <td>
+              <a href="{% url 'discount_package_edit' %}?id={{package.id}}">
+              <button class="btn btn-outline-primary" type="button">
+
+                  Sửa
+                </button>
+              </a>
               <button class="btn btn-danger" 
-              onclick="handleDeleteCategory('{{category.id}}','{{category.name}}')"
+              onclick="handleDeletePackage('{{package.id}}','{{package.gift_code}}')"
               type="button">
                 Xóa
               </button>
@@ -155,20 +168,20 @@
 
 {% block extra_js %}
   <script>
-    function onFilterGroup() {
+    function onSearchPackage() {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      const filterValue = $('#group').val()
-      urlParams.set('group', filterValue)
+      const searchText = $('#search_package').val()
+      urlParams.set('search', searchText)
       urlParams.set('page', 1)
       const path = window.location.pathname;
       window.location.assign(`?${urlParams.toString()}`)
     }
-    function handleDeleteCategory (id, title) {
+    function handleDeletePackage (id, title) {
       swalWithBootstrapButtons.fire({
         icon: 'error',
-        title: 'Xóa loại sản phẩm',
-        text: `Bạn chắc chắn muốn xóa loại sản phẩm ${title}?`,
+        title: 'Xóa gói giảm giá',
+        text: `Bạn chắc chắn muốn xóa gói giảm giá ${title}?`,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -176,7 +189,7 @@
       }).then((result) => {
         if (result.isConfirmed) {
           $.ajax({
-              url: `/order-api/products/${id}`,
+              url: `/order-api/discount-packages/${id}`,
               type: 'DELETE',
               data: {},
               beforeSend: function(xhr) {
@@ -188,7 +201,7 @@
                 swalWithBootstrapButtons.fire(
                   { icon: 'success',
                     title: 'Xóa thành công',
-                    text: 'Loại sản phẩm của bạn đã được xóa thành công!',
+                    text: 'Gói giảm giá của bạn đã được xóa thành công!',
                     showConfirmButton: true,
                   }
                 )

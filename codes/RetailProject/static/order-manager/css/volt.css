@@ -3997,8 +3997,8 @@ textarea.form-control-lg {
   box-shadow: 0 0 0 0.18rem rgba(31, 41, 55, 0.25);
 }
 .form-check-input:checked {
-  background-color: rgb(var(--bs-primary-rgb));
-  border-color: rgb(var(--bs-primary-rgb));
+  background-color: var(--bs-green);
+  border-color: var(--bs-green);
 }
 .form-check-input:checked[type=checkbox] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");

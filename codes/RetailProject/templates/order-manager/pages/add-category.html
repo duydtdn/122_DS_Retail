@@ -1,0 +1,79 @@
+{% extends 'order-manager/layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Section -->
+{% if messages %}
+  {% for message in messages %}
+  <span id="message" data-message="{{message}}">{{message}}</span>
+  {% endfor %}
+{% endif %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
+  <div class="d-block mb-4 mb-md-0">
+    <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+      <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">
+            <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+              </path>
+            </svg>
+          </a>
+        </li>
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{segment}}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<section class="mt-5 mt-lg-0 bg-soft d-flex align-items-center">
+  <div class="container-md px-0">
+    <div class="mb-2 mt-md-0">
+      <h2 class="h4">Thêm mới loại sản phẩm</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="bg-white shadow border-0 rounded border-light p-2 p-lg-3 w-100">
+          <form method="post" class="mt-4" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_div}}
+            <div class="d-flex justify-content-end gap-4 my-4">
+              <a href="{% url 'discount_packages' %}">
+              <div class="btn btn-outline-tertiary">
+                  Trở lại
+                </div>
+              </a>
+              <button type="submit" class="btn btn-primary d-flex align-items-center">
+                <svg style="height: 20px;" class="dropdown-icon text-white me-2" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                </svg>
+                Lưu
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
+{% block extra_js %}
+  <script>
+    $(document).ready(function() {
+      const messageText = $('#message').attr('data-message')
+      console.log('messageText',messageText);
+      if (messageText) {
+        notyf.open({
+          type: 'success',
+          message: messageText,
+          duration: 3000
+        });
+      }
+      $('#message').remove();
+    })
+  </script>
+{% endblock%}
