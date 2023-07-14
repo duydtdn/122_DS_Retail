@@ -15,7 +15,7 @@
 }
 
 .box-cart .cart-items .items {
-	max-height: calc(100vh - 400px);
+	max-height: calc( 100vh - 450px );
 	overflow-y: auto;
 	padding: 10px;
 	margin: -10px;
