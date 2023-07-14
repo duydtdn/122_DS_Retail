@@ -83,6 +83,8 @@ const renderOrderDetail = (id) => {
     </div>
   `
   $('#order_detail_popup').html(stringHtml)
+
+  $('#order_hash').html(itemDetail.store_operate.slug+itemDetail.id)
 }
 
 const renderListOrder = async () => {
@@ -90,7 +92,7 @@ const renderListOrder = async () => {
   const items = await response.json();
   orderList = items.results;
   const stringHtml =
-  orderList.map(it =>
+  orderList?.map(it =>
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
         <div class="col-3 fw-bold text-primary">${it.store_operate.slug+it.id}</div>
         <div class="col-3">${it.order_type}</div>

@@ -72,9 +72,10 @@ class ProductCreateForm(ModelForm):
             self.fields['store_operate'].initial = user.store_operate
     class Meta:
         model = Product
-        fields = ('title', 'price', 'thumbnail' , 'category', 'store_operate')
+        fields = ('title', 'detail', 'price', 'thumbnail' , 'category', 'store_operate')
         labels = {
             'title': 'Tên sản phẩm',
+            'detail': 'Mô tả',
             'category': 'Chủng loại',
             'price': "Giá sản phẩm"
         }
@@ -82,6 +83,11 @@ class ProductCreateForm(ModelForm):
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Tên sản phẩm'
+            }),
+            'detail': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Mô tả về sản phẩm',
+                'rows': '4'
             }),
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
