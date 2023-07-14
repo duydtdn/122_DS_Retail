@@ -10,7 +10,7 @@ from order_api.models import Store
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ['id', 'name', 'parent', 'slug']
+        fields = ['id', 'name', 'slug']
 
 class StoreFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='app', lookup_expr='icontains')

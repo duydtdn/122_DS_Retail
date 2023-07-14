@@ -102,6 +102,11 @@
       Serving
     </button>
     <button 
+      onclick="onSearchOrderByStatus('finished')"
+      class="lh-lg btn btn-pill {% if status != 'finished' %}btn-white{% endif %} {% if status == 'finished' %}btn-info{% endif %} px-5 py-2" type="button">
+      Fulfilled
+    </button>
+    <button 
       onclick="onSearchOrderByStatus('cancelled')"
       class="lh-lg btn btn-pill {% if status != 'cancelled' %}btn-white{% endif %} {% if status == 'cancelled' %}btn-info{% endif %} px-5 py-2" type="button">
       Canceled
@@ -128,7 +133,7 @@
               <span class="fw-normal"> {{ index|add:data.from}}</span>
             </td>
             <td>
-              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> WCFS{{order.id}}</a>
+              <a href="{% url 'order_detail' %}?id={{order.id}}" class="fw-bold text-success"> {{order.store_operate.slug}}{{order.id}}</a>
             </td>
             <td>
               <a href="#" class="fw-bold">

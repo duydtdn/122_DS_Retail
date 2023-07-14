@@ -57,7 +57,7 @@ admin.site.register(
 
 admin.site.register(
     OrderPlace,
-    list_display=['id', 'discount', 'order_date','status','price', 'store_operate', 'customer'],
+    list_display=['id', 'discount', 'created_at','status','price', 'store_operate', 'customer'],
     list_display_links=['id'],
 )
 

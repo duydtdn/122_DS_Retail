@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm
+from order_manager.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, ProductCreateForm,DiscountPackageCreateForm, CategoryCreateForm, StoreCreateForm
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
@@ -7,10 +7,10 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
-from order_api.models import Product, ProductCategory, OrderPlace
+from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPackage, Store
 from django.db.models import Count
-from order_api.controller.order_place_ctr import OrderPlaceViewSet, OrderPlaceSerializer
-import json
+from order_api.controller.order_place_ctr import  OrderPlaceSerializer
+from django.shortcuts import get_object_or_404
 
 LOGIN_URL="/order-manager/login/"
 
@@ -73,6 +73,20 @@ def categoryManager(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
+def discountPackageManager(request):
+  search  = request.GET.get('search') or ''
+  packages = DiscountPackage.objects.filter(store_operate=request.user.store_operate).order_by('id')
+  if search: 
+    packages = packages.filter(title__contains=search)
+
+  context = {
+    'segment': 'Discount package','discount_packages_segments' :['Discount package', 'Thêm discount package'],
+    'data': getItemsWithPagination (request, packages),
+  }
+  return render(request, 'order-manager/pages/discount-package-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 
 def productManager(request):
   search  = request.GET.get('search') or ''
@@ -98,7 +112,7 @@ def orderManager(request):
   status  = request.GET.get('status') or ''
   order_type  = request.GET.get('order_type') or ''
   is_paid = request.GET.get('is_paid') or ''
-  orders = OrderPlace.objects.all()
+  orders = OrderPlace.objects.filter(store_operate=request.user.store_operate)
   if search:
     orders = orders.filter(customer__username__contains=search)
   if status:
@@ -150,9 +164,75 @@ def addProduct(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
+def addDiscountPackage(request):
+  form = DiscountPackageCreateForm(user = request.user)
+  if request.method == 'POST':
+    form = DiscountPackageCreateForm(user = request.user, data = request.POST,files = request.FILES)
+    if form.is_valid():
+      form.save()
+      form = DiscountPackageCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,'Thêm gói giảm giá thành công')
+      redirect('/order-manager/discount-package/add')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Thêm gói giảm giá', 'discount_packages_segments' :['Discount packages', 'Thêm gói giảm giá']   
+ }
+  return render(request, 'order-manager/pages/add-discount-package.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def addCategory(request):
+  form = CategoryCreateForm(user = request.user)
+  if request.method == 'POST':
+    form = CategoryCreateForm(user = request.user, data = request.POST,files = request.FILES)
+    if form.is_valid():
+      form.save()
+      form = CategoryCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,'Thêm nhóm sản phẩm thành công')
+      redirect('/order-manager/categories')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Thêm nhóm sản phẩm', 'categories_segments' : 'Thêm nhóm sản phẩm'   
+ }
+  return render(request, 'order-manager/pages/add-category.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def editDiscountPackage(request):
+  id = request.GET.get('id')
+  packageItem = get_object_or_404(DiscountPackage, pk=id)
+  form = DiscountPackageCreateForm(user = request.user, instance= packageItem)
+  if request.method == 'POST':
+    form = DiscountPackageCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= packageItem)
+    if form.is_valid():
+      form.save()
+      # form = DiscountPackageCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      redirect('/order-manager/discount-packages')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Sửa gói giảm giá', 'discount_packages_segments' :['Discount packages', 'Sửa gói giảm giá']   
+ }
+  return render(request, 'order-manager/pages/edit-discount-package.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
 def settings(request):
+  store = Store.objects.get(pk=request.user.store_operate.id)
+  form = StoreCreateForm(user = request.user, instance= store)
+  if request.method == 'POST':
+    form = StoreCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= store)
+    if form.is_valid():
+      form.save()
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      form = StoreCreateForm(user = request.user, instance= store)
+      redirect('/order-manager/settings')
+    else:
+      print('error')
   context = {
-    'segment': 'Thông tin cửa hàng'
+    'segment': 'Thông tin cửa hàng',
+    'store': store,
+    'form': form,
   }
   return render(request, 'order-manager/pages/settings.html', context)
 

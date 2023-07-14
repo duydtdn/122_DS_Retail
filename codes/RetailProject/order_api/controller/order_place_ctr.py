@@ -22,11 +22,13 @@ from order_api.models import OrderPlace, OrderPlaceProduct
 from order_api.admin import CustomUserSerializer
 from order_api.form import OrderForm
 from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
+from order_api.controller.store_ctr import StoreSerializer
 from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
 
 class OrderPlaceSerializer(serializers.ModelSerializer):
     order_items = OrderPlaceProductSerializer(many=True)
     customer = CustomUserSerializer(many=False)
+    store_operate = StoreSerializer(many=False)
     total = serializers.SerializerMethodField()
 
     def get_total(self, obj):
@@ -78,7 +80,7 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self) :
-        qs = OrderPlace.objects.all().order_by('order_date')
+        qs = OrderPlace.objects.all().order_by('created_at')
         user = self.request.user
         if user.role == 'admin':
             return qs

@@ -1,11 +1,11 @@
 .box-orders {
   background: #fff;
   /* height: 400px; */
-  padding: 15px;
+  /* padding: 15px; */
 }
 .box-orders .header-table {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  /* border-top-left-radius: 8px;
+  border-top-right-radius: 8px; */
   overflow: hidden;
   font-size: 14px;
 }
@@ -41,7 +41,7 @@
 }
 .box-orders .orders-item div .badge {
   font-size: 10px;
-  line-height: unset;
-  width: 100%;
-  line-height: 24px
+  /* width: 100%; */
+  margin: auto;
+  line-height: 20px
 }
