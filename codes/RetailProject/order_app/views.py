@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status
 from order_api.models import Store, ProductCategory, Product, DiscountPackage
+from django.contrib.auth import logout
 
 def getStoreById(id):
     try:
@@ -69,8 +70,6 @@ def menu(request):
 def detail(request):
     storeId  = request.GET.get('store') or 0
     context = {
-        'categories': 'categories',
-        'products': 'products',
         'store': getStoreById(storeId)
     }
     return render(request, 'order-app/detail.html', context)
@@ -98,15 +97,14 @@ def signage(request):
 def placeOrders(request):
     storeId  = request.GET.get('store') or 0
     context = {
-        'categories': 'categories',
-        'products': 'products',
         'store': getStoreById(storeId)
     }
     return render(request, 'order-app/place-orders.html', context)
 
-def logout(request):
-    auth_logout(request)
-    return redirect('home')  # Replace 'home' with the name of your home view
+def logout_app(request):
+    storeId  = request.GET.get('store') or 0
+    logout(request)
+    return redirect('/order-app/home?store='+storeId)
 
 def signup_success(request):
     return render(request, 'order-app/signup_success.html', context)

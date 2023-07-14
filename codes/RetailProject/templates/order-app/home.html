@@ -17,7 +17,7 @@
         <img onclick="popupLogin()" src="{% static 'order-app/images/home/user.png' %}" alt="">
       {% endif %}
       {% if request.user.is_authenticated%}
-        <img src="{% static 'order-app/images/home/customer.png' %}" alt="">
+        <img onclick="popupAccount('{{request.user.username}}')" src="{% static 'order-app/images/home/customer.png' %}" alt="">
       {% endif %}
     </div>
   </div>

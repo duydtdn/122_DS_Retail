@@ -1,6 +1,3 @@
-from rest_framework import routers
-from django.urls import re_path as url
-from django.urls import include
 from django.urls import path
 from . import views
 
@@ -13,5 +10,5 @@ urlpatterns = [
     path('signage', views.signage, name='signage'),
     path('place-orders', views.placeOrders, name='place-orders'),
     path('signup/success/', views.signup_success, name='signup_success'),
-    path('logout', views.logout, name='logout'),
+    path('logout', views.logout_app, name='logout_app'),
 ]

@@ -13,6 +13,26 @@
 <body>
     {% block app-container %}
     {% endblock %}
+    <div id="account_popup" class="modal popup-form animated fadeInDown" aria-hidden="true" >
+      <div class="container">
+        <div class="row">
+          <div class="col-md-offset-3">
+            <h1 class="text-center font-weight-bold">Thông tin tài khoản</h1>
+            <div class="form-group">
+              <label for="account_username" class="control-label">Tên đăng nhập</label>
+              <div class="">
+                <input disabled type="text" class="form-control" id="account_username" placeholder="">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2">
+                <button onclick="handleLogout()" class="btn btn-primary btn-block">Đăng xuất</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="login_popup" class="modal popup-form animated fadeInDown" aria-hidden="true" >
       <div class="container">
         <div class="row">

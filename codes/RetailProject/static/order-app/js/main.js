@@ -77,7 +77,6 @@ const renderAppMenu = () => {
 // }
 const onSearch = () => {
   searchText = $('.search input').val();
-  console.log({ searchText, groupText, categoryFilter })
   if (path === APP_MENU_URLS.MENU) { return renderListOrderMenu(searchText, groupText, categoryFilter); }
   if (path === APP_MENU_URLS.HOME || APP_ROOT_URL) {
     renderPopularFood(searchText, categoryFilter);
@@ -143,11 +142,21 @@ const renderPopularDrink = async (search = '', category = '') => {
 const renderOrderCount = () => {
   $('.nav-box #order_count').html(cartLS.length || '')
 }
+
+const popupAccount = (username = '') => {
+  $('#account_popup #account_username').val(username)
+  $('#account_popup').modal({
+    open: true,
+    fadeDuration: 200,
+    showClose: false,
+    escapeClose: true,
+    clickClose: true,
+  });
+}
 const popupLogin = (open = true) => {
   // clear old form value
   $('#login_popup input').val('')
   $('#login_popup .error-text').html('')
-
   $('#login_popup').modal({
     open: open,
     fadeDuration: 200,
@@ -319,6 +328,9 @@ function validateUsername(username) {
   return regex.test(username);
 }
 
+const handleLogout = () => {
+  window.location.assign(`/order-app/logout?store=${store}`)
+}
 $(document).ready(function () {
   renderAppMenu();
   renderOrderCount();
