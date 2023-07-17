@@ -16,6 +16,7 @@ urlpatterns = [
     path('product/edit', views.editProduct, name="product_edit"),
     path('categories/', views.categoryManager, name="categories"),
     path('category/add', views.addCategory, name="category_add"),
+    path('category/edit', views.editCategory, name="category_edit"),
     path('orders/', views.orderManager, name="orders"),
     path('order-detail/', views.orderDetailManager, name="order_detail"),
     path('discount-packages/', views.discountPackageManager, name="discount_packages"),
@@ -58,7 +59,4 @@ urlpatterns = [
     path('error/403/', views.error_403, name="error_403"),
     path('error/404/', views.error_404, name="error_404"),
     path('error/500/', views.error_500, name="error_500"),
-
-    # Extra
-    # path('upgrade-to-pro/', views.upgrade_to_pro, name="upgrade_to_pro"),
 ]

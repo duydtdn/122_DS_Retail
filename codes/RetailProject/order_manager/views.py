@@ -11,6 +11,8 @@ from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPack
 from django.db.models import Count
 from order_api.controller.order_place_ctr import  OrderPlaceSerializer
 from django.shortcuts import get_object_or_404
+from django.db.models import Q, Value, TextField
+from django.db.models.functions import Concat
 
 LOGIN_URL="/order-manager/login/"
 
@@ -106,33 +108,15 @@ def productManager(request):
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
-def editProduct(request):
-  id = request.GET.get('id')
-  productItem = get_object_or_404(Product, pk=id)
-  form = ProductCreateForm(user = request.user, instance= productItem)
-  if request.method == 'POST':
-    form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= productItem)
-    if form.is_valid():
-      form.save()
-      # form = DiscountPackageCreateForm(user = request.user, data=None)
-      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
-      redirect('/order-manager/products')
-    else:
-      print('error')
-  context = { 'form': form, 'segment': 'Chỉnh sửa sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm','Chỉnh sửa sản phẩm'] 
- }
-  return render(request, 'order-manager/pages/product/edit-product.html', context)
-
-@login_required(login_url=LOGIN_URL)
-@store_manager_role_required
 def orderManager(request):
   search  = request.GET.get('search') or ''
   status  = request.GET.get('status') or ''
   order_type  = request.GET.get('order_type') or ''
   is_paid = request.GET.get('is_paid') or ''
-  orders = OrderPlace.objects.filter(store_operate=request.user.store_operate)
+  orders = OrderPlace.objects.filter(store_operate=request.user.store_operate).annotate(search_order=Concat('store_operate__slug', Value(''), 'id',output_field=TextField())).order_by('-created_at')
+
   if search:
-    orders = orders.filter(customer__username__contains=search)
+    orders = orders.filter(Q(customer__username__contains=search) | Q(search_order__contains=search))
   if status:
     orders = orders.filter(status=status)
   if order_type:
@@ -213,6 +197,44 @@ def addCategory(request):
   context = { 'form': form, 'segment': 'Thêm nhóm sản phẩm', 'categories_segments' : 'Thêm nhóm sản phẩm'   
  }
   return render(request, 'order-manager/pages/category/add-category.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def editProduct(request):
+  id = request.GET.get('id')
+  productItem = get_object_or_404(Product, pk=id)
+  form = ProductCreateForm(user = request.user, instance= productItem)
+  if request.method == 'POST':
+    form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= productItem)
+    if form.is_valid():
+      form.save()
+      # form = DiscountPackageCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      redirect('/order-manager/products')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Chỉnh sửa sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm','Chỉnh sửa sản phẩm'] 
+ }
+  return render(request, 'order-manager/pages/product/edit-product.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def editCategory(request):
+  id = request.GET.get('id')
+  categoryItem = get_object_or_404(ProductCategory, pk=id)
+  form = CategoryCreateForm(user = request.user, instance= categoryItem)
+  if request.method == 'POST':
+    form = CategoryCreateForm(user = request.user, data = request.POST, instance= categoryItem)
+    if form.is_valid():
+      form.save()
+      # form = DiscountPackageCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      redirect('/order-manager/categories')
+    else:
+      print('error')
+  context = { 'form': form,'segment': 'Chỉnh sửa loại sản phẩm', 'categories_segments' : 'Chỉnh sửa loại sản phẩm'
+ }
+  return render(request, 'order-manager/pages/product/edit-product.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required

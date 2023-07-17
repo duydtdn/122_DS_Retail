@@ -96,7 +96,9 @@
               <span class="fw-normal"> {{category.number_of_product}}</span>
             </td>
             <td>
-              <button class="btn btn-outline-primary" type="button">Sửa</button>
+              <a href="{% url 'category_edit' %}?id={{category.id}}">
+                <button class="btn btn-outline-primary" type="button">Sửa</button>
+              </a>
               <button class="btn btn-danger" 
               onclick="handleDeleteCategory('{{category.id}}','{{category.name}}')"
               type="button">

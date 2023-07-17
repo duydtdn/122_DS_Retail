@@ -15,6 +15,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.utils import timezone
 
 from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete, ManagerOfStorePermission
 from order_api.controller.assistant.pagination_ast import CustomPagination
@@ -30,7 +31,14 @@ class OrderPlaceSerializer(serializers.ModelSerializer):
     customer = CustomUserSerializer(many=False)
     store_operate = StoreSerializer(many=False)
     total = serializers.SerializerMethodField()
-
+    created_at = serializers.DateTimeField(
+            required=False, allow_null=True,
+            format="%Y-%m-%d %H:%M",
+    )
+    updated_at = serializers.DateTimeField(
+            required=False, allow_null=True,
+            format="%Y-%m-%d %H:%M",
+    )
     def get_total(self, obj):
         return sum(map(lambda item: item.product.price * item.amount, list(obj.order_items.all())))
     class Meta:
