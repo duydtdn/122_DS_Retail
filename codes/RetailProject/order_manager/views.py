@@ -53,7 +53,7 @@ def customerManager(request):
   context = {
     'segment': 'customers'
   }
-  return render(request, 'order-manager/pages/customer-manager.html', context)
+  return render(request, 'order-manager/pages/customer/customer-manager.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -69,7 +69,7 @@ def categoryManager(request):
     'data': getItemsWithPagination (request, categories),
     'group': group
   }
-  return render(request, 'order-manager/pages/category-manager.html', context)
+  return render(request, 'order-manager/pages/category/category-manager.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -83,11 +83,10 @@ def discountPackageManager(request):
     'segment': 'Discount package','discount_packages_segments' :['Discount package', 'Thêm discount package'],
     'data': getItemsWithPagination (request, packages),
   }
-  return render(request, 'order-manager/pages/discount-package-manager.html', context)
+  return render(request, 'order-manager/pages/discount/discount-package-manager.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
-
 def productManager(request):
   search  = request.GET.get('search') or ''
   category  = request.GET.get('category') or ''
@@ -103,7 +102,26 @@ def productManager(request):
     'category': category,
     'categories': categories
   }
-  return render(request, 'order-manager/pages/product-manager.html', context)
+  return render(request, 'order-manager/pages/product/product-manager.html', context)
+
+@login_required(login_url=LOGIN_URL)
+@store_manager_role_required
+def editProduct(request):
+  id = request.GET.get('id')
+  productItem = get_object_or_404(Product, pk=id)
+  form = ProductCreateForm(user = request.user, instance= productItem)
+  if request.method == 'POST':
+    form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= productItem)
+    if form.is_valid():
+      form.save()
+      # form = DiscountPackageCreateForm(user = request.user, data=None)
+      messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
+      redirect('/order-manager/products')
+    else:
+      print('error')
+  context = { 'form': form, 'segment': 'Chỉnh sửa sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm','Chỉnh sửa sản phẩm'] 
+ }
+  return render(request, 'order-manager/pages/product/edit-product.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -131,7 +149,7 @@ def orderManager(request):
     'order_type': order_type,
     'is_paid': is_paid,
   }
-  return render(request, 'order-manager/pages/order-manager.html', context)
+  return render(request, 'order-manager/pages/order/order-manager.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -143,7 +161,7 @@ def orderDetailManager(request):
     'segment': 'Thông tin đơn hàng','orders_segments' :['Quản lý đơn hàng', 'Thông tin đơn hàng'],
     'order': serializer.data,
   }
-  return render(request, 'order-manager/pages/order-detail.html', context)
+  return render(request, 'order-manager/pages/order/order-detail.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -160,7 +178,7 @@ def addProduct(request):
       print('error')
   context = { 'form': form, 'segment': 'Thêm sản phẩm', 'product_segments' :['Quản lý sản phẩm', 'Thêm sản phẩm']   
  }
-  return render(request, 'order-manager/pages/add-product.html', context)
+  return render(request, 'order-manager/pages/product/add-product.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -177,7 +195,7 @@ def addDiscountPackage(request):
       print('error')
   context = { 'form': form, 'segment': 'Thêm gói giảm giá', 'discount_packages_segments' :['Discount packages', 'Thêm gói giảm giá']   
  }
-  return render(request, 'order-manager/pages/add-discount-package.html', context)
+  return render(request, 'order-manager/pages/discount/add-discount-package.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -194,7 +212,7 @@ def addCategory(request):
       print('error')
   context = { 'form': form, 'segment': 'Thêm nhóm sản phẩm', 'categories_segments' : 'Thêm nhóm sản phẩm'   
  }
-  return render(request, 'order-manager/pages/add-category.html', context)
+  return render(request, 'order-manager/pages/category/add-category.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
@@ -213,7 +231,7 @@ def editDiscountPackage(request):
       print('error')
   context = { 'form': form, 'segment': 'Sửa gói giảm giá', 'discount_packages_segments' :['Discount packages', 'Sửa gói giảm giá']   
  }
-  return render(request, 'order-manager/pages/edit-discount-package.html', context)
+  return render(request, 'order-manager/pages/discount/edit-discount-package.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required

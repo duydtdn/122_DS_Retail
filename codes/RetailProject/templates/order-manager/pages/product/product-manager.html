@@ -114,7 +114,9 @@
               {% endif %}
             </div></td>
             <td>
-              <button class="btn btn-outline-primary" type="button">Sửa</button>
+              <a href="{% url 'product_edit' %}?id={{product.id}}">
+                <button class="btn btn-outline-primary" type="button">Sửa</button>
+              </a>
               <button class="btn btn-danger delete_product_btn" onclick="handleDeleteProduct('{{product.id}}','{{product.title}}')" data-product="{{product.title}}" type="button">Xóa</button>
             </td>
           </tr>
