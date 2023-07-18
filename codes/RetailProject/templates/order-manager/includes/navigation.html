@@ -26,7 +26,7 @@
       <!-- Navbar links -->
       <ul class="navbar-nav align-items-center">
         <li class="nav-item dropdown">
-          <a class="nav-link text-dark notification-bell unread dropdown-toggle" data-unread-notifications="true"
+          <a class="nav-link text-dark notification-bell dropdown-toggle" data-unread-notifications="false"
             href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
             <svg class="icon icon-sm text-white" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -38,108 +38,8 @@
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
             <div class="list-group list-group-flush">
               <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="{% static 'order-manager/assets/img/team/profile-picture-1.jpg' %}"
-                      class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Jose Leos</h4>
-                      </div>
-                      <div class="text-end">
-                        <small class="text-danger">a few moments ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">Added you to an event "Project stand-up" tomorrow at 12:30 AM.
-                    </p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="{% static 'order-manager/assets/img/team/profile-picture-2.jpg' %}"
-                      class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Neil Sims</h4>
-                      </div>
-                      <div class="text-end">
-                        <small class="text-danger">2 hrs ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">You've been assigned a task for "Awesome new project".</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="{% static 'order-manager/assets/img/team/profile-picture-3.jpg' %}"
-                      class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 m-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Roberta Casas</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>5 hrs ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">Tagged you in a document called "Financial plans",</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="{% static 'order-manager/assets/img/team/profile-picture-4.jpg' %}"
-                      class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Joseph Garth</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>1 d ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">New message: "Hey, what's up? All set for the presentation?"</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="{% static 'order-manager/assets/img/team/profile-picture-5.jpg' %}"
-                      class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Bonnie Green</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>2 hrs ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">New message: "We need to improve the UI/UX for the landing
-                      page."</p>
-                  </div>
-                </div>
-              </a>
+              <div class="list-group list-group-flush" id="fcm_notifications">
+              </div>
               <a href="#" class="dropdown-item text-center fw-bold rounded-bottom py-3">
                 <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
@@ -244,3 +144,103 @@
     </div>
   </div>
 </nav>
+{% block extra_js %}
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getMessaging, onMessage, getToken  } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-messaging.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIdQ_8-YwVcpwNqPmwrvmIKGQDI3sG-n8",
+    authDomain: "retail-project-148d8.firebaseapp.com",
+    projectId: "retail-project-148d8",
+    storageBucket: "retail-project-148d8.appspot.com",
+    messagingSenderId: "207411045636",
+    appId: "1:207411045636:web:bbb1687ea92b8e04569c51",
+    measurementId: "G-LG0GLDWVQJ"
+  };
+
+// Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  const messaging = getMessaging(app);
+  function requestPermission() {
+    console.log('Requesting permission...');
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        resetUI();
+      } else {
+        console.log('Unable to get permission to notify.');
+      }
+    });
+  }
+  getToken(messaging, { vapidKey: "BIB_wf1E0fr1CNJjDtDo4OTFri59u0k1ywary8hLNEcsFXOhT68YJVGXf4TcQfVVZUe4DkwNyLHYmUaNrNemr-E" })
+    .then((t) => {
+      console.log('t',t);
+      addUserDeviceId(t)
+    })
+    .catch(function (err) {
+      console.log("Didn't get notification permission", err);
+    });
+  onMessage(messaging, (payload) => {
+    renderNotification(payload)
+  });
+
+  function addUserDeviceId (deviceId) {
+      let formData = new FormData()
+      formData.append('device_id', deviceId)
+      $.ajax({
+        url: `/order-api/add-device/`,
+        type: 'POST',
+        data: formData,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
+        },
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        success: function (result) {
+        },
+        error: function (error) {
+        }
+      });
+  }
+
+  function renderNotification (payload) {
+    console.log('payload',payload)
+    const data = JSON.parse(payload?.data?.message)
+    console.log('data',data);
+    const stringHtml =
+      `<a href="/order-manager/order-detail/?id=${data.id}" class="list-group-item list-group-item-action border-bottom">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <div class="text-success fw-bold d-flex align-items-center">
+                      <svg width="50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"></path>
+                    </svg>
+                </div>
+                  </div>
+                  <div class="col ps-0 ms-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h4 class="h6 mb-0 text-small">${data?.customer?.username}</h4>
+                      </div>
+                      <div class="text-end">
+                        <small class="text-danger">${data.created_at}</small>
+                      </div>
+                    </div>
+                    <p class="font-small mt-1 mb-0">Có đơn hàng <strong>${data.order_type}</strong> mới
+                    </p>
+                  </div>
+                </div>
+              </a>`
+    $('#fcm_notifications').html(stringHtml);
+    $('.notification-bell').attr('data-unread-notifications', true)
+    $('.notification-bell').addClass('unread')
+  }
+</script>
+{% endblock %}

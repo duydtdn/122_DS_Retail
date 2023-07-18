@@ -104,6 +104,7 @@ class CustomUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     role = models.CharField(max_length=20, choices=ROLES_CHOICES, default='customer')
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
+    device_id = models.CharField(max_length=512, null=True, blank=True)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'username'
@@ -136,7 +137,6 @@ class CustomUser(AbstractBaseUser):
         #     parsed_number, phonenumbers.PhoneNumberFormat.E164
         # )
         super().save(*args, **kwargs)
-
 
 class ProductCategory(MPTTModel):
     name = models.CharField(verbose_name='Product category', max_length=150, db_index=True)

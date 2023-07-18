@@ -209,6 +209,7 @@
 
 {% block extra_js %}
   <script>
+
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
     let statusFilter = urlParams.get('status') || ''

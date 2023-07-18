@@ -35,3 +35,21 @@ def custom_register(request):
         except Exception :
             return JsonResponse({'error': Exception},status=status.HTTP_404_NOT_FOUND)
     return JsonResponse({},status=status.HTTP_404_NOT_FOUND)
+
+@csrf_exempt
+def custom_add_device_id(request):
+    if request.method == 'POST':
+        device_id =  request.POST.get('device_id')
+        try:
+            user = CustomUser.objects.get(pk=request.user.id)
+            if user is not None:
+                user.device_id = device_id
+                user.save()
+                return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+
+            else:
+                return JsonResponse({'message': 'Có lỗi xảy ra'},status=status.HTTP_404_NOT_FOUND)
+
+        except Exception :
+            return JsonResponse({'error': Exception},status=status.HTTP_404_NOT_FOUND)
+    return JsonResponse({},status=status.HTTP_404_NOT_FOUND)

@@ -15,16 +15,17 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from django.utils import timezone
 
 from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete, ManagerOfStorePermission
 from order_api.controller.assistant.pagination_ast import CustomPagination
-from order_api.models import OrderPlace, OrderPlaceProduct
+from order_api.models import OrderPlace, OrderPlaceProduct, CustomUser
 from order_api.admin import CustomUserSerializer
 from order_api.form import OrderForm
 from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
 from order_api.controller.store_ctr import StoreSerializer
-from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
+
+from firebase_admin.messaging import Message
+from fcm_django.models import FCMDevice
 
 class OrderPlaceSerializer(serializers.ModelSerializer):
     order_items = OrderPlaceProductSerializer(many=True)
@@ -120,6 +121,12 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
     # def create_payment(self, request, pk=None):
     #     data = request.data
     #     return Response(data, status=status.HTTP_200_OK)
+def sendOrderNotification(order):
+    storeId = order.store_operate
+    list_device = CustomUser.objects.filter(store_operate=storeId, role='store_manager').values_list('device_id', flat=True)
+    FCMDevice.objects.send_message(
+        Message(data={'message': json.dumps(OrderPlaceSerializer(order).data)}), False, list(list_device)
+    )
 
 @login_required
 def create_order( request):
@@ -129,11 +136,13 @@ def create_order( request):
             order = form.save(commit=False)
             order.customer=request.user
             create_order =  order.save()
+            create_order_sr = OrderPlaceSerializer(create_order).data
             items = json.loads(request.POST['items'])
             for item in items:
                 productItem = OrderPlaceProduct(order_place=create_order, product_id = int(item['id']), amount=int(item['quantity']), note=item['note'])
                 productItem.save()
-            return JsonResponse({'message':'success', 'data':  OrderPlaceSerializer(create_order).data}, status=status.HTTP_200_OK)
+            sendOrderNotification(create_order)
+            return JsonResponse({'message':'success', 'data': create_order_sr}, status=status.HTTP_200_OK)
         return JsonResponse({'message':form.errors}, status=status.HTTP_200_OK)
         
     return JsonResponse(status=status.HTTP_404_NOT_FOUND)
