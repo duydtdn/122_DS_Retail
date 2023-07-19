@@ -167,12 +167,12 @@
   const analytics = getAnalytics(app);
 
   const messaging = getMessaging(app);
+
   function requestPermission() {
     console.log('Requesting permission...');
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         console.log('Notification permission granted.');
-        resetUI();
       } else {
         console.log('Unable to get permission to notify.');
       }
@@ -180,12 +180,12 @@
   }
   getToken(messaging, { vapidKey: "BIB_wf1E0fr1CNJjDtDo4OTFri59u0k1ywary8hLNEcsFXOhT68YJVGXf4TcQfVVZUe4DkwNyLHYmUaNrNemr-E" })
     .then((t) => {
-      console.log('t',t);
       addUserDeviceId(t)
     })
     .catch(function (err) {
       console.log("Didn't get notification permission", err);
     });
+
   onMessage(messaging, (payload) => {
     renderNotification(payload)
   });
@@ -211,9 +211,7 @@
   }
 
   function renderNotification (payload) {
-    console.log('payload',payload)
     const data = JSON.parse(payload?.data?.message)
-    console.log('data',data);
     const stringHtml =
       `<a href="/order-manager/order-detail/?id=${data.id}" class="list-group-item list-group-item-action border-bottom">
                 <div class="row align-items-center">
