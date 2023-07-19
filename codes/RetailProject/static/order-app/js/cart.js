@@ -1,5 +1,5 @@
 let allProduct = [];
-let payMethod = 'cash';
+let payMethod = 'onboard';
 $(document).ready( async function () {
   await getAllProduct();
   renderCart();
@@ -30,6 +30,7 @@ const handlePay = (isAuth=null) => {
     let formData = new FormData()
     formData.append('store_operate',store)
     formData.append('order_type','onsite')
+    formData.append('pay_type', payMethod)
     formData.append('items', JSON.stringify(cartLS))
     const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
     const dataPost = {
@@ -64,7 +65,7 @@ const handlePay = (isAuth=null) => {
 }
 const getAllProduct = async () => {
   $('#processing').show();
-  const response = await fetch (`/order-api/products`);
+  const response = await fetch (`/order-api/products?store=${store}`);
   const data = await response.json();
   allProduct = data?.results || [];
   $('#processing').hide();

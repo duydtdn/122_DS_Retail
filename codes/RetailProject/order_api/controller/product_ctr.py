@@ -19,6 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='title', lookup_expr='icontains')
     category = filters.CharFilter(field_name='category__id',lookup_expr='icontains')
+    store = filters.CharFilter(field_name='store_operate__id',lookup_expr='exact')
     class Meta:
         model = Product
         fields = ['id']

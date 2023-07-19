@@ -57,4 +57,4 @@ class OrderForm(forms.ModelForm):
         #     self.fields['order_date'].initial = user
     class Meta:
         model = OrderPlace
-        fields = ['store_operate', 'order_type']
+        fields = ['store_operate', 'order_type', 'pay_type']
