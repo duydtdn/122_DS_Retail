@@ -40,12 +40,15 @@
   </div>
   <div id="place_order_popup" class="modal">
     <img src="{% static 'order-app/images/your-cart/success.png' %}" alt="">
-    <div class="text-done text-success">Đặt hàng thành công!</div>
+    <div class="order-title text-done text-success"></div>
     <div class="text-center">
       <span class="">Mã đơn hàng:</span>
-      <span class="order-hash"></span>
+      <div class="d-inline-flex">
+        <span class="order-hash">{{store.slug}}</span>
+        <span class="order-hash order-id"></span>
+      </div>
     </div>
-    <div class="text-center fst-italic mt-2 fw-bold">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng</div>
+    <div class="notice text-center fst-italic mt-2 fw-bold"></div>
     <a href="{% url 'place-orders' %}?store={{store.id}}">
       <button id="btn_home_page" class="btn-primary">
         <span>Xem danh sách đơn</span>

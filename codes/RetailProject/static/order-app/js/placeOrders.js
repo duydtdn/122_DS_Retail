@@ -40,11 +40,15 @@ const renderOrderDetail = (id) => {
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Trạng thái:</span>
-            <span class="col-8 fst-italic">${itemDetail.status}</span>
+            <span class="col-8 fst-italic text-capitalize">${itemDetail.status}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Hình thức:</span>
-            <span class="col-8 fst-italic">${itemDetail.order_type}</span>
+            <span class="col-8 fst-italic">${itemDetail.order_type === 'onsite' ? 'Phục vụ tại chỗ' : 'Giao nhận'}</span>
+          </div>
+          <div class="row mb-1 ">
+            <span class="col-4">Thanh toán:</span>
+            <span class="col-8 fst-italic">${itemDetail.pay_type === 'onboard' ? 'Online-pay' : 'Tại quầy'}</span>
           </div>
           <div class="row mb-1 ">
             <span class="col-4">Thực đơn:</span>
@@ -66,16 +70,32 @@ const renderOrderDetail = (id) => {
             <span class="col-4">Thành tiền:</span>
             <span class="col-8 fst-italic fw-bold">${itemDetail.total} đ</span>
           </div>
-          <p class="fst-italic text-center">***********************************</p>
-          <p class="fst-italic text-center fs-6 mb-0">Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng.</p>
+          ${!itemDetail.is_paid ?
+            '<p class="fst-italic text-center text-danger">CHƯA THANH TOÁN</p>'
+            :
+            '<p class="fst-italic text-center text-success">ĐÃ THANH TOÁN</p>'
+          }
+          <p class="fst-italic text-center mb-0">***********************************</p>
+          <p class="fst-italic text-center fs-6 mb-0">
+            ${(!itemDetail.is_paid && itemDetail.pay_type=='onboard') 
+              ? 'Vui lòng đến quầy để thanh toán đơn hàng.'
+              : ''
+            }
+          </p>
           <div class="form-group mt-2">
             <div class="row">
-              <div class="col-6 m-auto">
-                <button onclick="confirmCancelOrder()" class="btn btn-outline-primary btn-block">Hủy đơn</button>
-              </div>
-              <div class="col-6 m-auto">
-                <button onclick="requestPayment(${id})" class="btn btn-outline-primary btn-block">Thanh toán</button>
-              </div>
+            ${!itemDetail.is_paid ? 
+              `<div class="col-6 m-auto">
+              <button onclick="confirmCancelOrder()" class="btn btn-outline-primary btn-block">Hủy đơn</button>
+              </div>`
+              :''
+            }
+            ${!itemDetail.is_paid && itemDetail.pay_type === 'online_pay' ? 
+              `<div class="col-6 m-auto">
+              <button onclick="requestPayment(${id})" class="btn btn-outline-primary btn-block">Thanh toán</button>
+              </div>`
+              :''
+            }
             </div>
           </div>
         </div>
@@ -88,6 +108,13 @@ const renderOrderDetail = (id) => {
 }
 
 const renderListOrder = async () => {
+  const badgeClass = {
+    'pending': 'bg-danger',
+    'finished': 'bg-success',
+    'confirmed': 'bg-primary',
+    'serving': 'bg-indigo',
+    'cancelled': 'bg-secondary',
+  }
   const response = await fetch (`/order-api/orders?store_operate=${store}`);
   const items = await response.json();
   orderList = items.results;
@@ -95,9 +122,13 @@ const renderListOrder = async () => {
   orderList?.map(it =>
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
         <div class="col-3 fw-bold text-primary">${it.store_operate.slug+it.id}</div>
-        <div class="col-3">${it.order_type}</div>
-        <div class="col-3">${it.total}</div>
-        <div class="col-3"><span class="badge rounded-pill bg-warning text-dark">${it.status}</span></div>
+        <div class="col-3">${it.order_type === 'onsite' ? 'Tại chỗ' : 'Giao nhận'}</div>
+        <div class="col-4">${it.created_at}</div>
+        <div class="col-2">
+          <span class="badge rounded-pill text-white ${badgeClass[it.status]}">
+            ${it.status}
+          </span>
+        </div>
       </div>`
     ).join('')
   $('.box-orders .orders-items').html(stringHtml);

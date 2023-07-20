@@ -1,6 +1,25 @@
+const vnp_TxnRef = urlParams.get('vnp_TxnRef');
+const vnp_ResponseCode = urlParams.get('vnp_ResponseCode');
+
 let allProduct = [];
 let payMethod = 'onboard';
+
 $(document).ready( async function () {
+  if (vnp_ResponseCode && vnp_TxnRef) {
+    if (vnp_ResponseCode === '00') {
+      popupOrderSuccess(true,vnp_TxnRef)
+    }
+    else {
+      $.notify(
+        "Thanh toán không thành công, vui lòng thử lại.",
+        {
+          className: 'error',
+          position: "top",
+          autoHideDelay: 2000
+        }
+      );
+    }
+  }
   await getAllProduct();
   renderCart();
 })
@@ -50,7 +69,12 @@ const handlePay = (isAuth=null) => {
       cartLS = [];
       localStorage.setItem('cart', JSON.stringify([]));
       $("#processing").hide();
-      popupOrderSuccess(JSON.parse(response));
+      const orderResult = JSON.parse(response)
+      if (orderResult?.data?.paymentUrl) {
+        window.location.assign(orderResult?.data?.paymentUrl)
+      } else {
+        popupOrderSuccess(false, orderResult);
+      }
     }).fail(function (e) {
      $.notify("Có lỗi xảy ra, vui lòng thử lại.",
         {
@@ -59,8 +83,6 @@ const handlePay = (isAuth=null) => {
           autoHideDelay: 2000
         });
     });
-
-    // const orderResult = {method: 'cash', orderHash: 'TSLKBPO4657SDF'}
   }
 }
 const getAllProduct = async () => {
@@ -120,6 +142,7 @@ const renderCart = () => {
   </div>`
   $('.cart-items').html(stringHtml);
 }
+
 const selectPayMethod = (method) => {
   payMethod = method;
   $('.pay-method').removeClass('selected')

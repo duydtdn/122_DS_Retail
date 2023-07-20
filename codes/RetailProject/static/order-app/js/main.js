@@ -165,6 +165,7 @@ const popupLogin = (open = true) => {
     clickClose: true,
   });
 }
+
 const popupRegister = () => {
   $('#register_step_1').removeClass('d-none').addClass('d-flex');
   $('#register_step_2').removeClass('d-flex').addClass('d-none');
@@ -181,9 +182,18 @@ const popupRegister = () => {
     clickClose: true,
   });
 }
-const popupOrderSuccess = (orderResult) => {
-  $('#place_order_popup .order-hash').html(orderResult.data.store_operate.slug+orderResult.data.id);
+const callPaymentIpn = async () => {
+  const response = await fetch (`/order-api/payment-ipn${queryString}`);
+  const data = await response.json(); 
+}
 
+const popupOrderSuccess = (onlinePay=false, orderResult) => {
+  // if (onlinePay) {
+  //   callPaymentIpn();
+  // }
+  $('#place_order_popup .order-hash.order-id').html(onlinePay ? orderResult : orderResult.data.id);
+  $('.order-title').html(onlinePay ? 'Đặt hàng và thanh toán thành công!' : 'Đặt hàng thành công!')
+  $('.notice').html(onlinePay ? 'Đơn hàng đang được xử lý, xin vui lòng đợi' : 'Vui lòng đến thanh toán tại quầy để hoàn tất đơn hàng')
   $('#place_order_popup').modal({
     open: true,
     fadeDuration: 200,

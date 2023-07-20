@@ -3,7 +3,7 @@ $(document).ready(function () {
   // renderPopularFood();
   // renderPopularDrink();
   // getDiscountPackage();
-  renderOrderStatus();
+  // renderOrderStatus();
   renderHeader();
   renderListNews();
 });

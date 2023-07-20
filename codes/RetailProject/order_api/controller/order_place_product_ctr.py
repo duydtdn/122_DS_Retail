@@ -2,19 +2,12 @@
 import django_filters.rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, serializers
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.decorators import action
-from django.http import JsonResponse, HttpResponse
 
 from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete
 from order_api.controller.assistant.pagination_ast import CustomPagination
 from order_api.models import OrderPlaceProduct
 from order_api.controller.product_ctr import ProductSerializer
-from order_api.models import OrderPlace
-from django.db.models import F,ExpressionWrapper, FloatField, Count,  Value
 
-# from order_api.controller.order_place_ctr import OrderPlaceSerializer
 class OrderPlaceProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=False)
     price = serializers.SerializerMethodField()
