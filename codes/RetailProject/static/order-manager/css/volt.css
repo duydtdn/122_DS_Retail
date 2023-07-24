@@ -3727,10 +3727,10 @@ progress {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #6B7280;
+  color: rgb(var(--bs-primary-rgb));
   background-color: #ffffff;
   background-clip: padding-box;
-  border: 0.0625rem solid #D1D5DB;
+  border: 0.0625rem solid #309cea;
   -webkit-appearance: none;
           appearance: none;
   border-radius: 0.5rem;
@@ -6796,6 +6796,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: 0.0625rem solid rgba(17, 24, 39, 0.125);
   border-radius: 0.5rem;
+  
 }
 .card > hr {
   margin-right: 0;
@@ -9264,7 +9265,8 @@ textarea.form-control-lg {
 }
 
 .shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important; */
+  box-shadow: 3px 3px 10px 1px #9E9E9E !important;
 }
 
 .shadow-sm {
@@ -11393,6 +11395,10 @@ textarea.form-control-lg {
   font-size: 1rem !important;
 }
 
+.fs-7 {
+  font-size: 0.8rem !important;
+}
+
 .fst-italic {
   font-style: italic !important;
 }
@@ -11998,7 +12004,9 @@ textarea.form-control-lg {
 .fmxh-999 {
   min-height: 999px !important;
 }
-
+.object-cover {
+  object-fit: cover !important;
+}
 @media (min-width: 576px) {
   .float-sm-start {
     float: left !important;
@@ -21994,6 +22002,13 @@ textarea.form-control-lg {
 
 .user-card {
   border-bottom: 2px solid #fff;
+}
+.card.hover {
+  transition: all 0.3s;
+}
+.card.hover:hover {
+  box-shadow: none !important;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 575.98px) {

@@ -32,7 +32,7 @@
       </a>
     </div>
   </div>
-  <div class="table-settings mb-4">
+  <div class="table-settings mb-2">
     <div class="row align-items-center justify-content-between">
       <div class="col-12 col-md-8 d-flex mb-2">
         <div class="row">
@@ -64,67 +64,30 @@
       </div>
     </div>
   </div>
-  <h2 class="h4">Danh sách sản phẩm</h2>
-  <p class="mb-2">Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả.</p>
-  <div class="card card-body border-0 shadow table-wrapper table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th class="border-gray-200">#</th>
-          <th class="border-gray-200">Hình ảnh</th>
-          <th class="border-gray-200">Tên sản phẩm</th>
-          <th class="border-gray-200">Giá (VND)</th>
-          <th class="border-gray-200">Mô tả</th>
-          <th class="border-gray-200">Category</th>
-          <th class="border-gray-200">Trạng thái</th>
-          <th class="border-gray-200">Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Items -->
-        {% for index, product in data.items %}
-          <tr>
-            <td>
-              <span class="fw-normal"> {{ index|add:1}}</span>
-            </td>
-            <td>
-              <a href="#" class="fw-bold">
-                <img class="fmxw-50" style="max-height: 40px;
-                object-fit: cover;
-                width: 100%;" src="/media/{{product.thumbnail}}" />
-              </a>
-            </td>
-            <td>
-              <a href="#" class="fw-bold">
-                {{product.title}}
-              </a>
-            </td>
-
-            <td>
-              <span class="fw-normal"> {{product.price}}</span>
-            </td>
-            
-            <td><span class="fw-normal">{{product.detail}}
-            </span></td>
-            <td><span class="fw-normal">{{product.category}}</span></td>
-            <td><div class="form-check form-switch">
-              {% if not product.is_active %}
-              <input class="form-check-input" type="checkbox" disabled>
-              {% endif %}
-              {% if product.is_active %}
-              <input class="form-check-input" type="checkbox" checked disabled>
-              {% endif %}
-            </div></td>
-            <td>
-              <a href="{% url 'product_edit' %}?id={{product.id}}">
-                <button class="btn btn-outline-primary" type="button">Sửa</button>
-              </a>
-              <button class="btn btn-danger delete_product_btn" onclick="handleDeleteProduct('{{product.id}}','{{product.title}}')" data-product="{{product.title}}" type="button">Xóa</button>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-start align-items-baseline gap-2">
+    <h2 class="h4">Danh sách sản phẩm</h2>
+    <p class="mb-2">(Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả).</p>
+  </div>
+  <div class="mt-2">
+    <div class="row row-cols-1 row-cols-md-4 row-cols-xl-6 g-3">
+      {% for index, product in data.items %}
+        <div class="col">
+          <a href="{% url 'product_edit' %}?id={{product.id}}">
+            <div class="card shadow hover h-100">
+                <img class="card-img-top object-cover" height="120" alt="Product Image" src="/media/{{product.thumbnail}}" />
+              <div class="card-body p-2">
+                <h6 class="card-title text-truncate mb-0">{{product.title}}</h6>
+                <div class="d-flex justify-content-between">
+                  <span class="text-info fst-italic fs-7">{{product.category}}</span>
+                  <span class="text-danger fw-bold fs-7 float-end">{{product.price}}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
     <div class="card-footer border-0 d-flex flex-lg-row justify-content-end">
       {% if data.total_page > 1 %}
         <nav aria-label="Page navigation">
@@ -168,7 +131,6 @@
         <p class="m-auto mb-2">Không tìm thấy kết quả.</p>
       {% endif %}
     </div>
-  </div>
 {% endblock content %}
 
 {% block extra_js %}
@@ -183,49 +145,6 @@
       urlParams.set('page', 1)
       const path = window.location.pathname;
       window.location.assign(`?${urlParams.toString()}`)
-    }
-    function handleDeleteProduct (id, title) {
-      swalWithBootstrapButtons.fire({
-        icon: 'error',
-        title: 'Xóa sản phẩm',
-        text: `Bạn chắc chắn muốn xóa sản phẩm ${title}?`,
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Đồng ý'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-              url: `/order-api/products/${id}`,
-              type: 'DELETE',
-              data: {},
-              beforeSend: function(xhr) {
-                  xhr.setRequestHeader("X-CSRFToken", "{{csrf_token}}");
-              },
-              contentType: 'application/json',
-              dataType: 'text',
-              success: function (result) {
-                swalWithBootstrapButtons.fire(
-                  { icon: 'success',
-                    title: 'Xóa thành công',
-                    text: 'Sản phẩm của bạn đã được xóa thành công!',
-                    showConfirmButton: true,
-                  }
-                )
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000)
-              },
-              error: function (error) {
-                notyf.open({
-                  type: 'error',
-                  message: 'Xảy ra lỗi, vui lòng thử lại.',
-                  duration: 3000
-                });
-              }
-          });
-        }
-      })
     }
   </script>
 {% endblock %}

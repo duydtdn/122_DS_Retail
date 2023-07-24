@@ -38,71 +38,66 @@
         <div class="bg-white shadow border-0 rounded border-light p-2 p-lg-3 w-100">
           <form method="post" class="mt-4" enctype="multipart/form-data">
             {% csrf_token %}
-            {{form}}
-            <!-- <div class="row mb-4">
-              <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="mb-4">
-                  <label for="title">Tên sản phẩm</label>
-                  <input type="text" placeholder="Nhập tên sản phẩm" class="form-control" name="title" id="title" aria-describedby="emailHelp">
-                  <span>
-                    {{ form.title.errors }}
-                  </span>
+            <!-- {{form}} -->
+            <div class="row">
+              {{ form.store_operate }}
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="{{ form.title.id_for_label }}">Tên sản phẩm:</label>
+                  {{ form.title }}
                 </div>
               </div>
-              <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="mb-4">
-                  <label for="code">Mã sản phẩm</label>
-                  <input type="code" placeholder="Nhập mã sản phẩm" class="form-control" name="code" id="code" aria-describedby="emailHelp">
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="{{ form.category.id_for_label }}">Loại sản phẩm:</label>
+                  {{ form.category }}
                 </div>
               </div>
-              <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="mb-4">
-                  <label for="category">Loại sản phẩm</label>
-                  <select class="form-select" id="category" name="category" aria-label="Select category">
-                    <option selected>Chọn loại sản phẩm</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="{{ form.price.id_for_label }}">Giá sản phẩm:</label>
+                  {{ form.price }}
                 </div>
               </div>
-              <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="mb-4">
-                  <label for="email">Trạng thái</label>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="{{ form.discount.id_for_label }}">Giảm giá:</label>
+                  {{ form.discount }}
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="{{ form.detail.id_for_label }}">Mô tả sản phẩm:</label>
+                  {{ form.detail }}
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex flex-column">
+                  <label for="{{ form.is_active.id_for_label }}">Trạng thái hoạt động</label>
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="status" id="status" checked>
+                    {{ form.is_active }}
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row mb-4">
-              <div class="col-lg-6 col-sm-6">
-                <div class="">
-                  <label for="detail">Chi tiết sản phẩm</label>
-                  <textarea class="form-control" placeholder="Nhập mô tả..." id="detail" name="detail" rows="5"></textarea>
-                </div>
-              </div>
-              <div class="col-lg-6 col-sm-6">
-                <div class="mb-3">
-                  <label  class="form-label">Hình ảnh sản phẩm</label>
-                  <div class="d-flex align-items-center">
-                    <div class="me-3">
-                      <img id="thumbnail_image" style="object-fit: cover;" class="rounded avatar-xl objec" src="" alt="change avatar">
-                    </div>
-                    <div class="file-field">
-                      <div class="d-flex justify-content-xl-center ms-xl-3 border-dash">
-                        <div class="d-flex">
-                          <svg style="height: 64px;" class="icon text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                              d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                              clip-rule="evenodd"></path> 
-                          </svg>
-                          <input class="form-control" type="file" id="thumbnail" name="thumbnail">
-                          <div class="d-md-block text-left">
-                            <div class="fw-normal text-dark mb-1">Choose Image</div>
-                            <div class="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
-                          </div>
+              <div class="mb-3">
+                <label  class="form-label">Hình ảnh</label>
+                <div class="d-flex align-items-center">
+                  <div class="me-3">
+                    <img id="thumbnail_image" style="object-fit: cover;" class="rounded avatar-xl" src="/media/{{form.thumbnail.value}}" alt="change avatar">
+                  </div>
+                  <div class="file-field">
+                    <div class="d-flex justify-content-xl-center ms-xl-3 border-dash">
+                      <div class="d-flex">
+                        <svg style="height: 64px;" class="icon text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd"
+                            d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
+                            clip-rule="evenodd"></path> 
+                        </svg>
+                        {{ form.thumbnail }}
+                        <div class="d-md-block text-left">
+                          <div class="fw-normal text-dark mb-1">Choose Image</div>
+                          <div class="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
                         </div>
                       </div>
                     </div>
@@ -110,21 +105,6 @@
                 </div>
               </div>
             </div>
-            <div class="row mb-4">
-              <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="mb-4">
-                  <label for="price">Nhập giá</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" id="price" name="price" placeholder="Nhập giá sản phẩm"
-                      aria-label="Search">
-                    <span class="input-group-text" id="basic-addon2">
-                        <span strong>VND</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-            </div> -->
             <div class="d-flex justify-content-end gap-4 my-4">
               <a href="{% url 'products' %}">
               <div class="btn btn-outline-tertiary">
@@ -150,8 +130,11 @@
 {% block extra_js %}
   <script>
     $(document).ready(function() {
+      $("#id_thumbnail").val('');
+      $('#id_thumbnail').change(function(e) {
+        $('#thumbnail_image').attr('src', URL.createObjectURL(e.target.files[0]))
+      })
       const messageText = $('#message').attr('data-message')
-      console.log('messageText',messageText);
       if (messageText) {
         notyf.open({
           type: 'success',

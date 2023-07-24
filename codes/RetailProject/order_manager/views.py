@@ -17,7 +17,7 @@ from django.db.models.functions import Concat
 LOGIN_URL="/order-manager/login/"
 
 def getItemsWithPagination (request, items):
-  LIMIT = 6
+  LIMIT = 8
   page_number = request.GET.get("page") or 1
   search = request.GET.get("search") or ''
   paginator = Paginator(items, LIMIT)
@@ -208,7 +208,7 @@ def editProduct(request):
     form = ProductCreateForm(user = request.user, data = request.POST,files = request.FILES, instance= productItem)
     if form.is_valid():
       form.save()
-      # form = DiscountPackageCreateForm(user = request.user, data=None)
+      form = ProductCreateForm(user = request.user,  instance= productItem)
       messages.add_message(request, messages.INFO,' Cập nhật thông tin thành công')
       redirect('/order-manager/products')
     else:

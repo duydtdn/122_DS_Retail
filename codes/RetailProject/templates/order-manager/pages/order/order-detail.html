@@ -24,7 +24,7 @@
     </div>
   </div>
   <h2 class="h4 mb-4">Thông tin đơn hàng : <span class="text-info">{{order.store_operate.slug}}{{order.id}}</span></h2>
-  <div class="table-settings mb-4">
+  <div class="table-settings mb-2">
     <div class="row order-steps align-items-center justify-content-center gap-2">
       <div class="order-step step-1 {% if order.status in 'pending,confirmed,serving,finished' %}pass{% endif %}">
         <span>New order</span>
@@ -159,7 +159,7 @@
       </div>
     </div>
     <div class="col-12 col-md-4 ">
-      <div class="bg-white card-body border border-2 rounded-2 h-100">
+      <div class="bg-white card-body border border-2 shadow rounded-2 h-100">
         <h5 class="">Thông tin đơn hàng</h5>
         <div class="d-flex justify-content-between mb-1">
           <span class="text-gray">Thời gian đặt:</span><span>{{order.created_at}}</span>
