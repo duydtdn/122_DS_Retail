@@ -17,7 +17,7 @@ from django.db.models.functions import Concat
 LOGIN_URL="/order-manager/login/"
 
 def getItemsWithPagination (request, items):
-  LIMIT = 8
+  LIMIT = 12
   page_number = request.GET.get("page") or 1
   search = request.GET.get("search") or ''
   paginator = Paginator(items, LIMIT)
@@ -68,7 +68,7 @@ def categoryManager(request):
     categories = categories.filter(parent__id=group)
 
   context = {
-    'segment': 'Quản lý loại sản phẩm','category_segments' :['Quản lý loại sản phẩm', 'Thêm loại sản phẩm'],
+    'segment': 'Quản lý loại sản phẩm','categories_segments' :['Quản lý loại sản phẩm', 'Thêm loại sản phẩm'],
     'parentCategories': ProductCategory.objects.filter(store_operate=request.user.store_operate, parent__isnull = True),
     'data': getItemsWithPagination (request, categories),
     'group': group
@@ -196,7 +196,7 @@ def addCategory(request):
       redirect('/order-manager/categories')
     else:
       print('error')
-  context = { 'form': form, 'segment': 'Thêm nhóm sản phẩm', 'categories_segments' : 'Thêm nhóm sản phẩm'   
+  context = { 'form': form, 'segment': 'Thêm nhóm sản phẩm', 'categories_segments' : ['Quản lý loại sản phẩm','Thêm nhóm sản phẩm']   
  }
   return render(request, 'order-manager/pages/category/add-category.html', context)
 
@@ -234,9 +234,9 @@ def editCategory(request):
       redirect('/order-manager/categories')
     else:
       print('error')
-  context = { 'form': form,'segment': 'Chỉnh sửa loại sản phẩm', 'categories_segments' : 'Chỉnh sửa loại sản phẩm'
+  context = { 'form': form,'segment': 'Chỉnh sửa loại sản phẩm', 'categories_segments' : ['Quản lý loại sản phẩm','Chỉnh sửa loại sản phẩm']
  }
-  return render(request, 'order-manager/pages/product/edit-product.html', context)
+  return render(request, 'order-manager/pages/category/edit-category.html', context)
 
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required

@@ -8,6 +8,7 @@ from order_api.urls import api_router, api_urlpatterns
 from django.views.generic import TemplateView
 
 urlpatterns = [
+    path('', include('order_manager.urls')),
     path('admin/', admin.site.urls),
     path('order-api/', include(api_router.urls )),
     path('order-api/', include(api_urlpatterns)),
