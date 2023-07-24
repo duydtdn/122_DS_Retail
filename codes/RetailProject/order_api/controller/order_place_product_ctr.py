@@ -30,12 +30,3 @@ class OrderPlaceProductViewSet(viewsets.ModelViewSet):
     filterset_class = OrderPlaceProductFilter
     pagination_class = CustomPagination
     permission_classes = [AllowAnyPutDelete]
-
-    # @action(detail=False, methods=['get'], url_path ="order-tables")
-    # def get_tables(self,request) : 
-    #     tableParam = request.GET.get('tableId')
-    #     print(tableParam)
-    #     orders = OrderPlace.objects.filter(table = 3)
-    #     ordersSerializer = OrderPlaceSerializer(orders, many=True)
-    #     print(ordersSerializer.data)
-    #     return Response(ordersSerializer.data, status=status.HTTP_200_OK)

@@ -152,7 +152,7 @@
               {% endif %}
             </div></td>
             <td>
-              <span class="fw-normal fw-bold text-info"> {{ order.total }}</span>
+              <span class="fw-normal fw-bold text-info"> {{ order.total|floatformat:"2g" }}</span>
             </td>
             <td>
               <span class="fw-normal"> {{ order.created_at }}</span>

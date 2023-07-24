@@ -76,7 +76,11 @@ def create_order( request):
             for item in items:
                 productItem = OrderPlaceProduct(order_place=create_order, product_id = int(item['id']), amount=int(item['quantity']), note=item['note'])
                 productItem.save()
-            sendOrderNotification(create_order)
+            try:
+              sendOrderNotification(create_order)
+            except:
+               print('sendOrderNotification error')
+            
             if create_order_sr['pay_type'] == 'online_pay':
                 return JsonResponse({'message':'success',
                                      'data': get_payment_url(request.META.get('HTTP_REFERER'),pk=create_order_sr['id'])}, status=status.HTTP_200_OK) 
@@ -110,7 +114,10 @@ def payment_ipn(request):
             serializer = OrderPlaceSerializer(model, data={'is_paid': True}, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                sendOrderNotification(model)
+                try:
+                  sendOrderNotification(model)
+                except: 
+                   print('sendOrderNotification error') 
           else:
             print('Payment Error. Your code implement here')
 

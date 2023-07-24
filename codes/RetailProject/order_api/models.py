@@ -244,17 +244,6 @@ def update_product_media(sender, instance, **kwargs):
     except:
         pass
 
-
-# @receiver(post_delete, sender=ProductMedia)
-# def delete_product_media(sender, instance, **kwargs):
-#     media_path = f'media/{instance.media_path}'
-#     delete_file(file_path=media_path)
-
-
-# class GiftCode(models.Model):
-#     group = models.CharField(max_length=32, null=True, blank=True)
-#     rule = models.TextField(null=True, blank=True)
-
 class DiscountPackage(models.Model):
     title = models.CharField(max_length=512, null=True, blank=True)
     gift_code = models.CharField(max_length=10, null=True, blank=True, unique=True, default='')
@@ -342,26 +331,3 @@ class OrderPlaceProduct(models.Model):
     amount = models.IntegerField(null=False, blank=False, default=1)
     # price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     note = models.TextField(null=True, blank=True)
-
-
-# class Cart(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.IntegerField(null=True, blank=True)
-
-
-# class Pay(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.IntegerField(null=True, blank=True)
-#     price = models.FloatField(null=True, blank=True)
-#     date_begin = models.DateTimeField(auto_created=True)
-#     date_finish = models.DateTimeField(null=True, blank=True)
-#     status = models.CharField(max_length=32, null=True, blank=True)
-
-
-# class Notification(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, db_constraint=False)
-#     message = models.TextField(null=True, blank=True)
-#     category = models.CharField(max_length=32, null=True, blank=True)
-#     sender = models.CharField(max_length=32, null=True, blank=True)

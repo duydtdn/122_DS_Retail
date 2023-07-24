@@ -132,10 +132,10 @@
                   </a>
                 </td>
                 <td>
-                  <span class="fw-normal"> {{item.product.price}}</span>
+                  <span class="fw-normal"> {{item.product.price|floatformat:"2g"}}</span>
                 </td>
                 <td>
-                  <span class="fw-normal"> {% widthratio item.product.price 1 item.amount %}</span>
+                  <span class="fw-normal"> {% widthratio item.product.price 1 item.amount%}</span>
                 </td>
                 <td>
                   <span class="fw-normal"> {{ item.product.note }}</span>
@@ -147,13 +147,13 @@
         <div class="col-6 float-end mt-4">
 
           <div class="d-flex justify-content-between mb-2">
-            <span class="text-gray">Tổng:</span><span class="fw-bold">{{order.total}} VNĐ</span>
+            <span class="text-gray">Tổng:</span><span class="fw-bold">{{order.total|floatformat:"2g"}} VNĐ</span>
           </div>
           <div class="d-flex justify-content-between mb-2">
             <span class="text-gray">Giảm giá:</span><span>{% if order.discount %} {{order.discount}} {% endif %} VNĐ</span>
           </div>
           <div class="d-flex justify-content-between mb-2">
-            <span class="text-gray">Thanh toán:</span><span class="fw-bold fs-4 text-danger">{{order.total}} VNĐ</span>
+            <span class="text-gray">Thanh toán:</span><span class="fw-bold fs-4 text-danger">{{order.total|floatformat:"2g"}} VNĐ</span>
           </div>
       </div>
       </div>

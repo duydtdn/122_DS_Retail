@@ -7,11 +7,11 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from order_api.controller.assistant.decorator import  store_manager_role_required
-from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPackage, Store
-from django.db.models import Count
+from order_api.models import Product, ProductCategory, OrderPlace,  DiscountPackage, Store, OrderPlaceProduct
+from django.db.models import Count, Sum, ExpressionWrapper, F
 from order_api.controller.order_place_ctr import  OrderPlaceSerializer
 from django.shortcuts import get_object_or_404
-from django.db.models import Q, Value, TextField
+from django.db.models import Q, Value, TextField, FloatField
 from django.db.models.functions import Concat
 
 LOGIN_URL="/order-manager/login/"
@@ -37,8 +37,10 @@ def getItemsWithPagination (request, items):
 @login_required(login_url=LOGIN_URL)
 @store_manager_role_required
 def dashboard(request):
+  bestSellerProducts = OrderPlaceProduct.objects.filter(product__store_operate = request.user.store_operate, order_place__is_paid=True).annotate(count=Sum('amount')).annotate(total=ExpressionWrapper(F('count') * F('product__price'), output_field= FloatField() )).order_by('-count')[:5]
   context = {
     'segment': 'dashboard',
+    'best_seller': bestSellerProducts
   }
   return render(request, 'order-manager/pages/dashboard/dashboard.html', context)
 
