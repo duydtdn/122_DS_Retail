@@ -8,7 +8,6 @@ from order_api.controller.assistant.authenticated_ast import ModelViewSet, Admin
 from order_api.controller.assistant.pagination_ast import CustomPagination
 from order_api.models import Product
 from order_api.controller.category_ctr import ProductCategorySerializer
-from rest_framework.permissions import IsAdminUser
 
 class ProductSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer(many=False)

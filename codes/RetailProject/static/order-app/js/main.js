@@ -65,16 +65,7 @@ const renderAppMenu = () => {
       `;
   $('.app-menu-container .app-menu').html(stringHtml);
 };
-// const onChangeCategories = (key) => {
-//   categoryFilter = key;
-//   renderCategories(categoryFilter);
-//   console.log({ searchText, groupText, categoryFilter })
-//   if (path === APP_MENU_URLS.MENU) { return renderListOrderMenu(searchText, groupText, categoryFilter); }
-//   if (path === APP_MENU_URLS.HOME || path === APP_ROOT_URL) {
-//     renderPopularFood('', categoryFilter);
-//     renderPopularDrink('', categoryFilter);
-//   }
-// }
+
 const onSearch = () => {
   searchText = $('.search input').val();
   if (path === APP_MENU_URLS.MENU) { return renderListOrderMenu(searchText, groupText, categoryFilter); }
@@ -84,35 +75,6 @@ const onSearch = () => {
   }
 }
 
-// const renderCategories = async (activeKey) => {
-//   if (!categories.length) {
-//     const response = await fetch ('/order-api/categories');
-//     const data = await response.json();
-//     categories = data.results.filter(ct => ct.parent)
-//   }
-//   const stringHtml = `
-//     <div class="title">Categories</div>
-//       <div class="categories">
-//         ${categories.map(ct =>
-//     `<div onclick="onChangeCategories(${ct.id})" class="ctg-item ${ct.id === activeKey ? 'active' : ''}">${ct.name}</div>`).join('')}
-//         </div>
-//         </div>
-//       `;
-//   $('.section_categories').html(stringHtml);
-// };
-// const renderListOrderMenu = async (search = '', group = '', category = '') => {
-//   const response = await fetch (`/order-api/products?category=${category}`);
-//   const items = await response.json();
-//   const stringHtml =
-//     items.results.map(it =>
-//       `<a class="order-item" href="${APP_MENU_URLS.DETAIL}?id=${it.id}"}>
-//     <img class="thumbnail" src="${it.thumbnail}" alt="">
-//     <span class="name">${it.title}</span>
-//     <span class="price">${it.price} $</span>
-//   </a>`
-//     ).join('')
-//   $('.section_items_order').html(stringHtml);
-// }
 const renderPopularFood = async (search = '', category = '') => {
   const response = await fetch (`/order-api/products?category=${category}`);
   const foods = await response.json();

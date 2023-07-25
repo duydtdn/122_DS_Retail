@@ -7,11 +7,10 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete, ManagerOfStorePermission
+from order_api.controller.assistant.authenticated_ast import AllowAnyPutDelete, ManagerOfStorePermission, IsOwnerOrManager, ModelViewSet
 from order_api.controller.assistant.pagination_ast import CustomPagination
-from order_api.models import OrderPlace, OrderPlaceProduct, CustomUser
+from order_api.models import OrderPlace
 from order_api.admin import CustomUserSerializer
-from order_api.form import OrderForm
 from order_api.controller.order_place_product_ctr import OrderPlaceProductSerializer
 from order_api.controller.store_ctr import StoreSerializer
 
@@ -39,7 +38,7 @@ class OrderPlaceFilter(filters.FilterSet):
     class Meta:
         model = OrderPlace
         fields = ['id', 'store_operate']    
-class OrderPlaceViewSet(viewsets.ModelViewSet):
+class OrderPlaceViewSet(ModelViewSet):
     queryset = OrderPlace.objects.all()
     serializer_class = OrderPlaceSerializer
     filter_backends = [DjangoFilterBackend]
@@ -48,10 +47,10 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['get','list','retrieve']:
-            permission_classes = [AllowAnyPutDelete]
+            self.permission_classes = [AllowAnyPutDelete]
         else:
-            permission_classes = [ManagerOfStorePermission]
-        return [permission() for permission in permission_classes]
+            self.permission_classes = [ManagerOfStorePermission]
+        return super().get_permissions()
 
     def get_queryset(self) :
         qs = OrderPlace.objects.all().order_by('-created_at')
@@ -70,6 +69,13 @@ class OrderPlaceViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(code=201, data=serializer.data)
-        return JsonResponse(code=400, data="wrong parameters")
+        return JsonResponse(code=400, data="wrong parameters")    
 
-        
+def cancel_order(request):
+    inputData = request.GET
+    model = OrderPlace.objects.get(pk=inputData['id'])
+    serializer = OrderPlaceSerializer(model, data={'status':'cancelled'}, partial=True)
+    if request.user == model.customer and serializer.is_valid():
+        serializer.save()
+        return JsonResponse({'data':serializer.data}, status=status.HTTP_200_OK)
+    return JsonResponse({'message':'Forbidden'}, status=status.HTTP_403_FORBIDDEN)

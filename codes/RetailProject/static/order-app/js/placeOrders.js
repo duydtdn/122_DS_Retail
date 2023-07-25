@@ -84,7 +84,7 @@ const renderOrderDetail = (id) => {
           </p>
           <div class="form-group mt-2">
             <div class="row">
-            ${!itemDetail.is_paid ? 
+            ${!itemDetail.is_paid && itemDetail.status !== 'cancelled' ? 
               `<div class="col-6 m-auto">
               <button onclick="confirmCancelOrder()" class="btn btn-outline-primary btn-block">Hủy đơn</button>
               </div>`
@@ -105,6 +105,9 @@ const renderOrderDetail = (id) => {
   $('#order_detail_popup').html(stringHtml)
 
   $('#order_hash').html(itemDetail.store_operate.slug+itemDetail.id)
+  $('#cancel_order_btn').html(
+    `<button onclick="cancelOrder(${itemDetail.id})" class="btn btn-primary btn-block">Đồng ý</button>`
+  )
 }
 
 const renderListOrder = async () => {
@@ -151,11 +154,45 @@ const requestPayment = async (id) => {
   //   .done(function (response) {
   //   console.log(response);
   //   });
+
   const response = await fetch (`/order-api/orders/${id}/request-payment/`);
   const data = await response.json();
   if (data.paymentUrl) {
     window.location.assign(data.paymentUrl)
   }
+}
+const cancelOrder = async(id) => {
+  $('#confirm_cancel_order_popup').hide();
+  $.ajax({
+    url: `/order-api/cancel-order?id=${id}`,
+    type: 'GET',
+    async: true,
+    crossDomain: true,
+    processData: false,
+    contentType: false,
+    success: function (result) {
+      $.notify("Hủy đơn hàng thành công",
+        {
+          className: 'success',
+          position: "top center",
+          autoHideDelay: 1000
+        }
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000)
+    },
+    error: function (error) {
+      $.notify(
+        "Có lỗi xảy ra, vui lòng thử lại.",
+        {
+          className: 'error',
+          position: "top",
+          autoHideDelay: 2000
+        }
+      );
+    }
+  })
 }
 
 $(() => {

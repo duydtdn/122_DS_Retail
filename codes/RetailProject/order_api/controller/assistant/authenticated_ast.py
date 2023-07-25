@@ -10,7 +10,7 @@ class CustomerRoleFilter(RoleFilter):
     role_id = 'customer'
 
     def get_allowed_actions(self, request, view, obj=None):
-        return ['get','list','retrieve']
+        return ['get','list','retrieve', 'partial_update']
 
 class EmployeeRoleFilter(RoleFilter):
     role_id = 'employee'
@@ -21,15 +21,6 @@ class ManagerRoleFilter(RoleFilter):
     role_id = 'store_manager'
     def get_allowed_actions(self, request, view, obj=None):
         return ['create', 'list', 'retrieve', 'update', 'partial_update', 'destroy']
-    
-    # def get_queryset(self, request, view, queryset):
-    #     queryset = queryset.filter(store_operate =self.request.user.store_operate)
-    #     return queryset
-    # def get_queryset(self):
-    #     user=self.request.user
-    #     return Student.objects.filter(name=user)
-    # def get_serializer_class(self, request, view):
-    #     return SerializerForManager
 
 class ModelViewSet(RoleFilterModelViewSet):
     role_filter_classes = [AdminRoleFilter, ManagerRoleFilter, EmployeeRoleFilter, CustomerRoleFilter]
@@ -60,3 +51,12 @@ class ManagerOfStorePermission(permissions.BasePermission):
         if obj.store_operate == request.user.store_operate:
             return True
         return False
+
+class IsOwnerOrManager(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+    
+    def has_object_permission(self, request, view, obj):
+        if request.user.role == 'store_manager' and obj.store_operate == request.user.store_operate:
+            return True
+        return obj.customer ==request.user
