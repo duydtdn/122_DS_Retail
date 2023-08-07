@@ -60,7 +60,7 @@ const renderDetail = () => {
     <div class="section_detail">
       <div class="title">${product.title}</div>
       <div class="sub-title">${product.category.name}</div>
-      <div class="desc">${product.detail}</div>
+      <div class="desc">${product.detail || 'Chưa có mô tả'}</div>
       <div class="price">Price:
         <span>${product.price}$</span>
       </div>
@@ -71,7 +71,7 @@ const renderPopupAddToCart = () => {
   const stringHtml =
     `<div class="title">${product.title}</div>
     <div class="sub-title">${product.category.name}</div>
-    <div class="desc">${product.detail}</div>
+    <div class="desc">${product.detail || 'Chưa có mô tả'}</div>
     <div class="price">
       Price:
       <span>${product.price} $</span>

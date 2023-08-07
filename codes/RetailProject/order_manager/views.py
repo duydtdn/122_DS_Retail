@@ -143,9 +143,13 @@ def orderDetailManager(request):
   orderId  = request.GET.get('id') or ''
   order = OrderPlace.objects.get(pk=orderId)
   serializer = OrderPlaceSerializer(order)
+  orderTypeDisplay = order.get_order_type_display()
+  payTypeDisplay = order.get_pay_type_display()
   context = {
     'segment': 'Thông tin đơn hàng','orders_segments' :['Quản lý đơn hàng', 'Thông tin đơn hàng'],
     'order': serializer.data,
+    'order_type_display': orderTypeDisplay,
+    'pay_type_display': payTypeDisplay,
   }
   return render(request, 'order-manager/pages/order/order-detail.html', context)
 
