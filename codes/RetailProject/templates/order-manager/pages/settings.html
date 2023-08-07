@@ -26,11 +26,10 @@
         </ol>
       </nav>
     </div>
-    <div class="container-md d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+      <h2 class="h4 mb-4 text-uppercase">Thông tin cửa hàng</h2>
       <div class="row">
-      <h2 class="h4 mb-4">Thông tin cửa hàng</h2>
-      <div class="col-12">
-        <div class="card card-body border-0 shadow mb-4">
+        <div class="col-12 col-xl-8">
+        <div class="card card-body border-0 shadow mb-4 mb-xl-0">
           <h2 class="h5 mb-4">General information</h2>
           <form method="post" class="mt-4" enctype="multipart/form-data">
             {% csrf_token %}
@@ -120,7 +119,9 @@
             </div>
           </form>
         </div>
-        <div class="card card-body border-0 shadow mb-4 mb-xl-0">
+      </div>
+      <div class="col-12 col-xl-4">
+        <div class="card card-body border-0 shadow mb-4 h-100">
           <h2 class="h5 mb-4">Alerts & Notifications</h2>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
@@ -162,7 +163,7 @@
           </ul>
         </div>
       </div>
-    </div>
+      </div>
   </div>
 
 {% endblock content %}

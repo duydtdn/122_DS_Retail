@@ -62,10 +62,8 @@
       </div>
     </div>
   </div>
-  <div class="d-flex justify-content-start align-items-baseline gap-2">
-    <h2 class="h4">Danh sách sản phẩm</h2>
-    <p class="mb-2">(Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả).</p>
-  </div>
+  <h2 class="h4 text-uppercase">Danh sách sản phẩm</h2>
+  <p class="mb-2">(Hiển thị kết quả từ {{data.from}} đến {{data.to}} trên tổng <strong class="text-primary">{{data.total}}</strong> kết quả).</p>
   <div class="mt-2">
     <div class="row row-cols-1 row-cols-md-4 row-cols-xl-6 g-3">
       {% for index, product in data.items %}

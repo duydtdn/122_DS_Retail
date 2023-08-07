@@ -5,9 +5,9 @@
   align-items: center;
   justify-content: flex-start;
   width: 200px;
-  padding-left: 60px;
+  padding-left: 45px;
   border-radius: 10px;
-  color: #2196F3;
+  color: #9E9E9E;
   position: relative;
 }
 .order-step::before {
@@ -35,6 +35,7 @@
 .order-step.step-1 {
   clip-path: polygon(0% 0%, 90% 0, 100% 50%, 90% 100%, 0% 100%);
 }
-.order-step span {
+.order-step span,
+.order-step svg {
   z-index: 1;
 }
