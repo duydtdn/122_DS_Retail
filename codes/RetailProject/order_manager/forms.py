@@ -2,7 +2,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UsernameField, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from order_api.models import Product, ProductCategory, DiscountPackage, Store
-from django.utils.translation import gettext_lazy as _
+try:
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    from django.utils.translation import gettext_lazy as _  # Django 4.0.0 and more
 from django.forms import ModelForm
 
 
