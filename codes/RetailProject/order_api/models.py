@@ -174,7 +174,7 @@ class Product(models.Model):
     store_operate = models.ForeignKey(Store, on_delete=models.CASCADE, null=False, blank=False)
     price = models.FloatField(null=False, blank=False)
     discount = models.FloatField(null=True, blank=True)
-    detail = models.CharField(max_length=512, null=True, blank=True)
+    detail = models.CharField(max_length=1024, null=True, blank=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=False, blank=False)
     is_active= models.BooleanField(default=True)
     is_show_main_media = models.BooleanField(default=False)

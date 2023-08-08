@@ -92,7 +92,7 @@ class ProductCreateForm(ModelForm):
             'detail': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Mô tả về sản phẩm',
-                'rows': '4'
+                'rows': '12'
             }),
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
