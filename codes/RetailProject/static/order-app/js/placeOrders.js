@@ -51,7 +51,7 @@ const renderOrderDetail = (id) => {
             <span class="col-8 fst-italic">${itemDetail.pay_type === 'onboard' ? 'Online-pay' : 'Tại quầy'}</span>
           </div>
           <div class="row mb-1 ">
-            <span class="col-4">Thực đơn:</span>
+            <span class="col-4">Sản phẩm:</span>
             <div class="col-8 fst-italic">
             ${itemDetail.order_items.map(item => 
               `<div class="row">
@@ -112,10 +112,10 @@ const renderOrderDetail = (id) => {
 
 const renderListOrder = async () => {
   const badgeClass = {
-    'pending': 'bg-danger',
+    'pending': 'bg-warning',
     'finished': 'bg-success',
-    'confirmed': 'bg-primary',
-    'serving': 'bg-indigo',
+    'confirmed': 'bg-info',
+    'serving': 'bg-primary',
     'cancelled': 'bg-secondary',
   }
   const response = await fetch (`/order-api/orders?store_operate=${store}`);
@@ -124,11 +124,11 @@ const renderListOrder = async () => {
   const stringHtml =
   orderList?.map(it =>
       `<div class="orders-item row g-0" onclick="popupOrderDetail(${it.id})">
-        <div class="col-3 fw-bold text-primary">${it.store_operate.slug+it.id}</div>
-        <div class="col-3">${it.order_type === 'onsite' ? 'Tại chỗ' : 'Giao nhận'}</div>
-        <div class="col-4">${it.created_at}</div>
-        <div class="col-2">
-          <span class="badge rounded-pill text-white ${badgeClass[it.status]}">
+        <div class="col-2 fw-bold text-primary">${it.store_operate.slug+it.id}</div>
+        <div class="col-3 justify-content-center">${it.order_type === 'onsite' ? 'Tại chỗ' : 'Giao nhận'}</div>
+        <div class="col-4 justify-content-center">${it.created_at}</div>
+        <div class="col-3">
+          <span class="badge rounded-pill ${badgeClass[it.status]}">
             ${it.status}
           </span>
         </div>

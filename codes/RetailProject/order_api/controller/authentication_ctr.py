@@ -25,15 +25,19 @@ def custom_register(request):
     if request.method == 'POST':
         username =  request.POST.get('username')
         password = request.POST.get('password')
-        try:
-            user = CustomUser.objects.create_user(username=username, password=password)
-            if user is not None:
-                return JsonResponse({'message': 'Đăng ký thành công'}, status=status.HTTP_200_OK)
-            else:
+        if CustomUser.objects.filter(username = username).exists():
+            return JsonResponse({'message': 'Tài khoản đã tồn tại'},status=status.HTTP_400_BAD_REQUEST)
+        else :
+            try:
+                user = CustomUser.objects.create_user(username=username, password=password)
+                if user is not None:
+                    return JsonResponse({'message': 'Đăng ký thành công'}, status=status.HTTP_200_OK)
+                else:
+                    return JsonResponse({'message': 'Có lỗi xảy ra'},status=status.HTTP_404_NOT_FOUND)
+
+            except Exception :
                 return JsonResponse({'message': 'Có lỗi xảy ra'},status=status.HTTP_404_NOT_FOUND)
 
-        except Exception :
-            return JsonResponse({'error': Exception},status=status.HTTP_404_NOT_FOUND)
     return JsonResponse({},status=status.HTTP_404_NOT_FOUND)
 
 @csrf_exempt

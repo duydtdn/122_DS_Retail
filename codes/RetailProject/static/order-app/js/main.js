@@ -239,9 +239,10 @@ const handleRegister = () => {
           $("#processing").hide();
           popupLogin();
         }, 2000)
-
     }).fail(function (e) {
-      $('#login_popup #login_error').html('Sai tên đăng nhập hoặc mật khẩu.')
+      console.log(e);
+      $('#register_popup #register_error').html(JSON.parse(e.responseText).message)
+      $("#processing").hide();
     });
     //show confirm OTP popup
     // $('#register_step_1').addClass('d-none');

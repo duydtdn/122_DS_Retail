@@ -12,12 +12,12 @@
 .box-orders .header-table div {
   /* border: solid de3905 1px; */
   padding: 6px;
-  background: #de3905;
+  background: #df6751;
   color: #fff;
   height: 50px;
   display: flex;
   align-items: center;
-  border: #de3905 solid 1px;
+  border: #df6751 solid 1px;
 }
 .box-orders .orders-items {
   /* border: #9E9E9E solid 1px; */

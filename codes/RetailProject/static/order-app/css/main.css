@@ -206,6 +206,11 @@ input.otp-input {
 	font-weight: 600;
 	color: #fff;
 }
+.header .user .phone {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .order-status {
 	display: flex;
 	justify-content: center;
