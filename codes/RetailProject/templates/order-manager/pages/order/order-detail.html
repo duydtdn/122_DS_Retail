@@ -58,19 +58,19 @@
     <div class="">Xử lý đơn</div>
     {% endif %}
     {% if order.status == 'cancelled' %}
-      <div class="text-danger fw-bold d-flex align-items-center">
+      <div class="text-danger fw-bold d-flex align-items-center bg-white border-danger border-3 rounded-2 p-2 btn dashed-outline fs-6">
         <svg width="50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
         </svg>
         <span>
-          Đơn đã hủy
+          Đơn hàng đã bị hủy
         </span>
       </div>
     {% endif %}
     {% if order.status == 'finished' %}
-      <div class="text-success fw-bold d-flex align-items-center"><svg width="50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <div class="text-success fw-bold d-flex align-items-center bg-white border-success border-3 rounded-2 p-2 btn dashed-outline fs-6"><svg width="50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"></path>
-      </svg><span>
+      </svg><span class="text-uppercase">
         Đơn hàng đã hoàn tất
       </span>
     </div>
