@@ -35,6 +35,13 @@ def getProductByParentCategory(storeId, categoryId):
     return products
 
 # Create your views here.
+def stores(request):
+    stores = Store.objects.all()
+    context = {
+        'stores': stores,
+    }
+    return render(request, 'order-app/stores.html', context)
+
 def home(request):
     storeId  = request.GET.get('store') or 0
     category  = request.GET.get('category') or ''

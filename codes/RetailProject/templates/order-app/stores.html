@@ -1,0 +1,44 @@
+{% extends 'order-app/base-site/base-side.html' %}
+{% load static %}
+{% block css_js_custom_head %}
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+<link rel="stylesheet" href="{% static 'order-app/css/stores.css' %}">
+{% endblock %}
+{% block app-container %}
+<div class="app-container">
+  <div id="app_header" class="header remove-margin animated fadeInDown">
+    <div class="logo">
+      <img src="{% static 'order-app/images/stores/order.png' %}" alt="logo">
+      <span>Wenet Retail</span>
+    </div>
+  </div>
+  <div class="navigation-header remove-margin">
+    <div style="display: flex; align-items: center; gap: 4px;">
+      <img class="button" src="{% static 'order-app/images/home/order.png' %}" alt="">
+      <span class="page-title">Danh sách cửa hàng</span>
+    </div>
+  </div>
+  <div class="section_stores">
+    <div class="store-list">
+      {% for store in stores %}
+        <a href="/order-app/home?store={{store.id}}" class="store-item">
+          <div class="thumbnail">
+            <img src="/media/{{store.thumbnail}}" alt="">
+          </div>
+          <div class="info">
+            <div class="title">{{store.name}}</div>
+            {% for ct in store.categories %}
+            <div class="group">{{ct.name}}</div>
+            {% endfor %}
+            <div class="note">{{store.description}}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js_custom_foot %}
+<script src="{% static 'js/swiper-bundle.min.js'%}"></script>
+<script src="{% static 'order-app/js/home.js'%}"></script>
+{% endblock %}

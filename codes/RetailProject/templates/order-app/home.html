@@ -7,10 +7,10 @@
 {% block app-container %}
 <div class="app-container">
   <div id="app_header" class="header remove-margin animated fadeInDown">
-    <div class="logo">
+    <a href="/order-app" class="logo">
       <img src="/media/{{store.thumbnail}}" alt="">
       <span>{{store.name}}</span>
-    </div>
+    </a>
     <div class="user">
       <span class="phone">{% if request.user.is_authenticated%}{{request.user.username}}{% endif %}</span>
       {% if not request.user.is_authenticated%}
